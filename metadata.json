@@ -1,6 +1,0 @@
-{
-  "name": "Reynolds Family Dashboard",
-  "description": "Flutter Scaffold for the iPad tablet family dashboard",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}

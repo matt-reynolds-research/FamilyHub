@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../theme/app_colors.dart';
 import '../providers/navigation_provider.dart';
-import 'agent_terminal_bar.dart';
+import 'package:agent/agent.dart';
 import '../features/home/home_page.dart';
 import '../features/calendar/calendar_page.dart';
 import '../features/tasks/tasks_page.dart';
@@ -17,7 +17,7 @@ class AppShell extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentTab = ref.watch(currentTabProvider);
 
-    Widget activePage;
+    Widget activePage = const HomePage();
     switch (currentTab) {
       case AppTab.home:
         activePage = const HomePage();
@@ -104,7 +104,7 @@ class _TabButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return InkWell(
-      onTap: () => ref.read(currentTabProvider.notifier).state = tab,
+      onTap: () => ref.read(currentTabProvider.notifier).setTab(tab),
       borderRadius: BorderRadius.circular(24),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),

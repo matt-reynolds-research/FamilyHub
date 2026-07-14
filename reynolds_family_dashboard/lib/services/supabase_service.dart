@@ -1,12 +1,17 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 class SupabaseService {
+  static final SupabaseClient client = Supabase.instance.client;
+
   static Future<void> initialize() async {
-    // TODO: Implement real Supabase initialization
-    // await Supabase.initialize(
-    //   url: 'YOUR_SUPABASE_URL',
-    //   anonKey: 'YOUR_SUPABASE_ANON_KEY',
-    // );
+    await dotenv.load(fileName: ".env");
+    final url = dotenv.env['SUPABASE_URL']!;
+    final anonKey = dotenv.env['SUPABASE_ANON_KEY']!;
     
-    // Stubbed delay to simulate initialization
-    await Future.delayed(const Duration(milliseconds: 100));
+    await Supabase.initialize(
+      url: url,
+      anonKey: anonKey,
+    );
   }
 }

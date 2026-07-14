@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import '../../providers/mock_data_provider.dart';
+import '../../providers/data_providers.dart';
 import '../../theme/app_colors.dart';
 import '../../models/task.dart';
 
@@ -10,7 +10,7 @@ class TasksPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tasks = ref.watch(mockTasksProvider);
+    final tasksAsync = ref.watch(tasksProvider);
 
     return Stack(
       children: [
@@ -39,11 +39,31 @@ class TasksPage extends ConsumerWidget {
               ),
               const SizedBox(height: 32),
               Expanded(
-                child: ListView.builder(
-                  itemCount: tasks.length,
-                  itemBuilder: (context, index) {
-                    final task = tasks[index];
-                    return _buildTaskRow(context, task);
+                child: tasksAsync.when(
+                  loading: () => const Center(child: CircularProgressIndicator()),
+                  error: (err, stack) => Center(child: Text('Error loading tasks: $err')),
+                  data: (tasks) {
+                    if (tasks.isEmpty) {
+                      return Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.check_circle_outline, size: 64, color: AppColors.textSecondary),
+                            const SizedBox(height: 16),
+                            Text('No tasks yet', style: Theme.of(context).textTheme.titleLarge),
+                            const SizedBox(height: 8),
+                            Text('Add tasks from Supabase or tap + below', style: Theme.of(context).textTheme.bodyMedium),
+                          ],
+                        ),
+                      );
+                    }
+                    return ListView.builder(
+                      itemCount: tasks.length,
+                      itemBuilder: (context, index) {
+                        final task = tasks[index];
+                        return _buildTaskRow(context, ref, task);
+                      },
+                    );
                   },
                 ),
               )
@@ -69,13 +89,13 @@ class TasksPage extends ConsumerWidget {
       label: Text(label),
       selected: isSelected,
       onSelected: (_) {},
-      selectedColor: AppColors.primaryIndigo.withOpacity(0.1),
+      selectedColor: AppColors.primaryIndigo.withValues(alpha: 0.1),
       checkmarkColor: AppColors.primaryIndigo,
       backgroundColor: AppColors.surface,
     );
   }
 
-  Widget _buildTaskRow(BuildContext context, Task task) {
+  Widget _buildTaskRow(BuildContext context, WidgetRef ref, Task task) {
     Color priorityColor = AppColors.priorityLow;
     if (task.priority == 'high') priorityColor = AppColors.priorityHigh;
     if (task.priority == 'medium') priorityColor = AppColors.priorityMedium;
@@ -84,10 +104,15 @@ class TasksPage extends ConsumerWidget {
       margin: const EdgeInsets.only(bottom: 12),
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-        leading: Icon(
-          task.isCompleted ? Icons.check_circle : Icons.radio_button_unchecked,
-          color: task.isCompleted ? AppColors.textSecondary : AppColors.primaryIndigo,
-          size: 28,
+        leading: GestureDetector(
+          onTap: () {
+            ref.read(tasksProvider.notifier).toggleTask(task.id, !task.isCompleted);
+          },
+          child: Icon(
+            task.isCompleted ? Icons.check_circle : Icons.radio_button_unchecked,
+            color: task.isCompleted ? AppColors.textSecondary : AppColors.primaryIndigo,
+            size: 28,
+          ),
         ),
         title: Text(
           task.title,
@@ -109,7 +134,7 @@ class TasksPage extends ConsumerWidget {
             ),
             const SizedBox(width: 16),
             CircleAvatar(
-              backgroundColor: AppColors.primaryIndigo.withOpacity(0.2),
+              backgroundColor: AppColors.primaryIndigo.withValues(alpha: 0.2),
               radius: 16,
               child: Text(task.assignee[0], style: const TextStyle(color: AppColors.primaryIndigo, fontSize: 12, fontWeight: FontWeight.bold)),
             )

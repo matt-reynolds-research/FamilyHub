@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import '../../providers/mock_data_provider.dart';
+import '../../providers/data_providers.dart';
 import '../../providers/navigation_provider.dart';
 import '../../theme/app_colors.dart';
 
@@ -19,11 +19,9 @@ class HomePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final dateStr = DateFormat('EEEE, MMMM d').format(DateTime.now());
     
-    final events = ref.watch(mockEventsProvider);
-    final tasks = ref.watch(mockTasksProvider);
-    final groceries = ref.watch(mockGroceriesProvider);
-
-    final pendingTasks = tasks.where((t) => !t.isCompleted).length;
+    final eventsAsync = ref.watch(eventsProvider);
+    final tasksAsync = ref.watch(tasksProvider);
+    final groceriesAsync = ref.watch(groceriesProvider);
 
     return Padding(
       padding: const EdgeInsets.all(32.0),
@@ -67,26 +65,40 @@ class HomePage extends ConsumerWidget {
           Expanded(
             child: LayoutBuilder(
               builder: (context, constraints) {
-                // Determine layout based on width
+                final eventsCount = eventsAsync.value?.length ?? 0;
+                final pendingTasks = tasksAsync.value?.where((t) => !t.isCompleted).length ?? 0;
+                final totalTasks = tasksAsync.value?.length ?? 1;
+                final groceriesCount = groceriesAsync.value?.length ?? 0;
+
+                final taskProgress = totalTasks > 0 
+                    ? (totalTasks - pendingTasks) / totalTasks 
+                    : 0.0;
+
+                final isLoading = eventsAsync.isLoading || tasksAsync.isLoading || groceriesAsync.isLoading;
+
+                if (isLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
                 if (constraints.maxWidth > 800) {
                   return Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(child: _buildSummaryCard(context, ref, 'Events Today', '${events.length} Scheduled', Icons.calendar_month, AppTab.calendar)),
+                      Expanded(child: _buildSummaryCard(context, ref, 'Events Today', '$eventsCount Scheduled', Icons.calendar_month, AppTab.calendar)),
                       const SizedBox(width: 24),
-                      Expanded(child: _buildSummaryCard(context, ref, 'Tasks Due', '$pendingTasks Remaining', Icons.check_circle_outline, AppTab.tasks, progress: 0.6)),
+                      Expanded(child: _buildSummaryCard(context, ref, 'Tasks Due', '$pendingTasks Remaining', Icons.check_circle_outline, AppTab.tasks, progress: taskProgress)),
                       const SizedBox(width: 24),
-                      Expanded(child: _buildSummaryCard(context, ref, 'Grocery Items', '${groceries.length} Needed', Icons.shopping_cart_outlined, AppTab.groceries)),
+                      Expanded(child: _buildSummaryCard(context, ref, 'Grocery Items', '$groceriesCount Needed', Icons.shopping_cart_outlined, AppTab.groceries)),
                     ],
                   );
                 } else {
                    return ListView(
                     children: [
-                      _buildSummaryCard(context, ref, 'Events Today', '${events.length} Scheduled', Icons.calendar_month, AppTab.calendar),
+                      _buildSummaryCard(context, ref, 'Events Today', '$eventsCount Scheduled', Icons.calendar_month, AppTab.calendar),
                       const SizedBox(height: 24),
-                      _buildSummaryCard(context, ref, 'Tasks Due', '$pendingTasks Remaining', Icons.check_circle_outline, AppTab.tasks, progress: 0.6),
+                      _buildSummaryCard(context, ref, 'Tasks Due', '$pendingTasks Remaining', Icons.check_circle_outline, AppTab.tasks, progress: taskProgress),
                       const SizedBox(height: 24),
-                      _buildSummaryCard(context, ref, 'Grocery Items', '${groceries.length} Needed', Icons.shopping_cart_outlined, AppTab.groceries),
+                      _buildSummaryCard(context, ref, 'Grocery Items', '$groceriesCount Needed', Icons.shopping_cart_outlined, AppTab.groceries),
                     ],
                   );
                 }
@@ -100,7 +112,7 @@ class HomePage extends ConsumerWidget {
 
   Widget _buildSummaryCard(BuildContext context, WidgetRef ref, String title, String subtitle, IconData icon, AppTab targetTab, {double? progress}) {
     return InkWell(
-      onTap: () => ref.read(currentTabProvider.notifier).state = targetTab,
+      onTap: () => ref.read(currentTabProvider.notifier).setTab(targetTab),
       borderRadius: BorderRadius.circular(16),
       child: Card(
         child: Container(
