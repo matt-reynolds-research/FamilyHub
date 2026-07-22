@@ -51,6 +51,29 @@ green PRs auto-merge. Full mechanics and the one-time GitHub setup: **`.github/P
 Don't leave work "done but not submitted." If a change genuinely shouldn't be a PR, say so
 and why.
 
+## Repo alignment — the HARD RULE
+FamilyHub and IndigoFlow (`~/projects/indigo-flow`, `Reynolds-Research/indigoflow`) share the
+same two surfaces, the same Mac, and near-identical conventions. To stop them crossing wires:
+
+- **Preflight leads every session and every prompt.** The first action in any Claude Code
+  session here — and the literal first line of every CC handoff prompt Cowork writes — is:
+  ```bash
+  bash scripts/preflight.sh || exit 1
+  ```
+  It confirms `origin` is `matt-reynolds-research/FamilyHub` and **stops loudly** otherwise.
+  Do not edit, commit, branch, or push until it prints `✔ FamilyHub aligned`. Prompts are
+  built from `.claude/CC-PROMPT-TEMPLATE.md`, which bakes this in.
+- **One repo per window.** FamilyHub work only from `~/projects/reynolds-household/FamilyHub`.
+  Never `cd` into IndigoFlow mid-session.
+- **`indigo-flow` is read-only reference.** Never edit the IndigoFlow repo from a FamilyHub
+  session; in Cowork, mount it only when deliberately referencing it.
+- **Plain git + gh only.** Do NOT use IndigoFlow's global git aliases (`savedocs`, `pushdocs`,
+  `shuttle-docs`) or its commands (`/hotlist-next`, `/arm-runner`) here — they are set
+  `--global`, so they exist in this repo too and will misfire. FamilyHub ships via the plain
+  flow above.
+- **No shared IDs or doc structure.** Don't reuse IndigoFlow's audit IDs (`P0-1`, `UXR-3`, …),
+  its `docs/active/planning` tree, or its skills. FamilyHub keeps its own, simpler shape.
+
 ## Build principles
 - **Small steps.** Smallest safe, reviewable pieces; no sweeping rewrites in one PR.
 - **Fail loud while building.** Missing/unknown data surfaces as a clear error in dev, never
