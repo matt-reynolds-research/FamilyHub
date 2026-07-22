@@ -1,0 +1,64 @@
+name: CI
+
+# The quality gate. Runs on every PR into main and on direct pushes to main.
+# Green = the app analyzes clean, tests pass, and it compiles. Branch protection
+# makes this check required, and auto-merge waits for it (see .github/PIPELINE.md).
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+    paths-ignore:
+      - '**/*.md'
+      - 'docs/**'
+
+# If you push again before CI finishes, cancel the stale run.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  flutter:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: reynolds_family_dashboard
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      # pubspec.yaml declares `.env` as a bundled asset, but .env is git-ignored
+      # (real keys never live in the repo). Create a harmless placeholder so the
+      # asset exists and the build can compile. This file is thrown away with the
+      # runner; it is never committed.
+      - name: Create placeholder .env
+        run: |
+          cat > .env <<'EOF'
+          SUPABASE_URL=https://placeholder.supabase.co
+          SUPABASE_ANON_KEY=placeholder-anon-key
+          GEMINI_API_KEY=placeholder-gemini-key
+          EOF
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze (lint + static analysis)
+        run: flutter analyze
+
+      # No test files yet. Once you add test/*_test.dart, this runs them
+      # automatically; until then it passes with a note instead of failing.
+      - name: Test
+        run: |
+          if find test -name '*_test.dart' 2>/dev/null | grep -q .; then
+            flutter test
+          else
+            echo "No tests found yet (test/*_test.dart) — skipping. Add tests and CI runs them automatically."
+          fi
+
+      - name: Build (compile check)
+        run: flutter build web --release
