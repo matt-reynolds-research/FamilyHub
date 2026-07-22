@@ -10,11 +10,17 @@ bash scripts/preflight.sh || exit 1
 ```
 Must print `✔ FamilyHub aligned`. If it prints `✋ STOP`, you're in the wrong repo — halt.
 
-## 1. Put the pipeline live on main
+## 1. One-time: format, then put the pipeline live on main
+CI now has a `dart format` gate. Format the existing code once so it's compliant,
+then push (this also formats the new smoke test):
 ```bash
-git push origin main      # may already be up to date
+dart format .                                   # run at the repo root — covers both packages
+git add -A && git commit -m "chore: apply dart format"
+git push origin main
 ```
-This triggers CI once, registering the check names for step 3.
+That push triggers CI once, registering the check names for step 3. If `flutter analyze`
+or the smoke test flags anything on this first run, paste me the log — I wrote the test
+without being able to run Flutter here, so its first CI run is its verification.
 
 ## 2. One-time GitHub settings
 - **Settings → General → Pull Requests →** enable **Allow auto-merge**.
