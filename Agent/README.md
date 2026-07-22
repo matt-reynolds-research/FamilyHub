@@ -1,39 +1,27 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# agent
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/tools/pub/writing-package-pages).
+A local Flutter package used by the FamilyHub dashboard. It provides the AI assistant
+layer: the "terminal" chat bar pinned to the bottom of the app and the Gemini-powered
+conversation behind it.
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/to/develop-packages).
--->
+## What it exports
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
-
-## Features
-
-TODO: List what your package can do. Maybe include images, gifs, or videos.
-
-## Getting started
-
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+- **`AgentTerminalBar`** — the on-screen chat input bar and message history sheet.
+- **`GeminiService`** — talks to Google's Gemini API.
+- **`ChatProvider`** — Riverpod state for the conversation.
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+The main app depends on this package via a path reference in its `pubspec.yaml`
+(`agent: { path: ../Agent }`) and drops the bar into the app shell:
 
 ```dart
-const like = 'sample';
+import 'package:agent/agent.dart';
+
+// inside the app's layout:
+const AgentTerminalBar();
 ```
 
-## Additional information
+Requires a `GEMINI_API_KEY` in the app's `.env` (see the top-level README).
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+This package is internal to FamilyHub and is not intended for pub.dev.

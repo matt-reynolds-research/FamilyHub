@@ -1,20 +1,37 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# FamilyHub — Reynolds Family Dashboard
 
-# Run and deploy your AI Studio app
+A Flutter app that runs full-screen on an iPad as an always-on family "home hub" —
+a customized take on the Google Nest Hub. It shows the family's day at a glance
+(calendar, tasks, groceries, mail & packages, weather) with an AI assistant bar
+along the bottom.
 
-This contains everything you need to run your app locally.
+> New here? Read **[PROJECT_MAP.md](PROJECT_MAP.md)** first — it explains what's built,
+> what's still a placeholder, and the build roadmap.
 
-View your app in AI Studio: https://ai.studio/apps/4cc5cb19-a2ec-4c06-894f-fe410a3d6182
+## Structure
 
-## Run Locally
+- **`reynolds_family_dashboard/`** — the Flutter app (this is what you run).
+- **`Agent/`** — a local Flutter package that provides the bottom AI terminal bar and Gemini chat.
+- **`supabase_migration.sql`** — the database schema (family, events, tasks, groceries).
+- **`.env.example`** — template for the config keys the app needs (copy to `.env`).
 
-**Prerequisites:**  Node.js
+## Run locally
 
+**Prerequisites:** [Flutter SDK](https://docs.flutter.dev/get-started/install) 3.2+.
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+```bash
+cd reynolds_family_dashboard
+cp ../.env.example .env      # then fill in your keys (see below)
+flutter pub get
+flutter run                  # pick your iPad or simulator
+```
+
+## Configuration
+
+Create a `.env` file inside `reynolds_family_dashboard/` with:
+
+- `SUPABASE_URL` and `SUPABASE_ANON_KEY` — from your Supabase project (database).
+- `GEMINI_API_KEY` — from Google AI Studio (powers the AI assistant bar).
+
+Until Supabase is connected, the app displays mock demo data. See the roadmap in
+PROJECT_MAP.md for turning on the live database.
