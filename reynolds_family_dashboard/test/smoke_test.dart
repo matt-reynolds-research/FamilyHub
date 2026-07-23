@@ -1,9 +1,10 @@
 // Smoke test: the app's Home screen boots and renders without throwing.
 //
-// The data providers normally fetch from Supabase, which isn't available in a
-// test, so we override the three of them with empty canned results. That's
-// enough to prove the widget tree builds. As real features land, add focused
-// tests next to them (this file is just the pattern + the first CI signal).
+// The data providers normally fetch from Supabase (unavailable in a test), so we
+// override the three of them with empty canned results. We pump inside a Scaffold
+// (matching production, where HomePage lives under AppShell's Scaffold) at an
+// iPad-sized surface so the hub layout has room. Enough to prove the widget tree
+// builds. Add focused tests next to features as they land.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -32,6 +33,10 @@ class _FakeGroceries extends GroceriesNotifier {
 
 void main() {
   testWidgets('Home screen boots without crashing', (tester) async {
+    // iPad-sized surface so the hub layout has room to lay out.
+    await tester.binding.setSurfaceSize(const Size(1920, 1200));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
@@ -39,11 +44,10 @@ void main() {
           tasksProvider.overrideWith(_FakeTasks.new),
           groceriesProvider.overrideWith(_FakeGroceries.new),
         ],
-        child: const MaterialApp(home: HomePage()),
+        child: const MaterialApp(home: Scaffold(body: HomePage())),
       ),
     );
 
-    // Let the overridden async providers resolve.
     await tester.pumpAndSettle();
 
     expect(tester.takeException(), isNull);
