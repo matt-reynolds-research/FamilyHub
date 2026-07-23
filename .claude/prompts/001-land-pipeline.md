@@ -1,5 +1,9 @@
 # CC prompt 001 — bring the pipeline online + shakedown PR
 
+> ✅ **COMPLETED 2026-07-22.** This ran end-to-end and landed as **PR #1**, which merged
+> itself on green CI. The pipeline is live and enforced. Kept as a reference example of a
+> handoff prompt — for new work, build prompts from `.claude/CC-PROMPT-TEMPLATE.md`.
+
 Paste everything below the line into Claude Code, opened at
 `~/projects/reynolds-household/FamilyHub`.
 

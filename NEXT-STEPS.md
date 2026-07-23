@@ -1,46 +1,22 @@
-# NEXT STEPS — run in Claude Code on the Mac
+# NEXT STEPS
 
-Cowork can't push (it's read-only for GitHub). Open **Claude Code at
-`~/projects/reynolds-household/FamilyHub`** and work through this. Everything is committed
-locally and waiting.
+## ✅ Done — the pipeline is live (2026-07-22)
+The CI + auto-merge pipeline is built, proven, and enforced on GitHub:
+- **CI gate** on every PR: `dart format` → `flutter analyze --no-fatal-infos` → Home smoke test → `flutter build web`.
+- **Secret scan** (gitleaks).
+- **Branch ruleset** on `main` requires the `flutter` + `secret-scan` checks; **auto-merge** enabled.
+- Proven end-to-end by **PR #1**, which merged itself on green.
 
-## 0. Preflight (always first)
-```bash
-bash scripts/preflight.sh || exit 1
-```
-Must print `✔ FamilyHub aligned`. If it prints `✋ STOP`, you're in the wrong repo — halt.
+`main` is protected, so **all changes now go through a PR** (docs included). Ship with the
+`AGENTS.md` "ship it" flow: branch → conventional commit → `gh pr create` →
+`gh pr merge <n> --auto --squash`.
 
-## 1. One-time: format, then put the pipeline live on main
-CI now has a `dart format` gate. Format the existing code once so it's compliant,
-then push (this also formats the new smoke test):
-```bash
-dart format .                                   # run at the repo root — covers both packages
-git add -A && git commit -m "chore: apply dart format"
-git push origin main
-```
-That push triggers CI once, registering the check names for step 3. If `flutter analyze`
-or the smoke test flags anything on this first run, paste me the log — I wrote the test
-without being able to run Flutter here, so its first CI run is its verification.
+## ▶️ Next milestone — Supabase (Phase 1 in PROJECT_MAP.md)
+The app still runs on mock data. The next real step is standing up a Supabase project, adding
+the keys to `reynolds_family_dashboard/.env`, running `supabase_migration.sql`, and flipping
+the app to live data. This one needs your Supabase account.
 
-## 2. One-time GitHub settings
-- **Settings → General → Pull Requests →** enable **Allow auto-merge**.
-- **Settings → Branches →** protect `main`: require a PR, and require the **`flutter`** and
-  **`secret-scan`** status checks to pass.
-
-## 3. Land the shakedown PR (the `withOpacity` → `withValues` cleanup)
-```bash
-git push -u origin fix/deprecated-withopacity
-gh pr create --title "fix: replace deprecated withOpacity with withValues" \
-             --body "Shakedown PR for the new CI pipeline."
-gh pr merge --auto --squash <pr-number>
-```
-Then watch it: CI runs → both checks green → it squash-merges itself. That's the loop working.
-
-## 4. Return to main
-```bash
-git checkout main && git pull --ff-only
-```
-
----
-*After this, the pipeline is proven. The natural next build is real feature work from
-`PROJECT_MAP.md` (Phase 1: connect the Supabase database).*
+## 🧹 Good first PRs (easy pipeline practice)
+- Fix the Home header overflow (wrap the greeting in a `Flexible`).
+- Clear the 5 deprecation infos: `Color.value` → `toARGB32`, `withOpacity` → `withValues`,
+  Supabase `anonKey` → `publishableKey`, `ColorScheme.background` → `surface`.
