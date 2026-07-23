@@ -40,19 +40,24 @@ class TasksPage extends ConsumerWidget {
               const SizedBox(height: 32),
               Expanded(
                 child: tasksAsync.when(
-                  loading: () => const Center(child: CircularProgressIndicator()),
-                  error: (err, stack) => Center(child: Text('Error loading tasks: $err')),
+                  loading: () =>
+                      const Center(child: CircularProgressIndicator()),
+                  error: (err, stack) =>
+                      Center(child: Text('Error loading tasks: $err')),
                   data: (tasks) {
                     if (tasks.isEmpty) {
                       return Center(
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(Icons.check_circle_outline, size: 64, color: AppColors.textSecondary),
+                            const Icon(Icons.check_circle_outline,
+                                size: 64, color: AppColors.textSecondary),
                             const SizedBox(height: 16),
-                            Text('No tasks yet', style: Theme.of(context).textTheme.titleLarge),
+                            Text('No tasks yet',
+                                style: Theme.of(context).textTheme.titleLarge),
                             const SizedBox(height: 8),
-                            Text('Add tasks from Supabase or tap + below', style: Theme.of(context).textTheme.bodyMedium),
+                            Text('Add tasks from Supabase or tap + below',
+                                style: Theme.of(context).textTheme.bodyMedium),
                           ],
                         ),
                       );
@@ -106,37 +111,49 @@ class TasksPage extends ConsumerWidget {
         contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
         leading: GestureDetector(
           onTap: () {
-            ref.read(tasksProvider.notifier).toggleTask(task.id, !task.isCompleted);
+            ref
+                .read(tasksProvider.notifier)
+                .toggleTask(task.id, !task.isCompleted);
           },
           child: Icon(
-            task.isCompleted ? Icons.check_circle : Icons.radio_button_unchecked,
-            color: task.isCompleted ? AppColors.textSecondary : AppColors.primaryIndigo,
+            task.isCompleted
+                ? Icons.check_circle
+                : Icons.radio_button_unchecked,
+            color: task.isCompleted
+                ? AppColors.textSecondary
+                : AppColors.primaryIndigo,
             size: 28,
           ),
         ),
         title: Text(
           task.title,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            decoration: task.isCompleted ? TextDecoration.lineThrough : null,
-            color: task.isCompleted ? AppColors.textSecondary : null,
-          ),
+                decoration:
+                    task.isCompleted ? TextDecoration.lineThrough : null,
+                color: task.isCompleted ? AppColors.textSecondary : null,
+              ),
         ),
-        subtitle: task.dueDate != null 
-          ? Text('Due: ${DateFormat('MMM d').format(task.dueDate!)}')
-          : null,
+        subtitle: task.dueDate != null
+            ? Text('Due: ${DateFormat('MMM d').format(task.dueDate!)}')
+            : null,
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
               width: 12,
               height: 12,
-              decoration: BoxDecoration(color: priorityColor, shape: BoxShape.circle),
+              decoration:
+                  BoxDecoration(color: priorityColor, shape: BoxShape.circle),
             ),
             const SizedBox(width: 16),
             CircleAvatar(
               backgroundColor: AppColors.primaryIndigo.withValues(alpha: 0.2),
               radius: 16,
-              child: Text(task.assignee[0], style: const TextStyle(color: AppColors.primaryIndigo, fontSize: 12, fontWeight: FontWeight.bold)),
+              child: Text(task.assignee[0],
+                  style: const TextStyle(
+                      color: AppColors.primaryIndigo,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold)),
             )
           ],
         ),

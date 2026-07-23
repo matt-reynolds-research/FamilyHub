@@ -5,10 +5,10 @@ import 'services/supabase_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Stubbed initialization
   await SupabaseService.initialize();
-  
+
   runApp(
     const ProviderScope(
       child: ReynoldsDashboardApp(),

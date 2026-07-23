@@ -18,7 +18,8 @@ class GroceriesPage extends ConsumerWidget {
         children: [
           Row(
             children: [
-              Text('Groceries', style: Theme.of(context).textTheme.displayMedium),
+              Text('Groceries',
+                  style: Theme.of(context).textTheme.displayMedium),
               const SizedBox(width: 32),
               Expanded(
                 child: TextField(
@@ -49,18 +50,22 @@ class GroceriesPage extends ConsumerWidget {
           Expanded(
             child: groceriesAsync.when(
               loading: () => const Center(child: CircularProgressIndicator()),
-              error: (err, stack) => Center(child: Text('Error loading groceries: $err')),
+              error: (err, stack) =>
+                  Center(child: Text('Error loading groceries: $err')),
               data: (groceries) {
                 if (groceries.isEmpty) {
                   return Center(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.shopping_cart_outlined, size: 64, color: AppColors.textSecondary),
+                        const Icon(Icons.shopping_cart_outlined,
+                            size: 64, color: AppColors.textSecondary),
                         const SizedBox(height: 16),
-                        Text('Grocery list is empty', style: Theme.of(context).textTheme.titleLarge),
+                        Text('Grocery list is empty',
+                            style: Theme.of(context).textTheme.titleLarge),
                         const SizedBox(height: 8),
-                        Text('Type an item above to add it', style: Theme.of(context).textTheme.bodyMedium),
+                        Text('Type an item above to add it',
+                            style: Theme.of(context).textTheme.bodyMedium),
                       ],
                     ),
                   );
@@ -87,7 +92,8 @@ class GroceriesPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildCategoryCard(BuildContext context, WidgetRef ref, String category, List<GroceryItem> items) {
+  Widget _buildCategoryCard(BuildContext context, WidgetRef ref,
+      String category, List<GroceryItem> items) {
     return Container(
       width: 350,
       margin: const EdgeInsets.only(right: 24),
@@ -98,10 +104,12 @@ class GroceriesPage extends ConsumerWidget {
               width: double.infinity,
               padding: const EdgeInsets.all(16),
               decoration: const BoxDecoration(
-                border: Border(top: BorderSide(color: AppColors.accentPurple, width: 4)),
+                border: Border(
+                    top: BorderSide(color: AppColors.accentPurple, width: 4)),
                 borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
               ),
-              child: Text(category, style: Theme.of(context).textTheme.titleLarge),
+              child:
+                  Text(category, style: Theme.of(context).textTheme.titleLarge),
             ),
             Expanded(
               child: ListView.builder(
@@ -112,27 +120,40 @@ class GroceriesPage extends ConsumerWidget {
                   return ListTile(
                     leading: GestureDetector(
                       onTap: () {
-                        ref.read(groceriesProvider.notifier).toggleItem(item.id, !item.isChecked);
+                        ref
+                            .read(groceriesProvider.notifier)
+                            .toggleItem(item.id, !item.isChecked);
                       },
                       child: Icon(
-                        item.isChecked ? Icons.check_circle : Icons.radio_button_unchecked,
-                        color: item.isChecked ? AppColors.textSecondary : AppColors.primaryIndigo,
+                        item.isChecked
+                            ? Icons.check_circle
+                            : Icons.radio_button_unchecked,
+                        color: item.isChecked
+                            ? AppColors.textSecondary
+                            : AppColors.primaryIndigo,
                       ),
                     ),
                     title: Text(
                       item.name,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        decoration: item.isChecked ? TextDecoration.lineThrough : null,
-                        color: item.isChecked ? AppColors.textSecondary : null,
-                      ),
+                            decoration: item.isChecked
+                                ? TextDecoration.lineThrough
+                                : null,
+                            color:
+                                item.isChecked ? AppColors.textSecondary : null,
+                          ),
                     ),
                     trailing: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 4),
                       decoration: BoxDecoration(
                         color: AppColors.primaryIndigo.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: Text('${item.quantity}', style: const TextStyle(color: AppColors.primaryIndigo, fontWeight: FontWeight.bold)),
+                      child: Text('${item.quantity}',
+                          style: const TextStyle(
+                              color: AppColors.primaryIndigo,
+                              fontWeight: FontWeight.bold)),
                     ),
                   );
                 },

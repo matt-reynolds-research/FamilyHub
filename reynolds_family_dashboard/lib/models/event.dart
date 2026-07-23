@@ -29,10 +29,14 @@ class Event {
       title: json['title'] as String,
       description: json['description'] as String?,
       startTime: DateTime.parse(json['start_time'] as String),
-      endTime: json['end_time'] != null ? DateTime.parse(json['end_time'] as String) : null,
+      endTime: json['end_time'] != null
+          ? DateTime.parse(json['end_time'] as String)
+          : null,
       location: json['location'] as String?,
       familyMemberId: json['family_member_id'] as String?,
-      memberName: (json['family_members'] as Map<String, dynamic>?)?['name'] as String? ?? 'Unknown',
+      memberName: (json['family_members'] as Map<String, dynamic>?)?['name']
+              as String? ??
+          'Unknown',
       colorValue: Colors.indigo.toARGB32(),
     );
   }

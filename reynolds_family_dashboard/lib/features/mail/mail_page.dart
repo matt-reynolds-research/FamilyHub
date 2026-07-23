@@ -24,7 +24,8 @@ class _MailPageState extends ConsumerState<MailPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Mail & Packages', style: Theme.of(context).textTheme.displayMedium),
+              Text('Mail & Packages',
+                  style: Theme.of(context).textTheme.displayMedium),
               SegmentedButton<String>(
                 segments: const [
                   ButtonSegment(value: 'mail', label: Text('Mail')),
@@ -39,7 +40,9 @@ class _MailPageState extends ConsumerState<MailPage> {
           ),
           const SizedBox(height: 32),
           Expanded(
-            child: _selectedView == 'mail' ? _buildMailList(ref) : _buildPackagesList(ref),
+            child: _selectedView == 'mail'
+                ? _buildMailList(ref)
+                : _buildPackagesList(ref),
           )
         ],
       ),
@@ -59,17 +62,26 @@ class _MailPageState extends ConsumerState<MailPage> {
             leading: Container(
               width: 48,
               height: 48,
-              decoration: BoxDecoration(color: AppColors.background, borderRadius: BorderRadius.circular(8)),
-              child: const Icon(Icons.mail_outline, color: AppColors.textSecondary),
+              decoration: BoxDecoration(
+                  color: AppColors.background,
+                  borderRadius: BorderRadius.circular(8)),
+              child: const Icon(Icons.mail_outline,
+                  color: AppColors.textSecondary),
             ),
-            title: Text(item.sender, style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              fontWeight: item.isRead ? FontWeight.normal : FontWeight.bold
-            )),
-            subtitle: Text('Received: ${DateFormat('MMM d, yyyy').format(item.receivedDate)}'),
-            trailing: item.isRead ? null : Container(
-              width: 12, height: 12,
-              decoration: const BoxDecoration(color: AppColors.primaryIndigo, shape: BoxShape.circle),
-            ),
+            title: Text(item.sender,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight:
+                        item.isRead ? FontWeight.normal : FontWeight.bold)),
+            subtitle: Text(
+                'Received: ${DateFormat('MMM d, yyyy').format(item.receivedDate)}'),
+            trailing: item.isRead
+                ? null
+                : Container(
+                    width: 12,
+                    height: 12,
+                    decoration: const BoxDecoration(
+                        color: AppColors.primaryIndigo, shape: BoxShape.circle),
+                  ),
           ),
         );
       },
@@ -92,8 +104,12 @@ class _MailPageState extends ConsumerState<MailPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(pkg.description, style: Theme.of(context).textTheme.titleLarge),
-                    Text(pkg.carrier, style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.textSecondary)),
+                    Text(pkg.description,
+                        style: Theme.of(context).textTheme.titleLarge),
+                    Text(pkg.carrier,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.textSecondary)),
                   ],
                 ),
                 const SizedBox(height: 16),
@@ -105,7 +121,9 @@ class _MailPageState extends ConsumerState<MailPage> {
                   borderRadius: BorderRadius.circular(4),
                 ),
                 const SizedBox(height: 16),
-                Text('Est. Delivery: ${DateFormat('EEEE, MMM d').format(pkg.estimatedDelivery)}', style: Theme.of(context).textTheme.bodyMedium),
+                Text(
+                    'Est. Delivery: ${DateFormat('EEEE, MMM d').format(pkg.estimatedDelivery)}',
+                    style: Theme.of(context).textTheme.bodyMedium),
               ],
             ),
           ),

@@ -54,7 +54,8 @@ class AppShell extends ConsumerWidget {
             child: IconButton(
               icon: const Icon(Icons.settings, color: AppColors.textSecondary),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (_) => const SettingsPage()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const SettingsPage()));
               },
             ),
           )
@@ -77,11 +78,31 @@ class _TabBarRow extends ConsumerWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          _TabButton(tab: AppTab.home, icon: Icons.home, label: 'Home', isSelected: currentTab == AppTab.home),
-          _TabButton(tab: AppTab.calendar, icon: Icons.calendar_today, label: 'Calendar', isSelected: currentTab == AppTab.calendar),
-          _TabButton(tab: AppTab.tasks, icon: Icons.check_circle_outline, label: 'Tasks', isSelected: currentTab == AppTab.tasks),
-          _TabButton(tab: AppTab.groceries, icon: Icons.shopping_cart_outlined, label: 'Groceries', isSelected: currentTab == AppTab.groceries),
-          _TabButton(tab: AppTab.mail, icon: Icons.mail_outline, label: 'Mail', isSelected: currentTab == AppTab.mail),
+          _TabButton(
+              tab: AppTab.home,
+              icon: Icons.home,
+              label: 'Home',
+              isSelected: currentTab == AppTab.home),
+          _TabButton(
+              tab: AppTab.calendar,
+              icon: Icons.calendar_today,
+              label: 'Calendar',
+              isSelected: currentTab == AppTab.calendar),
+          _TabButton(
+              tab: AppTab.tasks,
+              icon: Icons.check_circle_outline,
+              label: 'Tasks',
+              isSelected: currentTab == AppTab.tasks),
+          _TabButton(
+              tab: AppTab.groceries,
+              icon: Icons.shopping_cart_outlined,
+              label: 'Groceries',
+              isSelected: currentTab == AppTab.groceries),
+          _TabButton(
+              tab: AppTab.mail,
+              icon: Icons.mail_outline,
+              label: 'Mail',
+              isSelected: currentTab == AppTab.mail),
         ],
       ),
     );
@@ -111,14 +132,19 @@ class _TabButton extends ConsumerWidget {
         decoration: BoxDecoration(
           color: isSelected ? AppColors.primaryIndigo : Colors.transparent,
           borderRadius: BorderRadius.circular(24),
-          border: isSelected ? null : Border.all(color: AppColors.textSecondary.withOpacity(0.3)),
+          border: isSelected
+              ? null
+              : Border.all(color: AppColors.textSecondary.withOpacity(0.3)),
         ),
         child: Row(
           children: [
-            Icon(icon, color: isSelected ? Colors.white : AppColors.textSecondary),
+            Icon(icon,
+                color: isSelected ? Colors.white : AppColors.textSecondary),
             if (isSelected) ...[
               const SizedBox(width: 8),
-              Text(label, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+              Text(label,
+                  style: const TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold)),
             ]
           ],
         ),

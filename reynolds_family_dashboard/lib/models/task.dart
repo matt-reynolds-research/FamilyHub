@@ -25,8 +25,12 @@ class Task {
       title: json['title'] as String,
       description: json['description'] as String?,
       isCompleted: json['is_completed'] as bool? ?? false,
-      assignee: (json['family_members'] as Map<String, dynamic>?)?['name'] as String? ?? 'Unassigned',
-      dueDate: json['due_date'] != null ? DateTime.parse(json['due_date'] as String) : null,
+      assignee: (json['family_members'] as Map<String, dynamic>?)?['name']
+              as String? ??
+          'Unassigned',
+      dueDate: json['due_date'] != null
+          ? DateTime.parse(json['due_date'] as String)
+          : null,
       priority: 'medium', // Priority not in DB schema — default
       assignedTo: json['assigned_to'] as String?,
     );

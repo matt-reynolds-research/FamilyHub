@@ -45,7 +45,9 @@ class SupabaseRepository {
   }
 
   static Future<void> toggleTask(String id, bool isCompleted) async {
-    await _client.from('tasks').update({'is_completed': isCompleted}).eq('id', id);
+    await _client
+        .from('tasks')
+        .update({'is_completed': isCompleted}).eq('id', id);
   }
 
   static Future<void> deleteTask(String id) async {
@@ -70,7 +72,9 @@ class SupabaseRepository {
   }
 
   static Future<void> toggleGroceryItem(String id, bool isPurchased) async {
-    await _client.from('grocery_items').update({'is_purchased': isPurchased}).eq('id', id);
+    await _client
+        .from('grocery_items')
+        .update({'is_purchased': isPurchased}).eq('id', id);
   }
 
   static Future<void> deleteGroceryItem(String id) async {
