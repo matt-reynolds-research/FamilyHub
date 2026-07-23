@@ -8,7 +8,7 @@ class SupabaseService {
     await dotenv.load(fileName: ".env");
     final url = dotenv.env['SUPABASE_URL']!;
     final anonKey = dotenv.env['SUPABASE_ANON_KEY']!;
-    
+
     await Supabase.initialize(
       url: url,
       anonKey: anonKey,

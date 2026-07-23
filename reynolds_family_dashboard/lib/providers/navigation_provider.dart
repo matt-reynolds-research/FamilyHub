@@ -5,7 +5,7 @@ enum AppTab { home, calendar, tasks, groceries, mail }
 class CurrentTabNotifier extends Notifier<AppTab> {
   @override
   AppTab build() => AppTab.home;
-  
+
   void setTab(AppTab tab) {
     state = tab;
   }

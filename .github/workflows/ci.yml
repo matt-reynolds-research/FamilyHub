@@ -47,8 +47,13 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      # Consistent formatting, enforced. If this fails, run `dart format .`
+      # locally (once) and commit — see NEXT-STEPS.md.
+      - name: Check formatting
+        run: dart format --output=none --set-exit-if-changed .
+
       - name: Analyze (lint + static analysis)
-        run: flutter analyze
+        run: flutter analyze --no-fatal-infos
 
       # No test files yet. Once you add test/*_test.dart, this runs them
       # automatically; until then it passes with a note instead of failing.

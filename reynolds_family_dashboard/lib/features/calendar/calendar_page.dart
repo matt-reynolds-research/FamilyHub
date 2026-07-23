@@ -14,7 +14,8 @@ class CalendarPage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Calendar', style: Theme.of(context).textTheme.displayMedium),
+              Text('Calendar',
+                  style: Theme.of(context).textTheme.displayMedium),
               SegmentedButton<String>(
                 segments: const [
                   ButtonSegment(value: 'day', label: Text('Day')),
@@ -33,11 +34,14 @@ class CalendarPage extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.calendar_view_week, size: 64, color: AppColors.textSecondary),
+                    const Icon(Icons.calendar_view_week,
+                        size: 64, color: AppColors.textSecondary),
                     const SizedBox(height: 16),
-                    Text('Weekly Calendar View Placeholder', style: Theme.of(context).textTheme.titleLarge),
+                    Text('Weekly Calendar View Placeholder',
+                        style: Theme.of(context).textTheme.titleLarge),
                     const SizedBox(height: 8),
-                    Text('Custom grid to be implemented in next phase.', style: Theme.of(context).textTheme.bodyMedium),
+                    Text('Custom grid to be implemented in next phase.',
+                        style: Theme.of(context).textTheme.bodyMedium),
                   ],
                 ),
               ),

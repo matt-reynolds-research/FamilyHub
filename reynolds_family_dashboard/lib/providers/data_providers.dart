@@ -69,7 +69,8 @@ class GroceriesNotifier extends AsyncNotifier<List<GroceryItem>> {
 
   Future<void> refresh() async {
     state = const AsyncValue.loading();
-    state = await AsyncValue.guard(() => SupabaseRepository.fetchGroceryItems());
+    state =
+        await AsyncValue.guard(() => SupabaseRepository.fetchGroceryItems());
   }
 
   Future<void> addItem(GroceryItem item) async {
@@ -88,6 +89,7 @@ class GroceriesNotifier extends AsyncNotifier<List<GroceryItem>> {
   }
 }
 
-final groceriesProvider = AsyncNotifierProvider<GroceriesNotifier, List<GroceryItem>>(() {
+final groceriesProvider =
+    AsyncNotifierProvider<GroceriesNotifier, List<GroceryItem>>(() {
   return GroceriesNotifier();
 });
