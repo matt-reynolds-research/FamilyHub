@@ -51,6 +51,12 @@ green PRs auto-merge. Full mechanics and the one-time GitHub setup: **`.github/P
 Don't leave work "done but not submitted." If a change genuinely shouldn't be a PR, say so
 and why.
 
+**Execution runs on the real Mac** — via Claude Code, or from Cowork through the Desktop
+Commander MCP (a real shell where `gh` is authenticated). Both routes are equivalent, both are
+gated by the preflight below, and every change still lands via a PR. (Cowork's *sandbox* shell
+has no git creds and can't reach GitHub's API — Desktop Commander is what makes Cowork able to
+execute.) The full narrative lives in `docs/WAYS-OF-WORKING.md`.
+
 ## Repo alignment — the HARD RULE
 FamilyHub and IndigoFlow (`~/projects/indigo-flow`, `Reynolds-Research/indigoflow`) share the
 same two surfaces, the same Mac, and near-identical conventions. To stop them crossing wires:
