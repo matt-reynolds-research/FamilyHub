@@ -84,8 +84,10 @@ else below is mechanical once this is set.
 7. **Wave 2 — household audit:** compare the Documents `family-assistant/` (`calendar_client/`,
    `applied-changes/`) and `docs/` against the live tree; migrate anything unique. **Only after this
    confirms nothing is stranded** do we retire the Documents copy.
-8. **Retire the Documents copy** (archive/delete) — the single destructive step, done last, with
-   your explicit go and the bundle from step 1 as a safety net.
+8. ~~**Retire the Documents copy**~~ — **SUPERSEDED by `WAVE-2-AUDIT.md` (2026-08-03): do NOT retire.**
+   The audit found DOC is the home of the calendar-maintenance subsystem + household governance files
+   (not just misfiled planning); retiring it would strand real work. Keep it; reframe it as the
+   household/calendar repo. Only the FamilyHub planning was misfiled, and that consolidation is done.
 
 ## What will NOT happen without a further explicit go
 - No overwriting the live `~/projects/reynolds-household/family-assistant/`, `SHOPPING.md`, `TASKS.md`.
