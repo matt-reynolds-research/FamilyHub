@@ -84,3 +84,25 @@ Five files, each one job — `PROJECT_MAP.md` (state), `AGENTS.md` (rules), PRDs
 (detail), `DECISIONS.md` (why), `SESSIONS.md` (handoff) — plus a 4-beat ritual (start: read map + AGENTS
 + last session entry; commit early + update the status table in the same commit; log decisions here as
 made; end: write a session recap). → `SESSIONS.md`.
+
+### D-14 · 2026-08-03 · Tile-shell vision is canonical; salvage the prior app (don't evolve it)
+A prior Flutter app (`reynolds_family_dashboard`) exists as a 5-tab dashboard on a Supabase backend —
+a different, earlier product conception. Chosen: the two-mode tile shell + markdown-mirror vision
+(PRDs/seed, scoping-critic'd) is canonical; the prior app is **harvested for reusable parts**, not
+extended. Why: its most-built piece (the Supabase data layer) points the wrong way for a
+conversation-first, markdown-mirroring wall hub, while its scaffold/patterns/`Agent` bar are reusable —
+net cheaper and cleaner than either greenfield or evolve. → `SALVAGE-AUDIT.md`, `PROJECT_MAP.md` §5–§6a.
+
+### D-15 · 2026-08-03 · Shelve Supabase; mirror the markdown world
+The data layer mirrors `SHOPPING.md`/`TASKS.md` (§3), not a separate Postgres. A second datastore
+writing household state duplicates the markdown world and would collide with the existing automations
+(the L5 live-wiring concurrency hazard). `supabase_flutter` + repository/service/`supabase_migration.sql`
+are shelved; removal is part of the Phase-0 reshape, flagged (not silent cleanup). → `PROJECT_MAP.md` §3, §8.
+
+### D-16 · 2026-08-03 · Repo consolidation — FamilyHub repo is canonical
+Planning work had been landing in a mislocated `~/Documents/Claude/Projects/Reynolds Household` git repo
+(`reynolds-household`), separate from the intended `~/projects/reynolds-household/` tree and its
+`FamilyHub` code repo. Consolidated: planning docs imported into `~/projects/reynolds-household/FamilyHub/`
+(GitHub `FamilyHub`, branch `planning-docs-consolidation`); the Documents copy is pending retirement after
+a household-level audit (Wave 2). Cowork to be re-pointed to `~/projects`. The `~/Documents` path also
+broke the Cowork sandbox's git (iCloud eviction); `~/projects` avoids it. → `CONSOLIDATION-PLAN.md`.

@@ -13,6 +13,38 @@
 
 ---
 
+## 2026-08-03 — Repo untangle + salvage audit + PROJECT_MAP reconciled
+
+**What changed**
+- Found the git repo Cowork was editing (`~/Documents/Claude/Projects/Reynolds Household`, GitHub
+  `reynolds-household`) is **separate from the intended tree** (`~/projects/reynolds-household/`, which
+  holds the live assistant runtime and the `FamilyHub` code repo). Consolidated per **D-16**: imported
+  the planning docs (PRDs, design, reviews, DECISIONS, SESSIONS) into `~/projects/reynolds-household/FamilyHub/`
+  on branch `planning-docs-consolidation` (commits `68945fc`, `1237b5c`, + this).
+- Ran a **salvage audit** of the prior Flutter app → [`SALVAGE-AUDIT.md`](SALVAGE-AUDIT.md): carry the
+  project/CI/Riverpod patterns/theme-structure/`Agent` bar; adapt models + repo interface; shelve Supabase + tab nav.
+- **Reconciled `PROJECT_MAP.md`** to reality (D-14/D-15): tile-shell vision canonical, prior app harvested
+  not evolved, Supabase shelved, Phase 0 reframed greenfield → reshape. Corrected the false "nothing built."
+
+**Decisions** — D-14 (tile-shell canonical + salvage), D-15 (shelve Supabase / mirror markdown), D-16 (repo consolidation).
+
+**State**
+- Phase 0 planning. Seed ✅ v1.1 · Home Hub PRD ✅ locked · Shopping PRD 📄 draft · prior app audited.
+- Canonical repo: `~/projects/reynolds-household/FamilyHub` (branch `planning-docs-consolidation`, unpushed).
+  Planning-file backup at `~/reynolds-household-planning-backup-20260803-063536/`.
+- ⚠️ The `~/Documents` copy still exists (pending Wave-2 household audit before retirement); its 15 planning
+  commits remain local-only there.
+
+**What's next**
+1. Re-point Cowork to `~/projects/reynolds-household`; push/PR the `planning-docs-consolidation` branch.
+2. Wave-2 audit: reconcile household-level divergence (`family-assistant/`, `AGENTS.md`, lists) before retiring the Documents copy.
+3. Resume the build: Phase 0 reshape (tile grid + retheme + markdown repo), toward the Shopping slice.
+
+**Open questions carried forward** — assistant brains ($/model; `Agent` uses Gemini); live-backend concurrency
+(Phase 5); Recently-Bought display + serializer whitespace (parser time).
+
+---
+
 ## 2026-08-02 (session 2) — PRD 02 (Shopping) drafted
 
 **What changed**
