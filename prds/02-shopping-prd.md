@@ -1,6 +1,6 @@
 # PRD 02 — Shopping (the first vertical slice)
 
-_FamilyHub · Phase 1 · Status: **Draft (2026-08-02)** · Last updated 2026-08-02_
+_FamilyHub · Phase 1 · Status: **Locked (2026-08-03)** · Last updated 2026-08-03_
 _Depends on: [PRD 01 — Home Hub](01-home-hub-prd.md) (locked) and the [design-system seed](../design/design-system-seed.md) (v1.1). Blocks: PRD 03 — Assistant Bar (needs one real domain to talk to)._
 _See [PROJECT_MAP.md](../PROJECT_MAP.md) §4–§5 for where this sits._
 

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>FamilyHub — Shopping surface mockup (PRD 02)</title>
+<!--
+  Shopping surface mockup · FamilyHub Phase 1 · drafted 2026-08-03
+  Companion to prds/02-shopping-prd.md (locked) — honors design/design-system-seed.md v1.1.
+  Every color / size / space value below is a seed token, mirrored 1:1 as a CSS variable
+  so this mockup is consistent with the shell "by construction, not by luck" (seed §9).
+
+  Purpose: a *surface* preview to (a) show Shopping plugging into the Phase-0 shell unchanged
+  (P0-8), (b) render the four tile states (P0-3/4/7), and (c) resolve the one open design
+  question in the PRD — Recently Bought: collapsed or de-emphasized. See the RESOLUTION note.
+
+  Seed data is generic/mock (AGENTS.md: never real family data) but shaped exactly like the
+  real SHOPPING.md forms the PRD lists: bare item, parenthetical note, bought `~~x~~ (list,date)`.
+  This is a static picture — the checkboxes/toggle are illustrative, not the real mutation layer.
+-->
+<style>
+  /* ---- Seed v1.1 tokens (raw palette → semantic), verbatim from design-system-seed.md ---- */
+  :root{
+    /* raw */
+    --ink-900:#0D0F12; --ink-800:#15181D; --ink-700:#1E2229; --line-600:#333842;
+    --text-100:#E7E9EE; --text-300:#9AA0AB; --text-500:#6F757F;
+    --teal-400:#5DCAA5; --blue-400:#7F9FF0; --amber-400:#EFB45A;
+    --red-400:#E5726B; --green-400:#7FC98A;
+    /* semantic */
+    --bg-page:var(--ink-900); --bg-tile:var(--ink-800); --bg-raised:var(--ink-700);
+    --line:var(--line-600);
+    --text-primary:var(--text-100); --text-secondary:var(--text-300); --text-muted:var(--text-500);
+    --accent-shopping:var(--teal-400); --accent-tasks:var(--blue-400); --accent-mail:var(--amber-400);
+    --status-error:var(--red-400); --status-success:var(--green-400);
+    /* spacing scale (base 4px) */
+    --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px; --space-5:20px; --space-6:32px;
+    /* radii */
+    --radius-tile:12px; --radius-screen:18px; --radius-pill:999px;
+    /* type scale (size / weight) */
+    --type-hero:52px; --type-number:30px; --type-body:16px; --type-label:14px; --type-caption:13px;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:#000; color:var(--text-primary);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding:32px; display:flex; flex-direction:column; align-items:center; gap:40px;
+  }
+
+  .caption-row{max-width:1180px; width:100%;}
+  .caption-row h1{font-size:18px; font-weight:600; letter-spacing:.2px;}
+  .caption-row p{font-size:13px; color:#9AA0AB; margin-top:6px; line-height:1.5; max-width:900px;}
+  .frame-label{font-size:12px; color:#6F757F; text-transform:uppercase; letter-spacing:1.4px;
+    margin:0 auto 10px; max-width:1180px; width:100%;}
+
+  /* ---- The iPad 10th-gen canvas: 1180×820 pt landscape (seed §0) ---- */
+  .device{
+    width:1180px; height:820px; background:var(--bg-page);
+    border-radius:var(--radius-screen); position:relative; overflow:hidden;
+    /* surface steps do the depth work; a faint outer ring reads as the device bezel */
+    box-shadow:0 0 0 10px #05060a, 0 24px 60px rgba(0,0,0,.6);
+    display:flex; flex-direction:column;
+    padding:var(--space-5); /* space.5 margin all around (seed §6) */
+  }
+
+  /* ===== HEADER (~15%): clock/date left · wordmark/weather right ===== */
+  .hub-header{height:15%; display:flex; justify-content:space-between; align-items:flex-start;}
+  .clock{font-size:var(--type-hero); font-weight:500; line-height:1.1; letter-spacing:-.5px;}
+  .date{font-size:var(--type-label); font-weight:500; color:var(--text-secondary); margin-top:var(--space-1);}
+  .hub-right{text-align:right;}
+  .wordmark{font-size:var(--type-label); font-weight:500; letter-spacing:2px; color:var(--text-secondary);}
+  .weather{font-size:var(--type-caption); color:var(--text-muted); margin-top:var(--space-1);}
+
+  /* ===== TILE ROW (~55%): 3 equal columns, gap space.4 ===== */
+  .tile-row{height:55%; display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-4);
+    align-content:stretch; padding:var(--space-6) 0;}
+
+  .tile{
+    background:var(--bg-tile); border-radius:var(--radius-tile); padding:var(--space-3);
+    display:flex; flex-direction:column; position:relative;
+  }
+  .tile-head{display:flex; align-items:center; gap:var(--space-2);}
+  .tile-dot{width:14px; height:14px; border-radius:4px; flex:none;}
+  .tile-title{font-size:var(--type-label); font-weight:500; color:var(--text-secondary);}
+  .tile-number{font-size:var(--type-number); font-weight:500; line-height:1.2; margin-top:var(--space-4);}
+  .tile-numlabel{font-size:var(--type-label); font-weight:500; color:var(--text-secondary); margin-top:var(--space-1);}
+  .tile-glance{font-size:var(--type-body); color:var(--text-secondary); margin-top:auto; padding-top:var(--space-3);
+    border-top:1px solid var(--line); display:flex; align-items:center; gap:var(--space-2);}
+  .mini-check{width:15px;height:15px;border:1.5px solid var(--text-muted);border-radius:4px;flex:none;}
+
+  .accent-shopping{background:var(--accent-shopping);}
+  .accent-tasks{background:var(--accent-tasks);}
+  .accent-mail{background:var(--accent-mail);}
+  .num-shopping{color:var(--accent-shopping);}
+  .num-tasks{color:var(--accent-tasks);}
+  .num-mail{color:var(--accent-mail);}
+
+  /* the "selected / tappable" hint on the Shopping tile */
+  .tile.is-active{outline:1.5px solid rgba(93,202,165,.5); outline-offset:-1.5px;}
+
+  /* ===== ASSISTANT BAR (~15%): full-width pill, pinned, reserved even while stubbed ===== */
+  .assistant-bar{height:15%; display:flex; align-items:center;}
+  .pill{width:100%; background:var(--bg-raised); border-radius:var(--radius-pill);
+    padding:var(--space-4) var(--space-5); display:flex; align-items:center; gap:var(--space-3);
+    /* keep clear of the bottom home-indicator strip (seed §6 safe-area rule) */
+    margin-bottom:var(--space-2);}
+  .pill-mic{width:22px;height:22px;border-radius:var(--radius-pill);border:2px solid var(--text-muted);flex:none;}
+  .pill-text{font-size:var(--type-body); color:var(--text-muted);}
+  .pill-tag{margin-left:auto; font-size:var(--type-caption); color:var(--text-muted);
+    border:1px solid var(--line); border-radius:var(--radius-pill); padding:2px 10px;}
+
+  /* ===== FOCUSED OVERLAY (tap Shopping → full list, bg.raised) ===== */
+  .focused{
+    position:absolute; inset:var(--space-5); background:var(--bg-raised);
+    border-radius:var(--radius-tile); padding:var(--space-5) var(--space-6);
+    display:flex; flex-direction:column; gap:var(--space-4);
+  }
+  .focused-head{display:flex; align-items:center; gap:var(--space-3);}
+  .back{font-size:var(--type-body); color:var(--text-secondary); display:flex; align-items:center; gap:var(--space-2);}
+  .back .chev{font-size:20px; line-height:1;}
+  .focused-title{font-size:var(--type-number); font-weight:500; display:flex; align-items:center; gap:var(--space-2);}
+  .focused-counts{margin-left:auto; font-size:var(--type-label); color:var(--text-secondary);}
+
+  .lists{display:grid; grid-template-columns:1fr 1fr; gap:var(--space-6); flex:1; min-height:0;}
+  .list-col{display:flex; flex-direction:column; min-height:0;}
+  .list-label{font-size:var(--type-label); font-weight:500; color:var(--text-secondary); letter-spacing:.3px;
+    display:flex; align-items:center; gap:var(--space-2); margin-bottom:var(--space-3);}
+  .list-label .n{color:var(--text-muted);}
+  .row{display:flex; align-items:center; gap:var(--space-3); padding:var(--space-3) 0;
+    border-bottom:1px solid var(--line);}
+  .check{width:26px;height:26px;border:2px solid var(--text-muted);border-radius:6px;flex:none;}
+  .row .item{font-size:var(--type-body); color:var(--text-primary);}
+  .row .note{color:var(--text-muted);}
+  .add-row{display:flex; align-items:center; gap:var(--space-3); padding:var(--space-3) 0; margin-top:var(--space-2);}
+  .add-plus{width:26px;height:26px;border:1.5px dashed var(--text-muted);border-radius:6px;flex:none;
+    color:var(--text-muted); display:flex; align-items:center; justify-content:center; font-size:18px;}
+  .add-hint{font-size:var(--type-body); color:var(--text-muted);}
+
+  /* Recently Bought — RESOLVED: de-emphasized-and-visible, collapsed to a summary row that expands */
+  .archive{border-top:1px solid var(--line); padding-top:var(--space-3);}
+  .archive-head{display:flex; align-items:center; gap:var(--space-2); font-size:var(--type-label);
+    color:var(--text-muted);}
+  .archive-head .chev{font-size:16px;}
+  .archive-items{display:flex; flex-wrap:wrap; gap:var(--space-2) var(--space-4); margin-top:var(--space-3);}
+  .bought{font-size:var(--type-caption); color:var(--text-muted); text-decoration:line-through;
+    text-decoration-color:var(--text-muted);}
+  .bought .prov{text-decoration:none; display:inline;}
+
+  /* ===== small state chips (empty / error) ===== */
+  .states{display:flex; gap:24px; flex-wrap:wrap; max-width:1180px; width:100%;}
+  .state-card{width:360px; height:220px; background:var(--bg-page); border-radius:var(--radius-screen);
+    padding:var(--space-5); box-shadow:0 0 0 8px #05060a;}
+  .state-card .mini-tile{background:var(--bg-tile); border-radius:var(--radius-tile); padding:var(--space-3);
+    height:100%; display:flex; flex-direction:column;}
+  .state-note{font-size:12px; color:#6F757F; margin-top:10px; text-align:center;}
+  .empty-msg{margin:auto; text-align:center; color:var(--text-muted); font-size:var(--type-body);}
+  .error-msg{margin:auto; text-align:center; color:var(--status-error); font-size:var(--type-body); font-weight:500;}
+  .error-sub{color:var(--text-muted); font-size:var(--type-caption); margin-top:6px;}
+
+  .legend{max-width:1180px;width:100%;font-size:12.5px;color:#9AA0AB;line-height:1.6;
+    background:#0d0f12;border:1px solid #1E2229;border-radius:12px;padding:18px 22px;}
+  .legend b{color:#E7E9EE;font-weight:600;}
+  .legend code{color:#5DCAA5;font-family:ui-monospace,Menlo,monospace;font-size:12px;}
+</style>
+</head>
+<body>
+
+  <div class="caption-row">
+    <h1>FamilyHub · Shopping surface — mockup for PRD 02</h1>
+    <p>iPad 10th-gen canvas (1180×820 pt, dark, ~8 ft glance). Two frames below: the ambient home
+      with Shopping in the 3-tile shell, then the focused view you get on tap. Built directly on
+      design-system-seed v1.1 tokens.</p>
+  </div>
+
+  <!-- ============ FRAME 1: ambient home, Shopping = summary tile ============ -->
+  <div class="frame-label">Frame 1 — Ambient home · Shopping in summary state (P0-3, P0-8)</div>
+  <div class="device">
+    <div class="hub-header">
+      <div>
+        <div class="clock">7:14</div>
+        <div class="date">Monday, August 3</div>
+      </div>
+      <div class="hub-right">
+        <div class="wordmark">FAMILYHUB</div>
+        <div class="weather">68° · clear</div>
+      </div>
+    </div>
+
+    <div class="tile-row">
+      <!-- Shopping (the domain this PRD owns) -->
+      <div class="tile is-active">
+        <div class="tile-head"><span class="tile-dot accent-shopping"></span><span class="tile-title">Shopping</span></div>
+        <div class="tile-number num-shopping">3</div>
+        <div class="tile-numlabel">to buy</div>
+        <!-- glance line = DERIVED summary (L4), never a raw markdown line -->
+        <div class="tile-glance">Grocery 2 · Household 1</div>
+      </div>
+
+      <!-- Tasks (placeholder sibling, shown for context) -->
+      <div class="tile">
+        <div class="tile-head"><span class="tile-dot accent-tasks"></span><span class="tile-title">Tasks</span></div>
+        <div class="tile-number num-tasks">4</div>
+        <div class="tile-numlabel">to do</div>
+        <div class="tile-glance"><span class="mini-check"></span>Skylight Frame decision</div>
+      </div>
+
+      <!-- Mail (placeholder sibling) -->
+      <div class="tile">
+        <div class="tile-head"><span class="tile-dot accent-mail"></span><span class="tile-title">Mail &amp; Packages</span></div>
+        <div class="tile-number num-mail">2</div>
+        <div class="tile-numlabel">arriving today</div>
+        <div class="tile-glance">Package · out for delivery</div>
+      </div>
+    </div>
+
+    <div class="assistant-bar">
+      <div class="pill">
+        <span class="pill-mic"></span>
+        <span class="pill-text">Ask or add to the list…</span>
+        <span class="pill-tag">Phase 2</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ FRAME 2: focused Shopping view ============ -->
+  <div class="frame-label">Frame 2 — Focused Shopping (tap-to-open) · lists + inline add + Recently Bought (P0-4, P0-5, P0-6)</div>
+  <div class="device">
+    <div class="focused">
+      <div class="focused-head">
+        <span class="back"><span class="chev">‹</span> Home</span>
+        <span class="focused-title"><span class="tile-dot accent-shopping"></span> Shopping</span>
+        <span class="focused-counts">3 to buy</span>
+      </div>
+
+      <div class="lists">
+        <!-- GROCERY -->
+        <div class="list-col">
+          <div class="list-label">Grocery <span class="n">· 2</span></div>
+          <div class="row"><span class="check"></span><span class="item">Milk <span class="note">(2 gallons)</span></span></div>
+          <div class="row"><span class="check"></span><span class="item">Eggs</span></div>
+          <div class="add-row"><span class="add-plus">+</span><span class="add-hint">Add to grocery</span></div>
+        </div>
+
+        <!-- HOUSEHOLD -->
+        <div class="list-col">
+          <div class="list-label">Household <span class="n">· 1</span></div>
+          <div class="row"><span class="check"></span><span class="item">Paper towels</span></div>
+          <div class="add-row"><span class="add-plus">+</span><span class="add-hint">Add to household</span></div>
+        </div>
+      </div>
+
+      <!-- Recently Bought: de-emphasized + collapsed-to-summary (RESOLUTION) -->
+      <div class="archive">
+        <div class="archive-head"><span class="chev">▾</span> Recently bought · 2 &nbsp;<span style="color:var(--text-muted);opacity:.7">(agent clears after ~7 days · read-only)</span></div>
+        <div class="archive-items">
+          <span class="bought">Bread <span class="prov">(grocery · Jul 30)</span></span>
+          <span class="bought">Dish soap <span class="prov">(household · Jul 29)</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ The other two tile states (P0-7) ============ -->
+  <div class="frame-label">Tile states — empty &amp; error (P0-7, fail-loud made visual)</div>
+  <div class="states">
+    <div class="state-card">
+      <div class="mini-tile">
+        <div class="tile-head"><span class="tile-dot accent-shopping"></span><span class="tile-title">Shopping</span></div>
+        <div class="empty-msg">You're all caught up</div>
+      </div>
+      <div class="state-note">Empty — both lists clear · text.muted, never looks broken</div>
+    </div>
+    <div class="state-card">
+      <div class="mini-tile">
+        <div class="tile-head"><span class="tile-dot accent-shopping"></span><span class="tile-title">Shopping</span></div>
+        <div class="error-msg">Couldn't load shopping<div class="error-sub">SHOPPING.md line 14 — unparseable</div></div>
+      </div>
+      <div class="state-note">Error — loud + honest · color.status.error (dev)</div>
+    </div>
+  </div>
+
+  <!-- ============ Design notes / the resolved open question ============ -->
+  <div class="legend">
+    <b>What this mockup decides &amp; shows</b><br><br>
+    <b>Open question resolved → Recently Bought = de-emphasized <i>and</i> collapsed.</b> It renders as
+    a muted, struck-through summary row under a small disclosure caret, labelled read-only with the
+    "agent clears after ~7 days" note. This answers PRD 02's open design question: it's visible for
+    "did we already get that?" without competing with the active lists, and it visually reinforces
+    that the client never clears it (P0-6 / L3). If it feels too buried in real use at 8 ft, the
+    fallback is de-emphasized-but-always-expanded — one line to change.<br><br>
+    <b>Every value is a seed token.</b> Key number <code>type.number</code> (30) in
+    <code>color.accent.shopping</code> (teal.400); combined unchecked count = <b>3</b> (D-13);
+    glance line is a <b>derived summary</b> "Grocery 2 · Household 1", not a raw markdown line (L4).
+    Focused view uses <code>bg.raised</code>; checkboxes are sized for touch-without-precise-aim (P0-7).<br><br>
+    <b>Plugs in unchanged (P0-8).</b> Shopping simply claims column 1 of the 3-column grid; the
+    header, Assistant Bar band (reserved, tagged Phase 2), Tasks and Mail tiles are untouched shell.<br><br>
+    <b>Seed data is mock, shaped like real SHOPPING.md forms</b> — bare item (Eggs), parenthetical
+    note (Milk (2 gallons)), bought <code>~~text~~ (list, date)</code> — per AGENTS.md (never real
+    family data). Static picture; the checkboxes are illustrative, not the Phase-1 mutation layer.
+  </div>
+
+</body>
+</html>

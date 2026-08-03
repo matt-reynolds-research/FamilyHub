@@ -13,6 +13,31 @@
 
 ---
 
+## 2026-08-03 (session 3, Cowork) — PRD 02 locked + first Shopping surface mockup
+
+**What changed**
+- Locked **PRD 02 — Shopping** after a read-through (Draft→Locked).
+- Drafted the first **surface mockup**: `design/shopping-surface-mockup.html` on seed v1.1 tokens — ambient
+  home with Shopping in the 3-tile shell (P0-8), focused list view with inline add (P0-5) + check→archive
+  (P0-6), empty/error tiles (P0-7).
+- **Resolved PRD 02 open design question:** Recently Bought = de-emphasized *and* collapsed (read-only,
+  agent-cleared). Logged **D-17**. Updated `PROJECT_MAP.md` (§6/§7 + status line).
+
+**Migration note** — this work was originally done in the mislocated `~/Documents/...` copy (Cowork was
+still pointed there; its `.git` deadlocks in the sandbox). Migrated here into canonical per D-16, on branch
+`session-3-prd02-lock`, decision renumbered "D-14"→**D-17** to avoid colliding with D-14/15/16.
+**Action still needed: re-point Cowork to `~/projects/reynolds-household/FamilyHub`** so future sessions land here.
+
+**What is next**
+1. **Re-point Cowork** (Matt) → then this branch can be reviewed/merged normally.
+2. Optional: **Home Hub surface mockup** (PRD 01 locked; brief + engaged wireframe exist).
+3. **PRD 03 — Assistant Bar (v1, Shopping-only)**, against the now-locked domain.
+
+**Open questions carried forward** — serializer whitespace policy (default byte-exact), deferred to parser
+implementation. Recently-Bought display now resolved (D-17).
+
+---
+
 ## 2026-08-03 — Repo untangle + salvage audit + PROJECT_MAP reconciled
 
 **What changed**

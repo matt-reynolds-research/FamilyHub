@@ -106,3 +106,16 @@ Planning work had been landing in a mislocated `~/Documents/Claude/Projects/Reyn
 (GitHub `FamilyHub`, branch `planning-docs-consolidation`); the Documents copy is pending retirement after
 a household-level audit (Wave 2). Cowork to be re-pointed to `~/projects`. The `~/Documents` path also
 broke the Cowork sandbox's git (iCloud eviction); `~/projects` avoids it. → `CONSOLIDATION-PLAN.md`.
+
+
+### D-17 · 2026-08-03 · PRD 02 locked + first Shopping surface mockup (Recently-Bought display resolved)
+Read-through of PRD 02 held up (internally consistent; grounded in the seed tokens and
+`family-assistant/list-conventions.md`; remaining opens are deliberately downstream), so it is **locked**.
+Drafted the first **surface mockup** (`design/shopping-surface-mockup.html`) on seed v1.1 tokens: ambient
+home with Shopping in the 3-tile shell (P0-8), focused list view with inline add (P0-5) + check→archive
+(P0-6), and empty/error tiles (P0-7). **Resolved PRD 02 open design question — Recently Bought =
+de-emphasized *and* collapsed** (muted, struck-through summary under a disclosure caret, read-only /
+agent-cleared), reinforcing L3 (client never clears). Fallback if too buried at 8 ft:
+de-emphasized-but-always-expanded (one-line change). *(Authored in the mislocated Documents copy as
+"D-14"; renumbered to D-17 on migration into canonical — see D-16.)*
+→ `prds/02-shopping-prd.md`, `design/shopping-surface-mockup.html`.
