@@ -5,7 +5,7 @@
 > this file disagree, one of them is wrong — fix it in the same step. Everything else
 > (PRDs, design system, code) hangs off this.
 
-_Last updated: 2026-08-04 · Status: **Phase 0 — planning (salvage-and-reshape: prior Flutter app audited; tile-shell vision canonical; Home Hub PRD locked + shell surface mockup drafted; PRD 02 Shopping locked + surface mockup drafted)**_
+_Last updated: 2026-08-03 · Status: **Phase 0 — building (salvage-and-reshape). Home Hub design imported from Claude Design (`design/FamilyHub Home Hub.dc.html`); first Flutter shell increment landed — dark seed v1.2 tokens (Helvetica Neue) + ambient home (header, 3-tile grid, Assistant Bar pill, generic focus container) on seeded data, widget-tested. Sphere / engaged / voice deferred to a later layer. Prior tab shell + Supabase pending prune.**_
 
 ---
 
@@ -132,7 +132,7 @@ disposition is §6a.
 
 | Feature | Status | Notes |
 |---------|--------|-------|
-| Home Hub (shell) | 📄 PRD locked · mockup drafted | Phase 0 — [`prds/01-home-hub-prd.md`](prds/01-home-hub-prd.md). Two-mode (ambient ⇄ engaged); engaged stubbed. Surface mockup drafted ([`design/home-hub-surface-mockup.html`](design/home-hub-surface-mockup.html)): grid, Assistant Bar 3 states, focus nav, engaged takeover. To be reshaped from the prior tab shell. |
+| Home Hub (shell) | 🟡 shell scaffolded (Phase 0) | Phase 0 — [`prds/01-home-hub-prd.md`](prds/01-home-hub-prd.md). Design imported + reviewed ([`design/claude-design-import--home-hub.md`](design/claude-design-import--home-hub.md)). **First Flutter increment built:** `lib/theme/hub_tokens.dart` (seed v1.2, Helvetica Neue) + `lib/features/home_hub/` (ambient home: header, 3-tile grid, Assistant Bar pill, generic focus container; seeded data; widget-tested). Ambient⇄engaged: engaged/voice sphere deferred to a later layer. **Follow-up:** prune prior tab shell + Supabase; wire the real data layer (Phase 1). |
 | Design-system seed | ✅ v1.1 | Phase 0 — [`design/design-system-seed.md`](design/design-system-seed.md). Tokens + tile grid + reusable tile. Target device iPad 10th gen. |
 | Shopping tile | 📄 PRD locked | Phase 1 — [`prds/02-shopping-prd.md`](prds/02-shopping-prd.md); owns the real `SHOPPING.md` parser + lossless model. Surface mockup drafted ([`design/shopping-surface-mockup.html`](design/shopping-surface-mockup.html)). Not yet built. |
 | Assistant Bar | 🟡 prior code to adapt | Phase 2 — the `Agent` package is a working chat bar to restyle/wire (§6a). |

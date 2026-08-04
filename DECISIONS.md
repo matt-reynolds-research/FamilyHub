@@ -119,3 +119,16 @@ agent-cleared), reinforcing L3 (client never clears). Fallback if too buried at 
 de-emphasized-but-always-expanded (one-line change). *(Authored in the mislocated Documents copy as
 "D-14"; renumbered to D-17 on migration into canonical — see D-16.)*
 → `prds/02-shopping-prd.md`, `design/shopping-surface-mockup.html`.
+
+### D-18 · 2026-08-03 · Home Hub build scope (shell-first) + typeface (Helvetica Neue)
+The finalized Claude Design (imported byte-exact into `design/`) evolved — Matt-driven, over 3 turns —
+into a **voice presence-sphere** assistant with live audio-reactive states (listening/speaking/
+confirmed/failed/resting). That's Phase-5-forward vs. PRD 01's text-first Phase 0. **Scope call for the
+first build: the static Phase-0 shell first** — ambient home (`1a`) + generic focus container (`1c`):
+header, 3-tile grid, Assistant Bar pill — with the **sphere / engaged mode / voice deferred to a later
+layer**. Why: keeps the roadmap's small-steps order (shell before domains before assistant) and doesn't
+pull Phase-5 work forward, while the sphere direction is *banked* (new tokens minted so it's ready).
+**Typeface: Inter → Helvetica Neue** (Matt's call — wall legibility; a system face on iPad, so no bundled
+asset). New tokens `#6C7BF0`/`#9B7BF0`/`#08090B` folded into **seed v1.2**.
+→ `design/claude-design-import--home-hub.md`, `reynolds_family_dashboard/lib/theme/hub_tokens.dart`,
+`reynolds_family_dashboard/lib/features/home_hub/`.

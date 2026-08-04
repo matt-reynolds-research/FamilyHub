@@ -13,6 +13,38 @@
 
 ---
 
+## 2026-08-04 (session 5, Cowork) — Home Hub design import + first Flutter shell
+
+**What changed**
+- **Imported the finalized Home Hub design** from Claude Design, byte-exact, into `design/`:
+  `FamilyHub Home Hub.dc.html` (50,978 B) + `support.js` (69,150 B — the generic dc-runtime; the sphere
+  logic is a `<script>` inside the `.dc.html`). Retrieval was non-trivial (auth-gated project): pulled via
+  the browser's authenticated session through a `get_page_text` → host-file → Desktop Commander decode
+  pipeline. Wrote `design/claude-design-import--home-hub.md` (8 frames across 3 turns; token table; drift review).
+- **Drift flagged + decided (D-18).** The design evolved (Matt-driven) into a voice **presence-sphere**
+  assistant — Phase-5-forward. Scope call: **build the Phase-0 static shell first**, defer sphere/engaged/voice.
+  Typeface **Inter → Helvetica Neue**.
+- **Built the first Flutter increment** (analyzer-clean on new code; widget-tested):
+  `lib/theme/hub_tokens.dart` (seed **v1.2**: dark tokens + Helvetica Neue + new `#6C7BF0`/`#9B7BF0`/`#08090B`)
+  and `lib/features/home_hub/` (ambient home: header w/ live clock, 3-tile seeded grid matching frame `1a`,
+  Assistant Bar pill, generic focus container). Repointed `app.dart` to the new dark shell.
+  `test/ambient_home_screen_test.dart` passes (render + tile→focus→back).
+- Seed doc → **v1.2** (font + new tokens folded back). `PROJECT_MAP` §6 Home Hub → "shell scaffolded".
+
+**Commits / not pushed** — `docs/import-home-hub-design` branch: `221e344` (design import) + a follow-up
+commit for the shell increment. **Not pushed** — consistent with the repo's standing "committed, not
+pushed" posture; pushing / opening a PR is a separate explicit yes.
+
+**What is next**
+1. **Push/PR decision** for the accumulated branches (`session-3-prd02-lock`, `docs/import-home-hub-design`).
+2. **Phase-0 prune follow-up:** remove the prior 5-tab shell + Supabase (`supabase_flutter`, service/repo/
+   `supabase_migration.sql`), retire the light `AppColors`/`AppTheme`, resolve the `.env` asset friction.
+3. **Phase 1** — real `SHOPPING.md` parser + Shopping tile behind the shell.
+
+**Open** — the presence sphere / engaged mode is *banked* (tokens minted), not built; it's a Phase-2/5 layer.
+
+---
+
 ## 2026-08-04 (session 4, Cowork) — Home Hub (shell) surface mockup
 
 **What changed**
