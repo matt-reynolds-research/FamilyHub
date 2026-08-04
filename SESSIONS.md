@@ -13,6 +13,31 @@
 
 ---
 
+## 2026-08-04 (session 6, Cowork) — merged the Home Hub PR + Phase-0 prune
+
+**What changed**
+- **Merged PR #6** to `main` (squash `4deabd1`) — one PR carried the stacked session 3–4 planning + the
+  design import + the ambient shell. CI needed only a `dart format` fix (the `flutter` job runs
+  `analyze --no-fatal-infos` and creates its own placeholder `.env`, so the legacy info-lints never
+  blocked it).
+- **Executed the Phase-0 prune** (branch `chore/phase0-prune-legacy`): deleted the prior 5-tab shell
+  (`lib/shell/`, all five `features/*` tab pages), Supabase (`lib/services/`, `lib/repositories/`,
+  `supabase_migration.sql`), the old `lib/models/` + `lib/providers/`, the light theme
+  (`AppColors`/`AppTheme`/`AppTypography`), and the stale `test/smoke_test.dart`. Trimmed `pubspec.yaml`:
+  removed `supabase_flutter`, `google_generative_ai`, `google_fonts`, `flutter_dotenv` and the `.env`
+  asset. `main.dart` no longer inits Supabase. **`Agent/` kept** as a path dep for the Phase-2 bar.
+- Result: `lib/` is just the Home Hub shell (`main`, `app`, `theme/hub_tokens`, `features/home_hub/`).
+  **`flutter analyze` → No issues found**, `dart format` clean, widget tests pass.
+- Updated `AGENTS.md` (tech stack + repo layout) and `PROJECT_MAP.md` (§6a, §8, status).
+
+**What is next**
+1. **Phase 1** — the real `SHOPPING.md` parser + lossless model, then wire the Shopping tile (PRD 02).
+2. Presence sphere / engaged mode stays *banked* (Phase 2/5).
+
+**Open** — none new.
+
+---
+
 ## 2026-08-04 (session 5, Cowork) — Home Hub design import + first Flutter shell
 
 **What changed**

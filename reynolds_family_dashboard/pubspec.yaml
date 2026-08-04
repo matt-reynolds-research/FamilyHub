@@ -10,13 +10,11 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_riverpod: ^3.3.2
-  supabase_flutter: ^2.16.0
-  google_generative_ai: ^0.4.0
-  google_fonts: ^8.1.0
   intl: ^0.20.3
+  # Kept for Phase 2 (Assistant Bar). Not imported yet — the old tab shell that used it
+  # was removed in the Phase-0 prune.
   agent:
     path: ../Agent
-  flutter_dotenv: ^6.0.1
 
 dev_dependencies:
   flutter_test:
@@ -25,5 +23,3 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-  assets:
-    - .env

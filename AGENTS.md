@@ -21,17 +21,20 @@ spending money, security/privacy tradeoffs, or a real fork in direction.
 
 ## Tech stack (authoritative version = `reynolds_family_dashboard/pubspec.yaml`)
 - Flutter (Dart), app lives in **`reynolds_family_dashboard/`**.
-- State: Riverpod. Backend: Supabase (Postgres + auth). AI bar: Gemini via the local
-  **`Agent/`** package (path dependency `../Agent`).
-- Custom theming under `lib/theme/`. No test suite yet.
-- Secrets (`SUPABASE_URL`, `SUPABASE_ANON_KEY`, `GEMINI_API_KEY`) live in
-  `reynolds_family_dashboard/.env` — git-ignored, never committed. `.env.example` documents them.
+- State: Riverpod. **No backend datastore** — FamilyHub mirrors the markdown world (D-15) and runs on
+  **seeded mock data** in Phase 0. **Supabase was removed in the Phase-0 prune** (2026-08-03), along with
+  `flutter_dotenv`, `google_fonts`, and `google_generative_ai`.
+- AI bar: the local **`Agent/`** package (Gemini) is kept as a path dep for the **Phase-2** Assistant
+  Bar; it is not wired in yet.
+- Design-system tokens under `lib/theme/hub_tokens.dart` (seed v1.2, Helvetica Neue). Widget tests in `test/`.
+- No secrets are needed by the app today (dotenv removed with Supabase). Any future keys live in
+  `reynolds_family_dashboard/.env` — git-ignored, never committed; `.env.example` documents them.
 
 ## Repo layout
-- `reynolds_family_dashboard/lib/` — app source: `features/`, `models/`, `providers/`,
-  `repositories/`, `services/`, `shell/`, `theme/`.
-- `Agent/` — local Flutter package (AI terminal bar + Gemini chat).
-- `supabase_migration.sql` — database schema.
+- `reynolds_family_dashboard/lib/` — app source: `main.dart`, `app.dart`, `theme/hub_tokens.dart`, and
+  `features/home_hub/` (the ambient shell). The prior 5-tab shell, Supabase service/repo, old
+  models/providers, and the light theme were removed in the Phase-0 prune.
+- `Agent/` — local Flutter package (AI bar; Gemini). Reserved for the Phase-2 Assistant Bar.
 - `.github/workflows/` — CI + secret scan. See `.github/PIPELINE.md` for how the
   gate + auto-merge work and how to enable them.
 

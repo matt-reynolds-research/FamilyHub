@@ -5,7 +5,7 @@
 > this file disagree, one of them is wrong — fix it in the same step. Everything else
 > (PRDs, design system, code) hangs off this.
 
-_Last updated: 2026-08-03 · Status: **Phase 0 — building (salvage-and-reshape). Home Hub design imported from Claude Design (`design/FamilyHub Home Hub.dc.html`); first Flutter shell increment landed — dark seed v1.2 tokens (Helvetica Neue) + ambient home (header, 3-tile grid, Assistant Bar pill, generic focus container) on seeded data, widget-tested. Sphere / engaged / voice deferred to a later layer. Prior tab shell + Supabase pending prune.**_
+_Last updated: 2026-08-03 · Status: **Phase 0 — building (salvage-and-reshape). Home Hub design imported from Claude Design (`design/FamilyHub Home Hub.dc.html`); first Flutter shell increment landed — dark seed v1.2 tokens (Helvetica Neue) + ambient home (header, 3-tile grid, Assistant Bar pill, generic focus container) on seeded data, widget-tested. Sphere / engaged / voice deferred to a later layer. **Prior tab shell + Supabase + light theme now pruned — the app tree is just the Home Hub shell and analyzes clean.**_
 
 ---
 
@@ -154,8 +154,10 @@ tile-shell/markdown vision above is canonical (D-14). Full detail in
   `intl`, `dotenv`; and the **`Agent`** package (the AI bar).
 - **🔧 Adapt:** the `Task` / `GroceryItem` models → the lossless markdown model; the repository
   *interface* → a markdown-backed repo; the theme *values* → the seed's dark tokens.
-- **⛔ Shelve:** `supabase_flutter` + the repository/service/`supabase_migration.sql`; the tab
-  navigation (`AppTab` + `_TabBarRow`); DB-shaped serialization and category-grouping logic.
+- **⛔ Shelved — now REMOVED (Phase-0 prune, 2026-08-03):** `supabase_flutter` + the repository/
+  service/`supabase_migration.sql`; the tab navigation (`AppTab` + `_TabBarRow`) and all five tab
+  feature pages; the light `AppColors`/`AppTheme`/`AppTypography`; the old models/providers; and the
+  `flutter_dotenv`/`google_fonts`/`google_generative_ai` deps. `Agent/` is kept for Phase 2.
 
 ## 7. PRD writing order
 
@@ -178,9 +180,10 @@ The project is scaffolded, so **the authority on stack + versions is `reynolds_f
 `flutter_riverpod`, `google_fonts` (Inter), `intl`, `flutter_dotenv`, and the local `Agent`
 package.** Direction: **iPad target, headless/ambient-first.**
 
-**Deliberately shelved:** `supabase_flutter` and the Supabase backend — FamilyHub mirrors the
-markdown world instead (§3, D-15). Removing the dependency happens as part of the Phase-0 reshape,
-flagged (don't treat it as cleanup).
+**Supabase — REMOVED (Phase-0 prune, 2026-08-03).** `supabase_flutter` + the repository/service/
+`supabase_migration.sql` are gone; FamilyHub mirrors the markdown world instead (§3, D-15). The app now
+runs on seeded mock data with no datastore. (`google_generative_ai`, `google_fonts`, `flutter_dotenv`
+went with it; `Agent/` stays for the Phase-2 bar.)
 
 ## 9. Open decisions — need Matt before/at these points
 
