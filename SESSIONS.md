@@ -28,6 +28,17 @@
   **Calendar** (not one of the 3 tile domains) and dev **System Logs** — are surfaced *muted / "pending
   domain decision"* and *dev-only*, flagged not committed (they belong to the Assistant Bar PRD).
 - Updated `PROJECT_MAP.md` (§6 Home Hub status → "PRD locked · mockup drafted" + top status line).
+- Wrote a **build-ready Claude Design prompt**: `design/claude-design-prompt--home-hub-shell.md` — a
+  self-contained paste (seed tokens + seed data inlined) asking for the 4 frames, with a **fidelity dial**
+  (render-faithfully vs. explore) and the two open flags (Calendar/System-Logs) held loose. Matt is taking
+  this to Claude Design and starting to build the Phase-0 shell from its output.
+
+**Session checkpoint (2026-08-04 close):** clean stop. Working tree clean; three commits on
+`session-3-prd02-lock` (`81c265c` mockup + doc updates, `1f4cc13` Claude Design prompt) on top of the
+session-3 checkpoint. Nothing pushed. *Sandbox git note: this `~/projects` copy has a lock-cleanup quirk —
+the sandbox can't `unlink` inside `.git`, so `index.lock`/`HEAD.lock` must be `mv`'d aside before a commit
+(git writes via rename, which works). Distinct from the iCloud EDEADLK on the Documents copy. If a commit
+says "another git process is running," move the stale `.lock` aside and retry.*
 
 **Why now (design ordering)** — Matt's steer was "don't let design get skipped, but at the correct time."
 The Shopping surface was mocked before the *shell* it sits in had its own full mockup; drawing the Home
@@ -42,8 +53,10 @@ muted placeholder until the "new domain vs. surface backend calendar" question i
 1. **Still the standing open loop:** branch `session-3-prd02-lock` (now also carrying this mockup +
    doc updates) is committed but **not pushed**. Decide its fate — merge to `main` or open a PR
    (pushing is an explicit, separate yes). `main` still untouched.
-2. Optional: **PRD 03 — Assistant Bar (v1, Shopping-only)**, now with both a locked domain and two
-   surface mockups to spec against.
+2. **Build the Phase-0 shell** from the Claude Design output (Matt driving) — reshape the prior tab
+   shell into the tile grid + ambient⇄engaged mode per PROJECT_MAP §5 Phase 0.
+3. Optional: **PRD 03 — Assistant Bar (v1, Shopping-only)**, now with a locked domain and two surface
+   mockups to spec against.
 
 **Open questions carried forward** — engaged-mode Calendar/System-Logs (deferred to Assistant Bar PRD);
 listening/waveform accent token (reused `accent.tasks` as a stand-in in the mockup; mint a real token when
