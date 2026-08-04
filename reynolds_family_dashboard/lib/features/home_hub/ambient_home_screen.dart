@@ -128,7 +128,8 @@ class _Header extends StatelessWidget {
           children: [
             Text(clock, style: HubType.hero),
             const SizedBox(height: HubSpace.xs),
-            Text(date, style: HubType.body.copyWith(color: HubColors.textSecondary)),
+            Text(date,
+                style: HubType.body.copyWith(color: HubColors.textSecondary)),
           ],
         ),
         Column(
@@ -146,7 +147,8 @@ class _Header extends StatelessWidget {
                 ),
                 const SizedBox(width: HubSpace.sm),
                 Text(AmbientHeaderData.weatherSeed,
-                    style: HubType.body.copyWith(color: HubColors.textSecondary)),
+                    style:
+                        HubType.body.copyWith(color: HubColors.textSecondary)),
               ],
             ),
           ],
@@ -203,8 +205,8 @@ class _DomainTile extends StatelessWidget {
                   const SizedBox(width: HubSpace.sm),
                   Flexible(
                     child: Text(data.keyMeaning,
-                        style:
-                            HubType.body.copyWith(color: HubColors.textSecondary),
+                        style: HubType.body
+                            .copyWith(color: HubColors.textSecondary),
                         overflow: TextOverflow.ellipsis),
                   ),
                 ],
@@ -265,8 +267,8 @@ class _FocusedContainer extends StatelessWidget {
               const SizedBox(width: 10),
               Flexible(
                 child: Text(tile.title,
-                    style:
-                        HubType.keyNumber.copyWith(color: HubColors.textPrimary),
+                    style: HubType.keyNumber
+                        .copyWith(color: HubColors.textPrimary),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis),
               ),
@@ -278,7 +280,8 @@ class _FocusedContainer extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text('Focused view',
-                      style: HubType.label.copyWith(color: HubColors.textMuted)),
+                      style:
+                          HubType.label.copyWith(color: HubColors.textMuted)),
                   const SizedBox(height: HubSpace.sm),
                   Text('${tile.title} content plugs in here',
                       style: HubType.caption),

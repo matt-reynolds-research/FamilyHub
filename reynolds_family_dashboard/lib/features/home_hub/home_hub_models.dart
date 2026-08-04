@@ -66,6 +66,7 @@ final homeTilesProvider = Provider<List<DomainTileData>>((ref) {
 /// surfaced as clearly-mock, per "fail loud while building; degrade gracefully once shipped").
 class AmbientHeaderData {
   const AmbientHeaderData._();
-  static const String weatherSeed = '68° clear'; // MOCK — no weather source wired yet
+  static const String weatherSeed =
+      '68° clear'; // MOCK — no weather source wired yet
   static const String wordmark = 'FAMILYHUB';
 }
