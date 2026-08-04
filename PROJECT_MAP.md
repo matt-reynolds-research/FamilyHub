@@ -5,7 +5,7 @@
 > this file disagree, one of them is wrong — fix it in the same step. Everything else
 > (PRDs, design system, code) hangs off this.
 
-_Last updated: 2026-08-03 · Status: **Phase 0 — planning (salvage-and-reshape: prior Flutter app audited; tile-shell vision canonical; Home Hub PRD locked; PRD 02 Shopping drafted)**_
+_Last updated: 2026-08-03 · Status: **Phase 0 — building (salvage-and-reshape). Home Hub design imported from Claude Design (`design/FamilyHub Home Hub.dc.html`); first Flutter shell increment landed — dark seed v1.2 tokens (Helvetica Neue) + ambient home (header, 3-tile grid, Assistant Bar pill, generic focus container) on seeded data, widget-tested. Sphere / engaged / voice deferred to a later layer. Prior tab shell + Supabase pending prune.**_
 
 ---
 
@@ -132,9 +132,9 @@ disposition is §6a.
 
 | Feature | Status | Notes |
 |---------|--------|-------|
-| Home Hub (shell) | 📄 PRD locked | Phase 0 — [`prds/01-home-hub-prd.md`](prds/01-home-hub-prd.md). Two-mode (ambient ⇄ engaged); engaged stubbed. To be reshaped from the prior tab shell. |
+| Home Hub (shell) | 🟡 shell scaffolded (Phase 0) | Phase 0 — [`prds/01-home-hub-prd.md`](prds/01-home-hub-prd.md). Design imported + reviewed ([`design/claude-design-import--home-hub.md`](design/claude-design-import--home-hub.md)). **First Flutter increment built:** `lib/theme/hub_tokens.dart` (seed v1.2, Helvetica Neue) + `lib/features/home_hub/` (ambient home: header, 3-tile grid, Assistant Bar pill, generic focus container; seeded data; widget-tested). Ambient⇄engaged: engaged/voice sphere deferred to a later layer. **Follow-up:** prune prior tab shell + Supabase; wire the real data layer (Phase 1). |
 | Design-system seed | ✅ v1.1 | Phase 0 — [`design/design-system-seed.md`](design/design-system-seed.md). Tokens + tile grid + reusable tile. Target device iPad 10th gen. |
-| Shopping tile | 📄 PRD draft | Phase 1 — [`prds/02-shopping-prd.md`](prds/02-shopping-prd.md); owns the real `SHOPPING.md` parser + lossless model. Not yet built. |
+| Shopping tile | 📄 PRD locked | Phase 1 — [`prds/02-shopping-prd.md`](prds/02-shopping-prd.md); owns the real `SHOPPING.md` parser + lossless model. Surface mockup drafted ([`design/shopping-surface-mockup.html`](design/shopping-surface-mockup.html)). Not yet built. |
 | Assistant Bar | 🟡 prior code to adapt | Phase 2 — the `Agent` package is a working chat bar to restyle/wire (§6a). |
 | Tasks / Todo tile | ⬜ Placeholder | Phase 3 |
 | Mail & Packages tile | ⬜ Placeholder | Phase 4 |
@@ -162,7 +162,7 @@ tile-shell/markdown vision above is canonical (D-14). Full detail in
 PRDs get written **one phase ahead of the build**, in dependency order:
 
 1. **Home Hub** (the shell) → **✅ Locked: [`prds/01-home-hub-prd.md`](prds/01-home-hub-prd.md).**
-2. **Shopping** — first vertical slice → **📄 Drafted: [`prds/02-shopping-prd.md`](prds/02-shopping-prd.md).**
+2. **Shopping** — first vertical slice → **✅ Locked: [`prds/02-shopping-prd.md`](prds/02-shopping-prd.md).**
 3. **Assistant Bar** — written after Shopping so it has a concrete domain (and now, a concrete
    `Agent` starting point) to specify against.
 4. **Tasks / Todo** — mostly mirrors Shopping; fast to write once patterns exist.

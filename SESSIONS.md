@@ -13,6 +13,126 @@
 
 ---
 
+## 2026-08-04 (session 5, Cowork) — Home Hub design import + first Flutter shell
+
+**What changed**
+- **Imported the finalized Home Hub design** from Claude Design, byte-exact, into `design/`:
+  `FamilyHub Home Hub.dc.html` (50,978 B) + `support.js` (69,150 B — the generic dc-runtime; the sphere
+  logic is a `<script>` inside the `.dc.html`). Retrieval was non-trivial (auth-gated project): pulled via
+  the browser's authenticated session through a `get_page_text` → host-file → Desktop Commander decode
+  pipeline. Wrote `design/claude-design-import--home-hub.md` (8 frames across 3 turns; token table; drift review).
+- **Drift flagged + decided (D-18).** The design evolved (Matt-driven) into a voice **presence-sphere**
+  assistant — Phase-5-forward. Scope call: **build the Phase-0 static shell first**, defer sphere/engaged/voice.
+  Typeface **Inter → Helvetica Neue**.
+- **Built the first Flutter increment** (analyzer-clean on new code; widget-tested):
+  `lib/theme/hub_tokens.dart` (seed **v1.2**: dark tokens + Helvetica Neue + new `#6C7BF0`/`#9B7BF0`/`#08090B`)
+  and `lib/features/home_hub/` (ambient home: header w/ live clock, 3-tile seeded grid matching frame `1a`,
+  Assistant Bar pill, generic focus container). Repointed `app.dart` to the new dark shell.
+  `test/ambient_home_screen_test.dart` passes (render + tile→focus→back).
+- Seed doc → **v1.2** (font + new tokens folded back). `PROJECT_MAP` §6 Home Hub → "shell scaffolded".
+
+**Commits / not pushed** — `docs/import-home-hub-design` branch: `221e344` (design import) + a follow-up
+commit for the shell increment. **Not pushed** — consistent with the repo's standing "committed, not
+pushed" posture; pushing / opening a PR is a separate explicit yes.
+
+**What is next**
+1. **Push/PR decision** for the accumulated branches (`session-3-prd02-lock`, `docs/import-home-hub-design`).
+2. **Phase-0 prune follow-up:** remove the prior 5-tab shell + Supabase (`supabase_flutter`, service/repo/
+   `supabase_migration.sql`), retire the light `AppColors`/`AppTheme`, resolve the `.env` asset friction.
+3. **Phase 1** — real `SHOPPING.md` parser + Shopping tile behind the shell.
+
+**Open** — the presence sphere / engaged mode is *banked* (tokens minted), not built; it's a Phase-2/5 layer.
+
+---
+
+## 2026-08-04 (session 4, Cowork) — Home Hub (shell) surface mockup
+
+**What changed**
+- Drafted the **Home Hub surface mockup**: `design/home-hub-surface-mockup.html`, on seed v1.1 tokens
+  (same verbatim token block as the Shopping mockup, so the two surfaces match by construction).
+- Deliberately scoped to picture the **shell itself**, not a domain — the piece the Shopping mockup
+  couldn't show. Four frames, each mapped to a PRD 01 P0: canonical ambient home + header (P0-1/2/3/4),
+  **Assistant Bar three states** idle/listening/reply (P0-6), **generic home⇄focus** nav (P0-7), and the
+  **ambient⇄engaged mode takeover** (P0-8). Tile empty/error states are *not* re-drawn — they already
+  live in the Shopping mockup; a pointer is left instead of a duplicate (avoids drift).
+- **Engaged mode drawn text-first** (Phase 2), with the voice waveform / live-transcription strip tagged
+  **Phase 5** so nothing implies voice in Phase 0. The two engaged-mode open flags from the wireframe —
+  **Calendar** (not one of the 3 tile domains) and dev **System Logs** — are surfaced *muted / "pending
+  domain decision"* and *dev-only*, flagged not committed (they belong to the Assistant Bar PRD).
+- Updated `PROJECT_MAP.md` (§6 Home Hub status → "PRD locked · mockup drafted" + top status line).
+- Wrote a **build-ready Claude Design prompt**: `design/claude-design-prompt--home-hub-shell.md` — a
+  self-contained paste (seed tokens + seed data inlined) asking for the 4 frames, with a **fidelity dial**
+  (render-faithfully vs. explore) and the two open flags (Calendar/System-Logs) held loose. Matt is taking
+  this to Claude Design and starting to build the Phase-0 shell from its output.
+
+**Session checkpoint (2026-08-04 close):** clean stop. Working tree clean; three commits on
+`session-3-prd02-lock` (`81c265c` mockup + doc updates, `1f4cc13` Claude Design prompt) on top of the
+session-3 checkpoint. Nothing pushed. *Sandbox git note: this `~/projects` copy has a lock-cleanup quirk —
+the sandbox can't `unlink` inside `.git`, so `index.lock`/`HEAD.lock` must be `mv`'d aside before a commit
+(git writes via rename, which works). Distinct from the iCloud EDEADLK on the Documents copy. If a commit
+says "another git process is running," move the stale `.lock` aside and retry.*
+
+**Why now (design ordering)** — Matt's steer was "don't let design get skipped, but at the correct time."
+The Shopping surface was mocked before the *shell* it sits in had its own full mockup; drawing the Home
+Hub mockup back-fills the foundation and lets the Shopping tile be checked against the real grid. Reversible
+planning work — no code, no publishing.
+
+**Decisions** — no new numbered decision. One design stance worth noting (candidate for the Assistant Bar
+PRD, not locked here): engaged-mode glance sidebar shows the **demoted three domains**; Calendar stays a
+muted placeholder until the "new domain vs. surface backend calendar" question is decided.
+
+**What is next**
+1. **Still the standing open loop:** branch `session-3-prd02-lock` (now also carrying this mockup +
+   doc updates) is committed but **not pushed**. Decide its fate — merge to `main` or open a PR
+   (pushing is an explicit, separate yes). `main` still untouched.
+2. **Build the Phase-0 shell** from the Claude Design output (Matt driving) — reshape the prior tab
+   shell into the tile grid + ambient⇄engaged mode per PROJECT_MAP §5 Phase 0.
+3. Optional: **PRD 03 — Assistant Bar (v1, Shopping-only)**, now with a locked domain and two surface
+   mockups to spec against.
+
+**Open questions carried forward** — engaged-mode Calendar/System-Logs (deferred to Assistant Bar PRD);
+listening/waveform accent token (reused `accent.tasks` as a stand-in in the mockup; mint a real token when
+the voice UI is built — seed §10 anticipates it). Serializer whitespace policy still deferred to the parser.
+
+---
+
+## 2026-08-03 (session 3, Cowork) — PRD 02 locked + first Shopping surface mockup
+
+**What changed**
+- Locked **PRD 02 — Shopping** after a read-through (Draft→Locked).
+- Drafted the first **surface mockup**: `design/shopping-surface-mockup.html` on seed v1.1 tokens — ambient
+  home with Shopping in the 3-tile shell (P0-8), focused list view with inline add (P0-5) + check→archive
+  (P0-6), empty/error tiles (P0-7).
+- **Resolved PRD 02 open design question:** Recently Bought = de-emphasized *and* collapsed (read-only,
+  agent-cleared). Logged **D-17**. Updated `PROJECT_MAP.md` (§6/§7 + status line).
+
+**Migration note** — this work was originally done in the mislocated `~/Documents/...` copy (Cowork was
+still pointed there; its `.git` deadlocks in the sandbox, iCloud EDEADLK). Migrated here into canonical per
+D-16, on branch **`session-3-prd02-lock`** (committed, **not pushed**; `main` untouched), decision renumbered
+"D-14"→**D-17** to avoid colliding with D-14/15/16.
+
+**Cowork folder situation (resolved as far as it can be):** the `~/projects/reynolds-household` folder is now
+a connected *context* folder and git works there. BUT the old `~/Documents/...Reynolds Household` folder is the
+Cowork project's **anchor** and **cannot be disconnected** — so the plan to "remove the old folder" isn't
+possible. Mitigations in place: (a) all FamilyHub work now targets `~/projects/...` explicitly; (b) the Cowork
+project **Instructions** were given a new `## Repo & working folder` section pointing future sessions here
+(pasted by Matt; not independently verified — the Instructions box syncs server-side and isn't readable from
+the sandbox). **So: trust `~/projects/reynolds-household/FamilyHub` as canonical; never write FamilyHub work to
+the Documents copy.** The Documents copy still legitimately owns the calendar-maintenance subsystem.
+
+**Session checkpoint (2026-08-03 eve):** stopping here to resume fresh. Open loop = the unpushed branch below.
+
+**What is next**
+1. **Decide the branch's fate:** review `session-3-prd02-lock` and either merge to `main` or open a PR
+   (pushing is an explicit, separate yes). Nothing published yet.
+2. Optional: **Home Hub surface mockup** (PRD 01 locked; brief + engaged wireframe exist).
+3. **PRD 03 — Assistant Bar (v1, Shopping-only)**, against the now-locked domain.
+
+**Open questions carried forward** — serializer whitespace policy (default byte-exact), deferred to parser
+implementation. Recently-Bought display now resolved (D-17). Cowork Instructions edit unverified (low-stakes).
+
+---
+
 ## 2026-08-03 — Repo untangle + salvage audit + PROJECT_MAP reconciled
 
 **What changed**

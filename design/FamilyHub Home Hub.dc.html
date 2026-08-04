@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<style>
+  html, body { margin:0; padding:0; background:#08090B; font-family:"Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing:antialiased; }
+  a { color:#9AA0AB; text-decoration:none; border-bottom:1px solid #333842; }
+  a:hover { color:#E7E9EE; }
+</style>
+</helmet>
+
+<section style="display:flex; flex-direction:column; gap:28px; padding:48px 56px 24px;">
+  <div style="display:flex; flex-direction:column; gap:6px;">
+    <div style="font-size:13px; font-weight:400; color:#6F757F; letter-spacing:0.04em;">Turn 3 · amplitude-reactive presence sphere · live, click the states</div>
+    <div style="font-size:22px; font-weight:500; color:#E7E9EE;">Reactive sphere <a href="#3a">3a</a></div>
+  </div>
+
+  <div style="display:flex; flex-wrap:wrap; gap:56px; align-items:flex-start;">
+    <div id="3a" style="display:flex; flex-direction:column; gap:12px;">
+      <div style="display:flex; align-items:baseline; gap:12px;">
+        <span style="font-size:13px; font-weight:500; color:#0D0F12; background:#9AA0AB; border-radius:4px; padding:2px 7px;">3a</span>
+        <span style="font-size:14px; font-weight:500; color:#E7E9EE;">Reactive presence sphere</span>
+        <span style="font-size:13px; color:#6F757F;">deforms on the audio envelope — a waveform wrapped on a sphere</span>
+      </div>
+
+      <div data-screen-label="3a Reactive sphere" style="width:1180px; height:820px; background:#0D0F12; border-radius:18px; padding:20px; box-sizing:border-box; display:flex; flex-direction:column; overflow:hidden;">
+
+        <div style="flex:none; display:flex; align-items:flex-end; justify-content:space-between; padding-bottom:16px; border-bottom:1px solid #333842;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:10px; height:10px; border-radius:999px; background: {{ stateColor }};"></div>
+            <div style="font-size:16px; line-height:1.4; font-weight:500; color:#E7E9EE;">{{ stateLabel }}</div>
+          </div>
+          <div style="display:flex; align-items:baseline; gap:16px;">
+            <div style="font-size:30px; line-height:1.2; font-weight:500; color:#9AA0AB;">7:14</div>
+            <div style="font-size:13px; line-height:1.4; color:#6F757F;">Monday, August 3</div>
+          </div>
+        </div>
+
+        <div style="flex:1; display:flex; gap:32px; min-height:0; padding-top:32px;">
+          <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:40px; min-width:0;">
+            <canvas data-sphere="live" width="880" height="880" style="width:440px; height:440px; display:block;"></canvas>
+            <div style="font-size:52px; line-height:1.2; font-weight:400; color:#E7E9EE; text-align:center; text-wrap:pretty; max-width:760px;">{{ transcript }}</div>
+          </div>
+
+          <div style="width:320px; flex:none; display:flex; flex-direction:column; gap:12px;">
+            <div style="font-size:14px; line-height:1.4; font-weight:500; color:#6F757F;">State</div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <div onClick="{{ setListening }}" style="height:64px; border-radius:12px; background:#15181D; border:1px solid #333842; display:flex; align-items:center; gap:12px; padding:0 16px; cursor:pointer;" style-hover="background:#1E2229">
+                <div style="width:10px; height:10px; border-radius:999px; background:#6C7BF0;"></div>
+                <div style="font-size:16px; color:#E7E9EE;">Listening</div>
+              </div>
+              <div onClick="{{ setSpeaking }}" style="height:64px; border-radius:12px; background:#15181D; border:1px solid #333842; display:flex; align-items:center; gap:12px; padding:0 16px; cursor:pointer;" style-hover="background:#1E2229">
+                <div style="width:10px; height:10px; border-radius:999px; background:#9B7BF0;"></div>
+                <div style="font-size:16px; color:#E7E9EE;">Speaking</div>
+              </div>
+              <div onClick="{{ setConfirmed }}" style="height:64px; border-radius:12px; background:#15181D; border:1px solid #333842; display:flex; align-items:center; gap:12px; padding:0 16px; cursor:pointer;" style-hover="background:#1E2229">
+                <div style="width:10px; height:10px; border-radius:999px; background:#7FC98A;"></div>
+                <div style="font-size:16px; color:#E7E9EE;">Confirmed</div>
+              </div>
+              <div onClick="{{ setFailed }}" style="height:64px; border-radius:12px; background:#15181D; border:1px solid #333842; display:flex; align-items:center; gap:12px; padding:0 16px; cursor:pointer;" style-hover="background:#1E2229">
+                <div style="width:10px; height:10px; border-radius:999px; background:#E5726B;"></div>
+                <div style="font-size:16px; color:#E7E9EE;">Failed</div>
+              </div>
+              <div onClick="{{ setIdle }}" style="height:64px; border-radius:12px; background:#15181D; border:1px solid #333842; display:flex; align-items:center; gap:12px; padding:0 16px; cursor:pointer;" style-hover="background:#1E2229">
+                <div style="width:10px; height:10px; border-radius:999px; background:#6F757F;"></div>
+                <div style="font-size:16px; color:#E7E9EE;">Resting</div>
+              </div>
+            </div>
+            <div style="flex:1;"></div>
+            <div style="font-size:13px; line-height:1.4; color:#6F757F;">Amplitude drives radial deformation per latitude band; hue carries state.</div>
+          </div>
+        </div>
+
+        <div style="flex:none; height:56px; margin-top:32px; border-top:1px solid #333842; display:flex; align-items:center; justify-content:space-between;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:8px; height:8px; border-radius:999px; background: {{ stateColor }};"></div>
+            <div style="font-size:13px; line-height:1.4; color:#6F757F;">{{ statusLine }}</div>
+          </div>
+          <div style="font-size:13px; line-height:1.4; font-weight:500; color:#6F757F; letter-spacing:0.18em;">FAMILYHUB</div>
+        </div>
+
+        <div style="height:26px; flex:none; display:flex; align-items:center; justify-content:center;">
+          <div style="width:200px; height:5px; border-radius:999px; background:#333842;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="display:flex; flex-direction:column; gap:28px; padding:24px 56px;">
+  <div style="display:flex; flex-direction:column; gap:6px;">
+    <div style="font-size:13px; font-weight:400; color:#6F757F; letter-spacing:0.04em;">Turn 2 · wireframe-aligned shell · particle sphere replaces the waveform</div>
+    <div style="font-size:22px; font-weight:500; color:#E7E9EE;">Idle home <a href="#2a">2a</a> · Listening <a href="#2b">2b</a> · Reply <a href="#2c">2c</a></div>
+  </div>
+
+  <div style="display:flex; flex-wrap:wrap; gap:56px; align-items:flex-start;">
+
+    <!-- ============ 2a IDLE ============ -->
+    <div id="2a" style="display:flex; flex-direction:column; gap:12px;">
+      <div style="display:flex; align-items:baseline; gap:12px;">
+        <span style="font-size:13px; font-weight:500; color:#0D0F12; background:#9AA0AB; border-radius:4px; padding:2px 7px;">2a</span>
+        <span style="font-size:14px; font-weight:500; color:#E7E9EE;">Idle home</span>
+        <span style="font-size:13px; color:#6F757F;">household status bar · canvas + glance sidebar · bottom status</span>
+      </div>
+
+      <div data-screen-label="2a Idle home" style="width:1180px; height:820px; background:#0D0F12; border-radius:18px; padding:20px; box-sizing:border-box; display:flex; flex-direction:column; overflow:hidden;">
+
+        <div style="flex:none; display:flex; align-items:flex-end; justify-content:space-between; padding-bottom:16px; border-bottom:1px solid #333842;">
+          <div style="display:flex; align-items:center; gap:24px;">
+            <div style="display:flex; align-items:baseline; gap:8px;"><span style="font-size:30px; line-height:1.2; font-weight:500; color:#5DCAA5;">3</span><span style="font-size:16px; line-height:1.4; color:#9AA0AB;">to buy</span></div>
+            <div style="width:1px; height:20px; background:#333842;"></div>
+            <div style="display:flex; align-items:baseline; gap:8px;"><span style="font-size:30px; line-height:1.2; font-weight:500; color:#7F9FF0;">4</span><span style="font-size:16px; line-height:1.4; color:#9AA0AB;">to do</span></div>
+            <div style="width:1px; height:20px; background:#333842;"></div>
+            <div style="display:flex; align-items:baseline; gap:8px;"><span style="font-size:30px; line-height:1.2; font-weight:500; color:#EFB45A;">2</span><span style="font-size:16px; line-height:1.4; color:#9AA0AB;">arriving today</span></div>
+          </div>
+          <div style="display:flex; align-items:baseline; gap:16px;">
+            <div style="font-size:52px; line-height:1.2; font-weight:500; color:#E7E9EE; letter-spacing:-0.01em;">7:14</div>
+            <div style="display:flex; flex-direction:column; align-items:flex-end; gap:2px;">
+              <div style="font-size:16px; line-height:1.4; color:#9AA0AB;">Monday, August 3</div>
+              <div style="font-size:13px; line-height:1.4; color:#6F757F;">68° clear</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="flex:1; display:flex; gap:32px; min-height:0; padding-top:32px;">
+          <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:32px; min-width:0;">
+            <canvas data-sphere="idle" width="720" height="720" style="width:360px; height:360px; display:block;"></canvas>
+            <div style="font-size:30px; line-height:1.2; font-weight:400; color:#6F757F; text-align:center;">Ask me anything — “add milk…”</div>
+          </div>
+
+          <div style="width:320px; flex:none; background:#15181D; border:1px solid #333842; border-radius:12px; padding:20px; display:flex; flex-direction:column; gap:12px;">
+            <div style="font-size:14px; line-height:1.4; font-weight:500; color:#6F757F;">At a glance</div>
+            <div style="display:flex; align-items:baseline; gap:12px; padding:12px 0;"><div style="font-size:30px; line-height:1.2; font-weight:500; color:#5DCAA5; min-width:44px;">3</div><div style="display:flex; flex-direction:column; gap:2px;"><div style="font-size:16px; line-height:1.4; color:#9AA0AB;">Shopping</div><div style="font-size:13px; line-height:1.4; color:#6F757F;">Grocery 2 · Household 1</div></div></div>
+            <div style="height:1px; background:#333842;"></div>
+            <div style="display:flex; align-items:baseline; gap:12px; padding:12px 0;"><div style="font-size:30px; line-height:1.2; font-weight:500; color:#7F9FF0; min-width:44px;">4</div><div style="display:flex; flex-direction:column; gap:2px;"><div style="font-size:16px; line-height:1.4; color:#9AA0AB;">Tasks</div><div style="font-size:13px; line-height:1.4; color:#6F757F;">Skylight Frame decision</div></div></div>
+            <div style="height:1px; background:#333842;"></div>
+            <div style="display:flex; align-items:baseline; gap:12px; padding:12px 0;"><div style="font-size:30px; line-height:1.2; font-weight:500; color:#EFB45A; min-width:44px;">2</div><div style="display:flex; flex-direction:column; gap:2px;"><div style="font-size:16px; line-height:1.4; color:#9AA0AB;">Mail &amp; packages</div><div style="font-size:13px; line-height:1.4; color:#6F757F;">Package · out for delivery</div></div></div>
+            <div style="flex:1;"></div>
+            <sc-if value="{{ showPending }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex; flex-direction:column; gap:8px; padding-top:16px; border-top:1px solid #333842;">
+                <div style="font-size:13px; line-height:1.4; color:#6F757F;">Family calendar · pending</div>
+                <div style="font-size:13px; line-height:1.4; color:#6F757F;">System logs · pending</div>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+
+        <div style="flex:none; height:56px; margin-top:32px; border-top:1px solid #333842; display:flex; align-items:center; justify-content:space-between;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:8px; height:8px; border-radius:999px; background:#6F757F;"></div>
+            <div style="font-size:13px; line-height:1.4; color:#6F757F;">Hub is resting · say “Hey Hub” or tap anywhere</div>
+          </div>
+          <div style="font-size:13px; line-height:1.4; font-weight:500; color:#6F757F; letter-spacing:0.18em;">FAMILYHUB</div>
+        </div>
+
+        <div style="height:26px; flex:none; display:flex; align-items:center; justify-content:center;">
+          <div style="width:200px; height:5px; border-radius:999px; background:#333842;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 2b LISTENING ============ -->
+    <div id="2b" style="display:flex; flex-direction:column; gap:12px;">
+      <div style="display:flex; align-items:baseline; gap:12px;">
+        <span style="font-size:13px; font-weight:500; color:#0D0F12; background:#9AA0AB; border-radius:4px; padding:2px 7px;">2b</span>
+        <span style="font-size:14px; font-weight:500; color:#E7E9EE;">Listening</span>
+        <span style="font-size:13px; color:#6F757F;">sphere energizes · transcript builds under it</span>
+      </div>
+
+      <div data-screen-label="2b Listening" style="width:1180px; height:820px; background:#0D0F12; border-radius:18px; padding:20px; box-sizing:border-box; display:flex; flex-direction:column; overflow:hidden;">
+
+        <div style="flex:none; display:flex; align-items:flex-end; justify-content:space-between; padding-bottom:16px; border-bottom:1px solid #333842;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:10px; height:10px; border-radius:999px; background:#6C7BF0;"></div>
+            <div style="font-size:16px; line-height:1.4; font-weight:500; color:#E7E9EE;">Listening…</div>
+          </div>
+          <div style="display:flex; align-items:baseline; gap:16px;">
+            <div style="font-size:30px; line-height:1.2; font-weight:500; color:#9AA0AB;">7:14</div>
+            <div style="font-size:13px; line-height:1.4; color:#6F757F;">Monday, August 3</div>
+          </div>
+        </div>
+
+        <div style="flex:1; display:flex; gap:32px; min-height:0; padding-top:32px;">
+          <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:40px; min-width:0;">
+            <canvas data-sphere="listen" width="880" height="880" style="width:440px; height:440px; display:block;"></canvas>
+            <div style="font-size:52px; line-height:1.2; font-weight:400; color:#E7E9EE; text-align:center; text-wrap:pretty;">Add milk and paper towels<span style="color:#6F757F;">…</span></div>
+          </div>
+
+          <div style="width:320px; flex:none; display:flex; flex-direction:column; gap:12px; opacity:0.55;">
+            <div style="font-size:14px; line-height:1.4; font-weight:500; color:#6F757F;">At a glance</div>
+            <div style="display:flex; align-items:baseline; gap:12px; padding:12px 0;"><div style="font-size:30px; line-height:1.2; font-weight:500; color:#5DCAA5; min-width:44px;">3</div><div style="font-size:16px; line-height:1.4; color:#9AA0AB;">Shopping</div></div>
+            <div style="height:1px; background:#333842;"></div>
+            <div style="display:flex; align-items:baseline; gap:12px; padding:12px 0;"><div style="font-size:30px; line-height:1.2; font-weight:500; color:#6C7BF0; min-width:44px;">4</div><div style="font-size:16px; line-height:1.4; color:#9AA0AB;">Tasks</div></div>
+            <div style="height:1px; background:#333842;"></div>
+            <div style="display:flex; align-items:baseline; gap:12px; padding:12px 0;"><div style="font-size:30px; line-height:1.2; font-weight:500; color:#EFB45A; min-width:44px;">2</div><div style="font-size:16px; line-height:1.4; color:#9AA0AB;">Mail &amp; packages</div></div>
+          </div>
+        </div>
+
+        <div style="flex:none; height:56px; margin-top:32px; border-top:1px solid #333842; display:flex; align-items:center; justify-content:space-between;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:8px; height:8px; border-radius:999px; background:#6C7BF0;"></div>
+            <div style="font-size:13px; line-height:1.4; color:#6F757F;">Hub is listening · returns on silence</div>
+          </div>
+          <div style="font-size:13px; line-height:1.4; font-weight:500; color:#6F757F; letter-spacing:0.18em;">FAMILYHUB</div>
+        </div>
+
+        <div style="height:26px; flex:none; display:flex; align-items:center; justify-content:center;">
+          <div style="width:200px; height:5px; border-radius:999px; background:#333842;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 2c REPLY ============ -->
+    <div id="2c" style="display:flex; flex-direction:column; gap:12px;">
+      <div style="display:flex; align-items:baseline; gap:12px;">
+        <span style="font-size:13px; font-weight:500; color:#0D0F12; background:#9AA0AB; border-radius:4px; padding:2px 7px;">2c</span>
+        <span style="font-size:14px; font-weight:500; color:#E7E9EE;">Reply</span>
+        <span style="font-size:13px; color:#6F757F;">sphere settles green · intent response card · sidebar updates</span>
+      </div>
+
+      <div data-screen-label="2c Reply" style="width:1180px; height:820px; background:#0D0F12; border-radius:18px; padding:20px; box-sizing:border-box; display:flex; flex-direction:column; overflow:hidden;">
+
+        <div style="flex:none; display:flex; align-items:flex-end; justify-content:space-between; padding-bottom:16px; border-bottom:1px solid #333842;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:22px; height:22px; border-radius:999px; border:2px solid #7FC98A; box-sizing:border-box; display:flex; align-items:center; justify-content:center;">
+              <div style="width:10px; height:5px; border-left:2px solid #7FC98A; border-bottom:2px solid #7FC98A; transform:rotate(-45deg) translateY(-1px);"></div>
+            </div>
+            <div style="font-size:16px; line-height:1.4; font-weight:500; color:#E7E9EE;">Done</div>
+          </div>
+          <div style="display:flex; align-items:baseline; gap:16px;">
+            <div style="font-size:30px; line-height:1.2; font-weight:500; color:#9AA0AB;">7:14</div>
+            <div style="font-size:13px; line-height:1.4; color:#6F757F;">Monday, August 3</div>
+          </div>
+        </div>
+
+        <div style="flex:1; display:flex; gap:32px; min-height:0; padding-top:32px;">
+          <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:32px; min-width:0;">
+            <canvas data-sphere="reply" width="560" height="560" style="width:280px; height:280px; display:block;"></canvas>
+            <div style="font-size:52px; line-height:1.2; font-weight:400; color:#E7E9EE; text-align:center; text-wrap:pretty; max-width:640px;">Milk to grocery, paper towels to household.</div>
+            <div style="background:#1E2229; border-radius:12px; padding:20px 24px; display:flex; align-items:center; gap:20px;">
+              <div style="width:22px; height:22px; flex:none; border-radius:999px; border:2px solid #5DCAA5; box-sizing:border-box;"></div>
+              <div style="display:flex; flex-direction:column; gap:4px;">
+                <div style="font-size:14px; line-height:1.4; font-weight:500; color:#9AA0AB;">Shopping</div>
+                <div style="font-size:30px; line-height:1.2; font-weight:500; color:#5DCAA5;">5 to buy</div>
+              </div>
+              <div style="width:1px; align-self:stretch; background:#333842;"></div>
+              <div style="font-size:16px; line-height:1.4; color:#9AA0AB;">Grocery 3 · Household 2</div>
+            </div>
+          </div>
+
+          <div style="width:320px; flex:none; background:#15181D; border:1px solid #333842; border-radius:12px; padding:20px; display:flex; flex-direction:column; gap:12px;">
+            <div style="font-size:14px; line-height:1.4; font-weight:500; color:#6F757F;">At a glance</div>
+            <div style="display:flex; align-items:baseline; gap:12px; padding:12px 0;"><div style="font-size:30px; line-height:1.2; font-weight:500; color:#5DCAA5; min-width:44px;">5</div><div style="font-size:16px; line-height:1.4; color:#9AA0AB;">Shopping</div></div>
+            <div style="height:1px; background:#333842;"></div>
+            <div style="display:flex; align-items:baseline; gap:12px; padding:12px 0;"><div style="font-size:30px; line-height:1.2; font-weight:500; color:#7F9FF0; min-width:44px;">4</div><div style="font-size:16px; line-height:1.4; color:#9AA0AB;">Tasks</div></div>
+            <div style="height:1px; background:#333842;"></div>
+            <div style="display:flex; align-items:baseline; gap:12px; padding:12px 0;"><div style="font-size:30px; line-height:1.2; font-weight:500; color:#EFB45A; min-width:44px;">2</div><div style="font-size:16px; line-height:1.4; color:#9AA0AB;">Mail &amp; packages</div></div>
+            <div style="flex:1;"></div>
+            <sc-if value="{{ showPending }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex; flex-direction:column; gap:8px; padding-top:16px; border-top:1px solid #333842;">
+                <div style="font-size:13px; line-height:1.4; color:#6F757F;">Family calendar · pending</div>
+                <div style="font-size:13px; line-height:1.4; color:#6F757F;">System logs · pending</div>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+
+        <div style="flex:none; height:56px; margin-top:32px; border-top:1px solid #333842; display:flex; align-items:center; justify-content:space-between;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:8px; height:8px; border-radius:999px; background:#7FC98A;"></div>
+            <div style="font-size:13px; line-height:1.4; color:#6F757F;">Returning to rest in 3s</div>
+          </div>
+          <div style="font-size:13px; line-height:1.4; font-weight:500; color:#6F757F; letter-spacing:0.18em;">FAMILYHUB</div>
+        </div>
+
+        <div style="height:26px; flex:none; display:flex; align-items:center; justify-content:center;">
+          <div style="width:200px; height:5px; border-radius:999px; background:#333842;"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section style="display:flex; flex-direction:column; gap:28px; padding:24px 56px 96px;">
+  <div style="display:flex; flex-direction:column; gap:6px;">
+    <div style="font-size:13px; font-weight:400; color:#6F757F; letter-spacing:0.04em;">Turn 1 · FamilyHub Home Hub — shell frames · 1180×820 landscape</div>
+    <div style="font-size:22px; font-weight:500; color:#E7E9EE;">Ambient home <a href="#1a">1a</a> · Assistant Bar states <a href="#1b">1b</a> · Focused tile <a href="#1c">1c</a> · Engaged mode <a href="#1d">1d</a></div>
+  </div>
+
+  <div style="display:flex; flex-wrap:wrap; gap:56px; align-items:flex-start;">
+
+    <!-- ============ 1a AMBIENT HOME ============ -->
+    <div id="1a" style="display:flex; flex-direction:column; gap:12px;">
+      <div style="display:flex; align-items:baseline; gap:12px;">
+        <span style="font-size:13px; font-weight:500; color:#0D0F12; background:#9AA0AB; border-radius:4px; padding:2px 7px;">1a</span>
+        <span style="font-size:14px; font-weight:500; color:#E7E9EE;">Ambient home</span>
+        <span style="font-size:13px; color:#6F757F;">the resting state — hero deliverable</span>
+      </div>
+
+      <div data-screen-label="1a Ambient home" style="width:1180px; height:820px; background:#0D0F12; border-radius:18px; padding:20px; box-sizing:border-box; display:flex; flex-direction:column; overflow:hidden;">
+
+        <!-- HEADER -->
+        <div style="height:120px; flex:none; display:flex; align-items:flex-start; justify-content:space-between;">
+          <div style="display:flex; flex-direction:column; gap:4px;">
+            <div style="font-size:52px; line-height:1.2; font-weight:500; color:#E7E9EE; letter-spacing:-0.01em;">7:14</div>
+            <div style="font-size:16px; line-height:1.4; font-weight:400; color:#9AA0AB;">Monday, August 3</div>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:flex-end; gap:8px;">
+            <div style="font-size:13px; line-height:1.4; font-weight:500; color:#6F757F; letter-spacing:0.18em;">FAMILYHUB</div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <div style="width:14px; height:14px; border-radius:999px; background:#EFB45A;"></div>
+              <div style="font-size:16px; line-height:1.4; font-weight:400; color:#9AA0AB;">68° clear</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="height:32px; flex:none;"></div>
+
+        <!-- TILE ROW -->
+        <div style="flex:1; display:grid; grid-template-columns:repeat(3, 1fr); gap:16px;">
+
+          <div style="background:#15181D; border:1px solid #333842; border-radius:12px; padding:20px; display:flex; flex-direction:column;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <div style="width:22px; height:22px; border-radius:999px; border:2px solid #5DCAA5; box-sizing:border-box;"></div>
+              <div style="font-size:14px; line-height:1.4; font-weight:500; color:#E7E9EE;">Shopping</div>
+            </div>
+            <div style="flex:1;"></div>
+            <div style="font-size:30px; line-height:1.2; font-weight:500; color:#5DCAA5;">3 to buy</div>
+            <div style="font-size:16px; line-height:1.4; font-weight:400; color:#9AA0AB; margin-top:6px;">across two lists</div>
+            <div style="height:1px; background:#333842; margin:16px 0 12px;"></div>
+            <div style="font-size:13px; line-height:1.4; font-weight:400; color:#6F757F;">Grocery 2 · Household 1</div>
+          </div>
+
+          <div style="background:#15181D; border:1px solid #333842; border-radius:12px; padding:20px; display:flex; flex-direction:column;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <div style="width:20px; height:20px; border-radius:4px; border:2px solid #7F9FF0; box-sizing:border-box;"></div>
+              <div style="font-size:14px; line-height:1.4; font-weight:500; color:#E7E9EE;">Tasks</div>
+            </div>
+            <div style="flex:1;"></div>
+            <div style="font-size:30px; line-height:1.2; font-weight:500; color:#7F9FF0;">4 to do</div>
+            <div style="font-size:16px; line-height:1.4; font-weight:400; color:#9AA0AB; margin-top:6px;">open for the household</div>
+            <div style="height:1px; background:#333842; margin:16px 0 12px;"></div>
+            <div style="font-size:13px; line-height:1.4; font-weight:400; color:#6F757F;">Skylight Frame decision</div>
+          </div>
+
+          <div style="background:#15181D; border:1px solid #333842; border-radius:12px; padding:20px; display:flex; flex-direction:column;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <div style="width:20px; height:20px; border:2px solid #EFB45A; box-sizing:border-box; transform:rotate(45deg);"></div>
+              <div style="font-size:14px; line-height:1.4; font-weight:500; color:#E7E9EE;">Mail &amp; packages</div>
+            </div>
+            <div style="flex:1;"></div>
+            <div style="font-size:30px; line-height:1.2; font-weight:500; color:#EFB45A;">2 arriving today</div>
+            <div style="font-size:16px; line-height:1.4; font-weight:400; color:#9AA0AB; margin-top:6px;">mail and deliveries</div>
+            <div style="height:1px; background:#333842; margin:16px 0 12px;"></div>
+            <div style="font-size:13px; line-height:1.4; font-weight:400; color:#6F757F;">Package · out for delivery</div>
+          </div>
+
+        </div>
+
+        <div style="height:32px; flex:none;"></div>
+
+        <!-- ASSISTANT BAR -->
+        <div style="height:120px; flex:none; background:#1E2229; border-radius:999px; display:flex; align-items:center; gap:20px; padding:0 32px;">
+          <div style="width:64px; height:64px; flex:none; border-radius:999px; background:#0D0F12; border:1px solid #333842; display:flex; align-items:center; justify-content:center;">
+            <div style="width:16px; height:26px; border-radius:999px; background:#9AA0AB;"></div>
+          </div>
+          <div style="font-size:30px; line-height:1.2; font-weight:400; color:#9AA0AB;">Ask me anything — “add milk…”</div>
+        </div>
+
+        <div style="height:26px; flex:none; display:flex; align-items:center; justify-content:center;">
+          <div style="width:200px; height:5px; border-radius:999px; background:#333842;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 1b ASSISTANT BAR STATES ============ -->
+    <div id="1b" style="display:flex; flex-direction:column; gap:12px;">
+      <div style="display:flex; align-items:baseline; gap:12px;">
+        <span style="font-size:13px; font-weight:500; color:#0D0F12; background:#9AA0AB; border-radius:4px; padding:2px 7px;">1b</span>
+        <span style="font-size:14px; font-weight:500; color:#E7E9EE;">Assistant Bar — three states</span>
+        <span style="font-size:13px; color:#6F757F;">idle · listening · reply</span>
+      </div>
+
+      <div data-screen-label="1b Assistant Bar states" style="width:1180px; height:820px; background:#0D0F12; border-radius:18px; padding:20px; box-sizing:border-box; display:flex; flex-direction:column; overflow:hidden;">
+        <div style="height:60px; flex:none; display:flex; align-items:center; justify-content:space-between;">
+          <div style="font-size:14px; line-height:1.4; font-weight:500; color:#E7E9EE;">Assistant Bar — states</div>
+          <div style="font-size:13px; line-height:1.4; font-weight:400; color:#6F757F; letter-spacing:0.18em;">FAMILYHUB</div>
+        </div>
+
+        <div style="flex:1; display:flex; flex-direction:column; justify-content:center; gap:32px;">
+
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <div style="font-size:13px; line-height:1.4; font-weight:400; color:#6F757F;">Idle — the front door, always present</div>
+            <div style="height:120px; background:#1E2229; border-radius:999px; display:flex; align-items:center; gap:20px; padding:0 32px;">
+              <div style="width:64px; height:64px; flex:none; border-radius:999px; background:#0D0F12; border:1px solid #333842; display:flex; align-items:center; justify-content:center;">
+                <div style="width:16px; height:26px; border-radius:999px; background:#9AA0AB;"></div>
+              </div>
+              <div style="font-size:30px; line-height:1.2; font-weight:400; color:#9AA0AB;">Ask me anything — “add milk…”</div>
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <div style="font-size:13px; line-height:1.4; font-weight:400; color:#6F757F;">Listening — accent ring + waveform (new token: listening accent = Tasks blue #7F9FF0)</div>
+            <div style="height:120px; background:#1E2229; border-radius:999px; border:2px solid #7F9FF0; box-sizing:border-box; display:flex; align-items:center; gap:20px; padding:0 30px;">
+              <div style="width:64px; height:64px; flex:none; border-radius:999px; background:#7F9FF0; display:flex; align-items:center; justify-content:center;">
+                <div style="width:16px; height:26px; border-radius:999px; background:#0D0F12;"></div>
+              </div>
+              <div style="font-size:30px; line-height:1.2; font-weight:400; color:#E7E9EE;">Listening…</div>
+              <div style="flex:1;"></div>
+              <div style="display:flex; align-items:center; gap:6px; height:48px;">
+                <div style="width:6px; height:16px; border-radius:999px; background:#7F9FF0;"></div>
+                <div style="width:6px; height:30px; border-radius:999px; background:#7F9FF0;"></div>
+                <div style="width:6px; height:48px; border-radius:999px; background:#7F9FF0;"></div>
+                <div style="width:6px; height:26px; border-radius:999px; background:#7F9FF0;"></div>
+                <div style="width:6px; height:38px; border-radius:999px; background:#7F9FF0;"></div>
+                <div style="width:6px; height:14px; border-radius:999px; background:#7F9FF0;"></div>
+                <div style="width:6px; height:28px; border-radius:999px; background:#7F9FF0;"></div>
+                <div style="width:6px; height:42px; border-radius:999px; background:#7F9FF0;"></div>
+                <div style="width:6px; height:18px; border-radius:999px; background:#7F9FF0;"></div>
+                <div style="width:6px; height:10px; border-radius:999px; background:#7F9FF0;"></div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <div style="font-size:13px; line-height:1.4; font-weight:400; color:#6F757F;">Reply — confirmation, then returns to idle on silence</div>
+            <div style="height:120px; background:#1E2229; border-radius:999px; display:flex; align-items:center; gap:20px; padding:0 32px;">
+              <div style="width:64px; height:64px; flex:none; border-radius:999px; background:#0D0F12; border:2px solid #7FC98A; box-sizing:border-box; display:flex; align-items:center; justify-content:center;">
+                <div style="width:22px; height:12px; border-left:3px solid #7FC98A; border-bottom:3px solid #7FC98A; transform:rotate(-45deg) translateY(-3px);"></div>
+              </div>
+              <div style="font-size:30px; line-height:1.2; font-weight:400; color:#9AA0AB;"><span style="font-weight:500; color:#E7E9EE;">Added milk</span> to the grocery list</div>
+            </div>
+          </div>
+
+        </div>
+
+        <div style="height:26px; flex:none; display:flex; align-items:center; justify-content:center;">
+          <div style="width:200px; height:5px; border-radius:999px; background:#333842;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 1c FOCUSED TILE ============ -->
+    <div id="1c" style="display:flex; flex-direction:column; gap:12px;">
+      <div style="display:flex; align-items:baseline; gap:12px;">
+        <span style="font-size:13px; font-weight:500; color:#0D0F12; background:#9AA0AB; border-radius:4px; padding:2px 7px;">1c</span>
+        <span style="font-size:14px; font-weight:500; color:#E7E9EE;">Home → focused tile</span>
+        <span style="font-size:13px; color:#6F757F;">generic focus container on the raised surface</span>
+      </div>
+
+      <div data-screen-label="1c Focused tile" style="width:1180px; height:820px; background:#0D0F12; border-radius:18px; padding:20px; box-sizing:border-box; display:flex; flex-direction:column; overflow:hidden;">
+
+        <div style="height:120px; flex:none; display:flex; align-items:flex-start; justify-content:space-between;">
+          <div style="display:flex; align-items:center; gap:16px; height:64px; padding:0 24px 0 16px; background:#15181D; border:1px solid #333842; border-radius:12px;">
+            <div style="width:14px; height:14px; border-left:2px solid #E7E9EE; border-bottom:2px solid #E7E9EE; transform:rotate(45deg);"></div>
+            <div style="font-size:30px; line-height:1.2; font-weight:500; color:#E7E9EE;">Home</div>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:flex-end; gap:8px;">
+            <div style="font-size:13px; line-height:1.4; font-weight:500; color:#6F757F; letter-spacing:0.18em;">FAMILYHUB</div>
+            <div style="font-size:16px; line-height:1.4; font-weight:400; color:#9AA0AB;">7:14 · 68° clear</div>
+          </div>
+        </div>
+
+        <div style="height:32px; flex:none;"></div>
+
+        <div style="flex:1; background:#1E2229; border-radius:12px; padding:32px; display:flex; flex-direction:column;">
+          <div style="display:flex; align-items:flex-start; justify-content:space-between;">
+            <div style="display:flex; flex-direction:column; gap:12px;">
+              <div style="display:flex; align-items:center; gap:10px;">
+                <div style="width:22px; height:22px; border-radius:999px; border:2px solid #5DCAA5; box-sizing:border-box;"></div>
+                <div style="font-size:14px; line-height:1.4; font-weight:500; color:#9AA0AB;">Focused domain</div>
+              </div>
+              <div style="font-size:52px; line-height:1.2; font-weight:500; color:#E7E9EE;">3 to buy</div>
+            </div>
+            <div style="font-size:13px; line-height:1.4; font-weight:400; color:#6F757F; text-align:right; max-width:280px;">Returns home on silence,<br>or tap ‹ Home</div>
+          </div>
+
+          <div style="height:1px; background:#333842; margin:32px 0;"></div>
+
+          <div style="flex:1; border:1px dashed #333842; border-radius:12px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; background-image:repeating-linear-gradient(135deg, #21262e 0 8px, #1E2229 8px 16px);">
+            <div style="font-family:ui-monospace, Menlo, monospace; font-size:16px; line-height:1.4; color:#9AA0AB;">domain content plugs in here</div>
+            <div style="font-family:ui-monospace, Menlo, monospace; font-size:13px; line-height:1.4; color:#6F757F;">shell provides the container, header, and way back — nothing else</div>
+          </div>
+
+          <div style="display:flex; gap:16px; margin-top:32px;">
+            <div style="height:72px; flex:1; border-radius:12px; background:#15181D; border:1px solid #333842; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:500; color:#6F757F;">domain action slot</div>
+            <div style="height:72px; flex:1; border-radius:12px; background:#15181D; border:1px solid #333842; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:500; color:#6F757F;">domain action slot</div>
+          </div>
+        </div>
+
+        <div style="height:32px; flex:none;"></div>
+
+        <div style="height:120px; flex:none; background:#1E2229; border-radius:999px; display:flex; align-items:center; gap:20px; padding:0 32px;">
+          <div style="width:64px; height:64px; flex:none; border-radius:999px; background:#0D0F12; border:1px solid #333842; display:flex; align-items:center; justify-content:center;">
+            <div style="width:16px; height:26px; border-radius:999px; background:#9AA0AB;"></div>
+          </div>
+          <div style="font-size:30px; line-height:1.2; font-weight:400; color:#9AA0AB;">Ask me anything — “add milk…”</div>
+        </div>
+
+        <div style="height:26px; flex:none; display:flex; align-items:center; justify-content:center;">
+          <div style="width:200px; height:5px; border-radius:999px; background:#333842;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 1d ENGAGED MODE ============ -->
+    <div id="1d" style="display:flex; flex-direction:column; gap:12px;">
+      <div style="display:flex; align-items:baseline; gap:12px;">
+        <span style="font-size:13px; font-weight:500; color:#0D0F12; background:#9AA0AB; border-radius:4px; padding:2px 7px;">1d</span>
+        <span style="font-size:14px; font-weight:500; color:#E7E9EE;">Engaged mode</span>
+        <span style="font-size:13px; color:#6F757F;">the resting bar, expanded to the whole canvas</span>
+      </div>
+
+      <div data-screen-label="1d Engaged mode" style="width:1180px; height:820px; background:#0D0F12; border-radius:18px; padding:20px; box-sizing:border-box; display:flex; flex-direction:column; overflow:hidden;">
+
+        <div style="flex:1; display:flex; gap:32px; min-height:0;">
+
+          <!-- conversational canvas -->
+          <div style="flex:1; display:flex; flex-direction:column; min-width:0;">
+            <div style="display:flex; align-items:center; gap:12px; height:40px; flex:none;">
+              <div style="width:10px; height:10px; border-radius:999px; background:#7F9FF0;"></div>
+              <div style="font-size:14px; line-height:1.4; font-weight:500; color:#9AA0AB;">Listening</div>
+            </div>
+
+            <div style="flex:1; display:flex; flex-direction:column; justify-content:flex-end; gap:20px; min-height:0;">
+              <div style="display:flex; flex-direction:column; gap:6px; align-items:flex-start;">
+                <div style="font-size:13px; line-height:1.4; font-weight:400; color:#6F757F;">You · 7:14</div>
+                <div style="background:#15181D; border:1px solid #333842; border-radius:12px; padding:20px 24px; max-width:80%;">
+                  <div style="font-size:30px; line-height:1.2; font-weight:400; color:#E7E9EE;">Add milk and paper towels</div>
+                </div>
+              </div>
+
+              <div style="display:flex; flex-direction:column; gap:6px; align-items:flex-start;">
+                <div style="font-size:13px; line-height:1.4; font-weight:400; color:#6F757F;">Hub</div>
+                <div style="background:#1E2229; border-radius:12px; padding:20px 24px; max-width:88%;">
+                  <div style="font-size:30px; line-height:1.2; font-weight:400; color:#E7E9EE;">Done — milk to grocery, paper towels to household.</div>
+                </div>
+              </div>
+
+              <!-- intent response card -->
+              <div style="background:#1E2229; border-radius:12px; padding:20px 24px; display:flex; align-items:center; gap:20px; max-width:88%;">
+                <div style="width:22px; height:22px; flex:none; border-radius:999px; border:2px solid #5DCAA5; box-sizing:border-box;"></div>
+                <div style="display:flex; flex-direction:column; gap:4px; min-width:0;">
+                  <div style="font-size:14px; line-height:1.4; font-weight:500; color:#9AA0AB;">Shopping</div>
+                  <div style="font-size:30px; line-height:1.2; font-weight:500; color:#5DCAA5;">5 to buy</div>
+                </div>
+                <div style="width:1px; align-self:stretch; background:#333842;"></div>
+                <div style="font-size:16px; line-height:1.4; font-weight:400; color:#9AA0AB;">Grocery 3 · Household 2</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- glance sidebar -->
+          <div style="width:320px; flex:none; background:#15181D; border:1px solid #333842; border-radius:12px; padding:20px; display:flex; flex-direction:column; gap:12px;">
+            <div style="font-size:14px; line-height:1.4; font-weight:500; color:#6F757F;">At a glance</div>
+
+            <div style="display:flex; align-items:baseline; gap:12px; padding:12px 0;">
+              <div style="font-size:30px; line-height:1.2; font-weight:500; color:#5DCAA5; min-width:44px;">5</div>
+              <div style="font-size:16px; line-height:1.4; font-weight:400; color:#9AA0AB;">Shopping</div>
+            </div>
+            <div style="height:1px; background:#333842;"></div>
+            <div style="display:flex; align-items:baseline; gap:12px; padding:12px 0;">
+              <div style="font-size:30px; line-height:1.2; font-weight:500; color:#7F9FF0; min-width:44px;">4</div>
+              <div style="font-size:16px; line-height:1.4; font-weight:400; color:#9AA0AB;">Tasks</div>
+            </div>
+            <div style="height:1px; background:#333842;"></div>
+            <div style="display:flex; align-items:baseline; gap:12px; padding:12px 0;">
+              <div style="font-size:30px; line-height:1.2; font-weight:500; color:#EFB45A; min-width:44px;">2</div>
+              <div style="font-size:16px; line-height:1.4; font-weight:400; color:#9AA0AB;">Mail &amp; packages</div>
+            </div>
+
+            <div style="flex:1;"></div>
+
+            <sc-if value="{{ showPending }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex; flex-direction:column; gap:8px; padding-top:16px; border-top:1px solid #333842;">
+                <div style="font-size:13px; line-height:1.4; font-weight:400; color:#6F757F;">Family calendar · pending</div>
+                <div style="font-size:13px; line-height:1.4; font-weight:400; color:#6F757F;">System logs · pending</div>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+
+        <div style="height:32px; flex:none;"></div>
+
+        <div style="height:40px; flex:none; display:flex; align-items:center; gap:12px;">
+          <div style="width:8px; height:8px; border-radius:999px; background:#7F9FF0;"></div>
+          <div style="font-size:13px; line-height:1.4; font-weight:400; color:#6F757F;">Hub is listening · returns on silence</div>
+        </div>
+
+        <div style="height:26px; flex:none; display:flex; align-items:center; justify-content:center;">
+          <div style="width:200px; height:5px; border-radius:999px; background:#333842;"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showPending&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Engaged mode&quot;}}">
+class Component extends DCLogic {
+  state = { vs: 'listening' };
+
+  componentDidMount() {
+    const N = 420;
+    this.pts = Array.from({ length: N }, (_, i) => {
+      const y = 1 - (i / (N - 1)) * 2;
+      const r = Math.sqrt(Math.max(0, 1 - y * y));
+      const th = i * Math.PI * (3 - Math.sqrt(5));
+      return { x: Math.cos(th) * r, y, z: Math.sin(th) * r, phase: i * 0.37 };
+    });
+    this.env = 0;
+    this.cfg = [
+      { key: 'idle', mode: 'idle' },
+      { key: 'listen', mode: 'listening' },
+      { key: 'reply', mode: 'confirmed' },
+      { key: 'live', mode: 'live' }
+    ];
+    this.warned = {};
+    // Stand-in for a real WebAudio analyser: a speech-like amplitude envelope.
+    // In a build, replace `target` with analyser RMS (mic) or TTS output level.
+    const envelope = (t, mode) => {
+      if (mode === 'idle') return 0.06;
+      if (mode === 'confirmed') return 0.14;
+      if (mode === 'failed') return 0.12;
+      const syl = Math.abs(Math.sin(t * (mode === 'speaking' ? 0.0075 : 0.0058)));
+      const jit = 0.55 * Math.abs(Math.sin(t * 0.019 + 1.3)) + 0.25 * Math.abs(Math.sin(t * 0.037 + 0.7));
+      const gate = mode === 'speaking' ? 0.9 : 1;
+      return Math.min(1, (0.35 * syl + 0.65 * syl * jit) * gate + 0.08);
+    };
+    const draw = (t) => {
+      for (const c of this.cfg) {
+        const cv = document.querySelector('canvas[data-sphere="' + c.key + '"]');
+        if (!cv) {
+          if (!this.warned[c.key]) { this.warned[c.key] = 1; console.warn('sphere canvas missing:', c.key); }
+          continue;
+        }
+        const mode = c.mode === 'live' ? this.state.vs : c.mode;
+        const s = this.look(mode);
+        const target = envelope(t, mode);
+        c.e = (c.e ?? target) + (target - (c.e ?? target)) * 0.22;
+        const ctx = cv.getContext('2d');
+        const w = cv.width, h = cv.height, R = w * 0.34;
+        ctx.clearRect(0, 0, w, h);
+        const a = t * s.speed;
+        for (const p of this.pts) {
+          const band = Math.floor((p.y + 1) / 2 * 9);
+          const bandAmp = 0.45 + 0.55 * Math.abs(Math.sin(t * 0.0031 + band * 1.7));
+          const puls = 1 + s.amp * c.e * bandAmp + 0.012 * Math.sin(t * 0.0018 + p.phase);
+          const x = p.x * Math.cos(a) - p.z * Math.sin(a);
+          const z = p.x * Math.sin(a) + p.z * Math.cos(a);
+          const depth = (z + 1) / 2;
+          const rad = s.dot * (0.5 + depth) * (w / 720) * 2;
+          ctx.fillStyle = 'rgba(' + s.rgb + ',' + (s.alpha * (0.1 + 0.9 * depth * depth)).toFixed(3) + ')';
+          ctx.beginPath();
+          ctx.arc(w / 2 + x * R * puls, h / 2 + p.y * R * puls, rad, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+    };
+    this.draw = draw;
+    this.frames = 0;
+    draw(0); // paint immediately — rAF never fires in hidden tabs / captures
+    const tick = (t) => { this.frames++; draw(t); this.raf = requestAnimationFrame(tick); };
+    this.raf = requestAnimationFrame(tick);
+    // fallback ticker for backgrounded tabs, screenshots and exports
+    this.iv = setInterval(() => { if (this.frames < 2 || document.hidden) draw(performance.now()); }, 1000 / 15);
+  }
+
+  look(mode) {
+    const m = {
+      idle:      { rgb: '111,117,127', amp: 0.05, speed: 0.00075, alpha: 0.8, dot: 1.5 },
+      listening: { rgb: '108,123,240', amp: 0.42, speed: 0.0022,  alpha: 1,   dot: 1.9 },
+      speaking:  { rgb: '155,123,240', amp: 0.34, speed: 0.0016,  alpha: 1,   dot: 1.9 },
+      confirmed: { rgb: '127,201,138', amp: 0.16, speed: 0.0011,  alpha: 0.95, dot: 1.6 },
+      failed:    { rgb: '229,114,107', amp: 0.10, speed: 0.0006,  alpha: 0.95, dot: 1.6 }
+    };
+    return m[mode] || m.idle;
+  }
+
+  componentWillUnmount() { cancelAnimationFrame(this.raf); clearInterval(this.iv); }
+
+  componentDidUpdate() { if (this.draw) this.draw(performance.now()); }
+
+  renderVals() {
+    const vs = this.state.vs;
+    const copy = {
+      idle:      { label: 'Resting',   line: 'Hub is resting · say “Hey Hub”',        text: 'Ask me anything — “add milk…”' },
+      listening: { label: 'Listening', line: 'Hub is listening · returns on silence', text: 'Add milk and paper towels…' },
+      speaking:  { label: 'Speaking',  line: 'Hub is replying',                       text: 'Milk to grocery, paper towels to household.' },
+      confirmed: { label: 'Done',      line: 'Returning to rest in 3s',               text: 'Added — Shopping is now 5 to buy.' },
+      failed:    { label: 'Didn’t catch that', line: 'Say it again, or tap to type',  text: 'Sorry — I didn’t catch that.' }
+    }[vs];
+    const set = (v) => () => this.setState({ vs: v });
+    return {
+      showPending: this.props.showPending ?? true,
+      stateColor: '#' + { idle: '6F757F', listening: '6C7BF0', speaking: '9B7BF0', confirmed: '7FC98A', failed: 'E5726B' }[vs],
+      stateLabel: copy.label,
+      statusLine: copy.line,
+      transcript: copy.text,
+      setIdle: set('idle'), setListening: set('listening'), setSpeaking: set('speaking'),
+      setConfirmed: set('confirmed'), setFailed: set('failed')
+    };
+  }
+}
+</script>
+</body>
+</html>

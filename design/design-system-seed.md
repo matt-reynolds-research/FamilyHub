@@ -1,8 +1,14 @@
 # FamilyHub — Design-System Seed (v0)
 
 _Companion to [PRD 01 — Home Hub](../prds/01-home-hub-prd.md) and its
-[Claude Design brief](claude-design-brief--home-hub.md). Status: **v1.1** — 5 taste calls resolved
-(§8) + scoping-critic revisions (§10). Last updated 2026-08-02._
+[Claude Design brief](claude-design-brief--home-hub.md). Status: **v1.2** — 5 taste calls resolved
+(§8) + scoping-critic revisions (§10) + Home Hub design harvest (see v1.2 deltas). Last updated 2026-08-03._
+
+> **v1.2 deltas (2026-08-03) — harvested from the built Home Hub design** ([`claude-design-import--home-hub.md`](claude-design-import--home-hub.md)); implemented in the Flutter shell (`reynolds_family_dashboard/lib/theme/hub_tokens.dart`):
+> - **Typeface Inter → Helvetica Neue** (Matt's call — reads better at wall distance; a system face on the iPad target, so no bundled asset).
+> - **New voice-state accents** for the presence sphere / engaged layer (Phase 2/5): **listening `#6C7BF0`** (indigo blue), **speaking `#9B7BF0`** (indigo purple). Confirmed reuses success `#7FC98A`, failed reuses error `#E5726B`.
+> - **New surface: page backing `#08090B`** — the space behind the `#0D0F12` frames (used for letterboxing; the frame/screen bg stays `#0D0F12`).
+> - Everything else in §§ below is unchanged and was confirmed byte-for-byte against the design.
 
 > **What this is.** The *seed*, not a component library. It's the small set of foundational
 > decisions — color, type, spacing, radii, the tile grid, and one reusable tile — that
