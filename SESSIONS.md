@@ -13,6 +13,36 @@
 
 ---
 
+## 2026-08-04 (session 7, Cowork) — Phase 1a: the lossless `SHOPPING.md` data layer
+
+**What changed** — new `reynolds_family_dashboard/lib/domain/shopping/`:
+- `shopping_model.dart` — the **whole-file** model (preamble, sections, `ActiveItem` with
+  note/style, `BoughtItem` with provenance + date, `RawNode` for everything else). Not
+  `{section,text,checked}` — that thin model is what the scoping critic killed (C1).
+- `shopping_parser.dart` — parser + **byte-exact** serializer (D-19). Handles bare / parenthetical /
+  em-dash active items, the bought form, CRLF, missing trailing newline, unknown sections (verbatim),
+  and **HTML-comment example blocks** (inert — their fake bullets would otherwise become real items;
+  caught before the first test run). Fails loud (`ShoppingParseException` with line number) on a
+  bullet it can't classify inside a list section.
+- `shopping_mutations.dart` — `add` + `markBought` as **pure functions over the document**, so the
+  Phase-2 Assistant Bar reuses them (P2-1). Append-to-end, conventions dedup, note-dropped-on-archive.
+- `shopping_repository.dart` — the data-layer seam; `FixtureShoppingRepository` reads the committed
+  `assets/fixtures/shopping_seed.md` and holds mutations in memory (no live file — D-11).
+- Tests: `test/domain/shopping/` — round-trip byte-identity on three fixtures, whole-file diffs
+  against **hand-written** `expected_after_add.md` / `expected_after_check.md`, dedup, conservation
+  ("nothing is deleted"), fail-loud. **`flutter analyze` → No issues found; 27 tests green; format clean.**
+
+**Why data-layer-only** — PRD 02's hard dependency order: prove the model before building UI on it.
+
+**What is next**
+1. **Phase 1b — the Shopping tile**: summary state off `document.totalToBuy`, focused list view,
+   inline add, check → archive. Should need **zero** shell changes (P0-8 is the test of PRD 01).
+2. Then Phase 2 — Assistant Bar wired to these same mutation functions.
+
+**Open** — none new. (PRD 02's serializer-whitespace open question is now closed: D-19.)
+
+---
+
 ## 2026-08-04 (session 6, Cowork) — merged the Home Hub PR + Phase-0 prune
 
 **What changed**

@@ -132,3 +132,27 @@ pull Phase-5 work forward, while the sphere direction is *banked* (new tokens mi
 asset). New tokens `#6C7BF0`/`#9B7BF0`/`#08090B` folded into **seed v1.2**.
 → `design/claude-design-import--home-hub.md`, `reynolds_family_dashboard/lib/theme/hub_tokens.dart`,
 `reynolds_family_dashboard/lib/features/home_hub/`.
+
+### D-19 · 2026-08-04 · Shopping data layer: byte-exact serializer, whole-file model, comment blocks are inert
+PRD 02 left the **serializer whitespace policy** open. Decided: **byte-exact**. `SHOPPING.md` is a
+*shared* file — the Morning Briefing reads it, the text assistant writes it — so normalising it would
+produce noisy diffs and could fight the other writers. Implementation: the model represents the
+**whole file** (preamble, section intros, HTML-comment example blocks, blank-line rhythm) as ordered
+nodes, and every parsed node replays its original line verbatim; only lines we deliberately add or
+remove change. Mutations are pure functions over the document (`ShoppingMutations.add` /
+`.markBought`), not widget methods, so the Phase-2 Assistant Bar can call the same logic (P2-1).
+
+Two things the file forced that the PRD hadn't spelled out:
+1. **Comment blocks are inert.** Both sections document their item forms in an HTML comment whose
+   lines *look* exactly like real bullets (`- [ ] Milk (2 gallons)`). A line-at-a-time parser
+   promotes those to real items and inflates every count, so the parser tracks `<!-- … -->` and
+   treats everything inside as raw prose — including headings.
+2. **Dedup key follows the conventions literally** — "the line minus its trailing parenthetical" —
+   so `Milk` ≡ `Milk (2 gallons)`, but an em-dash note *is* part of the key (the conventions only
+   strip parentheticals). Normalised for case/whitespace so a hub-typed "milk" matches "Milk".
+
+Also decided: the Phase-1 repository (`FixtureShoppingRepository`) reads the committed seed asset and
+holds mutations **in memory** for the session — assets are read-only at runtime and writing the real
+file is Phase 5 (D-11). Every save still runs the full parse → mutate → serialize path, so the
+serializer is genuinely exercised; only the final `write()` is absent.
+→ `reynolds_family_dashboard/lib/domain/shopping/`, `prds/02-shopping-prd.md` (P0-1/2/5/6).
