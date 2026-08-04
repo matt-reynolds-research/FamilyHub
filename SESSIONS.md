@@ -24,17 +24,29 @@
   agent-cleared). Logged **D-17**. Updated `PROJECT_MAP.md` (§6/§7 + status line).
 
 **Migration note** — this work was originally done in the mislocated `~/Documents/...` copy (Cowork was
-still pointed there; its `.git` deadlocks in the sandbox). Migrated here into canonical per D-16, on branch
-`session-3-prd02-lock`, decision renumbered "D-14"→**D-17** to avoid colliding with D-14/15/16.
-**Action still needed: re-point Cowork to `~/projects/reynolds-household/FamilyHub`** so future sessions land here.
+still pointed there; its `.git` deadlocks in the sandbox, iCloud EDEADLK). Migrated here into canonical per
+D-16, on branch **`session-3-prd02-lock`** (committed, **not pushed**; `main` untouched), decision renumbered
+"D-14"→**D-17** to avoid colliding with D-14/15/16.
+
+**Cowork folder situation (resolved as far as it can be):** the `~/projects/reynolds-household` folder is now
+a connected *context* folder and git works there. BUT the old `~/Documents/...Reynolds Household` folder is the
+Cowork project's **anchor** and **cannot be disconnected** — so the plan to "remove the old folder" isn't
+possible. Mitigations in place: (a) all FamilyHub work now targets `~/projects/...` explicitly; (b) the Cowork
+project **Instructions** were given a new `## Repo & working folder` section pointing future sessions here
+(pasted by Matt; not independently verified — the Instructions box syncs server-side and isn't readable from
+the sandbox). **So: trust `~/projects/reynolds-household/FamilyHub` as canonical; never write FamilyHub work to
+the Documents copy.** The Documents copy still legitimately owns the calendar-maintenance subsystem.
+
+**Session checkpoint (2026-08-03 eve):** stopping here to resume fresh. Open loop = the unpushed branch below.
 
 **What is next**
-1. **Re-point Cowork** (Matt) → then this branch can be reviewed/merged normally.
+1. **Decide the branch's fate:** review `session-3-prd02-lock` and either merge to `main` or open a PR
+   (pushing is an explicit, separate yes). Nothing published yet.
 2. Optional: **Home Hub surface mockup** (PRD 01 locked; brief + engaged wireframe exist).
 3. **PRD 03 — Assistant Bar (v1, Shopping-only)**, against the now-locked domain.
 
 **Open questions carried forward** — serializer whitespace policy (default byte-exact), deferred to parser
-implementation. Recently-Bought display now resolved (D-17).
+implementation. Recently-Bought display now resolved (D-17). Cowork Instructions edit unverified (low-stakes).
 
 ---
 
