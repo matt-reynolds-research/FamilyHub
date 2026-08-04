@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>FamilyHub — Home Hub surface mockup (PRD 01)</title>
+<!--
+  Home Hub (shell) surface mockup · FamilyHub Phase 0 · drafted 2026-08-04
+  Companion to prds/01-home-hub-prd.md (locked) — honors design/design-system-seed.md v1.1
+  and design/engaged-mode-notes.md. Sibling of shopping-surface-mockup.html; same token block
+  verbatim so the two surfaces are consistent "by construction, not by luck" (seed §9).
+
+  WHY THIS EXISTS (and how it differs from the Shopping mockup): the Shopping mockup pictures a
+  *domain* plugging into the shell. THIS mockup pictures the *shell itself* — the frame that is
+  PRD 01's whole job. So it shows what is distinctly the shell's identity and what Shopping could
+  not show: the canonical grid (P0-3), the Assistant Bar's three states (P0-6), generic
+  home<->focus navigation (P0-7), and the ambient<->engaged mode takeover (P0-8). Tile empty/error
+  states are already drawn in the Shopping mockup and are not re-drawn here (a pointer is left).
+
+  Seed data is generic/mock (AGENTS.md: never real family data), shaped like the real files.
+  Static picture; the mic/waveform/reply are illustrative, not the Phase-2/5 assistant.
+-->
+<style>
+  /* ---- Seed v1.1 tokens (raw palette -> semantic), verbatim from design-system-seed.md ---- */
+  :root{
+    /* raw */
+    --ink-900:#0D0F12; --ink-800:#15181D; --ink-700:#1E2229; --line-600:#333842;
+    --text-100:#E7E9EE; --text-300:#9AA0AB; --text-500:#6F757F;
+    --teal-400:#5DCAA5; --blue-400:#7F9FF0; --amber-400:#EFB45A;
+    --red-400:#E5726B; --green-400:#7FC98A;
+    /* semantic */
+    --bg-page:var(--ink-900); --bg-tile:var(--ink-800); --bg-raised:var(--ink-700);
+    --line:var(--line-600);
+    --text-primary:var(--text-100); --text-secondary:var(--text-300); --text-muted:var(--text-500);
+    --accent-shopping:var(--teal-400); --accent-tasks:var(--blue-400); --accent-mail:var(--amber-400);
+    --status-error:var(--red-400); --status-success:var(--green-400);
+    /* spacing scale (base 4px) */
+    --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px; --space-5:20px; --space-6:32px;
+    /* radii */
+    --radius-tile:12px; --radius-screen:18px; --radius-pill:999px;
+    /* type scale (size / weight) */
+    --type-hero:52px; --type-number:30px; --type-body:16px; --type-label:14px; --type-caption:13px;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:#000; color:var(--text-primary);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding:32px; display:flex; flex-direction:column; align-items:center; gap:40px;
+  }
+
+  .caption-row{max-width:1180px; width:100%;}
+  .caption-row h1{font-size:18px; font-weight:600; letter-spacing:.2px;}
+  .caption-row p{font-size:13px; color:#9AA0AB; margin-top:6px; line-height:1.5; max-width:920px;}
+  .frame-label{font-size:12px; color:#6F757F; text-transform:uppercase; letter-spacing:1.4px;
+    margin:0 auto 10px; max-width:1180px; width:100%;}
+  .frame-label small{text-transform:none; letter-spacing:0; color:#565b64;}
+
+  /* ---- The iPad 10th-gen canvas: 1180x820 pt landscape (seed §0) ---- */
+  .device{
+    width:1180px; height:820px; background:var(--bg-page);
+    border-radius:var(--radius-screen); position:relative; overflow:hidden;
+    box-shadow:0 0 0 10px #05060a, 0 24px 60px rgba(0,0,0,.6);
+    display:flex; flex-direction:column;
+    padding:var(--space-5); /* space.5 margin all around (seed §6) */
+  }
+
+  /* ===== HEADER (~15%): clock/date left · wordmark/weather right (P1-2) ===== */
+  .hub-header{height:15%; display:flex; justify-content:space-between; align-items:flex-start;}
+  .clock{font-size:var(--type-hero); font-weight:500; line-height:1.1; letter-spacing:-.5px;}
+  .date{font-size:var(--type-label); font-weight:500; color:var(--text-secondary); margin-top:var(--space-1);}
+  .hub-right{text-align:right;}
+  .wordmark{font-size:var(--type-label); font-weight:500; letter-spacing:2px; color:var(--text-secondary);}
+  .weather{font-size:var(--type-caption); color:var(--text-muted); margin-top:var(--space-1);}
+
+  /* ===== TILE ROW (~55%): 3 equal columns, gap space.4 (P0-3) ===== */
+  .tile-row{height:55%; display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-4);
+    align-content:stretch; padding:var(--space-6) 0;}
+
+  .tile{
+    background:var(--bg-tile); border-radius:var(--radius-tile); padding:var(--space-3);
+    display:flex; flex-direction:column; position:relative;
+  }
+  .tile-head{display:flex; align-items:center; gap:var(--space-2);}
+  .tile-dot{width:14px; height:14px; border-radius:4px; flex:none;}
+  .tile-title{font-size:var(--type-label); font-weight:500; color:var(--text-secondary);}
+  .tile-number{font-size:var(--type-number); font-weight:500; line-height:1.2; margin-top:var(--space-4);}
+  .tile-numlabel{font-size:var(--type-label); font-weight:500; color:var(--text-secondary); margin-top:var(--space-1);}
+  .tile-glance{font-size:var(--type-body); color:var(--text-secondary); margin-top:auto; padding-top:var(--space-3);
+    border-top:1px solid var(--line); display:flex; align-items:center; gap:var(--space-2);}
+  .mini-check{width:15px;height:15px;border:1.5px solid var(--text-muted);border-radius:4px;flex:none;}
+
+  .accent-shopping{background:var(--accent-shopping);}
+  .accent-tasks{background:var(--accent-tasks);}
+  .accent-mail{background:var(--accent-mail);}
+  .num-shopping{color:var(--accent-shopping);}
+  .num-tasks{color:var(--accent-tasks);}
+  .num-mail{color:var(--accent-mail);}
+
+  /* ===== ASSISTANT BAR (~15%): full-width pill, pinned, reserved even while stubbed (P0-6) ===== */
+  .assistant-bar{height:15%; display:flex; align-items:center;}
+  .pill{width:100%; background:var(--bg-raised); border-radius:var(--radius-pill);
+    padding:var(--space-4) var(--space-5); display:flex; align-items:center; gap:var(--space-3);
+    /* keep clear of the bottom home-indicator strip (seed §6 safe-area rule) */
+    margin-bottom:var(--space-2);}
+  .pill-mic{width:22px;height:22px;border-radius:var(--radius-pill);border:2px solid var(--text-muted);flex:none;}
+  .pill-text{font-size:var(--type-body); color:var(--text-muted);}
+  .pill-tag{margin-left:auto; font-size:var(--type-caption); color:var(--text-muted);
+    border:1px solid var(--line); border-radius:var(--radius-pill); padding:2px 10px;}
+
+  /* ===== Assistant Bar — 3 states shown side-by-side (P0-6 / brief frame 5) ===== */
+  .bar-states{max-width:1180px; width:100%; display:flex; flex-direction:column; gap:16px;}
+  .bar-state{background:var(--bg-page); border-radius:var(--radius-screen); padding:var(--space-4) var(--space-5);
+    box-shadow:0 0 0 8px #05060a;}
+  .bar-state .state-tag{font-size:12px; color:#6F757F; letter-spacing:1.2px; text-transform:uppercase;
+    margin-bottom:12px; display:flex; align-items:center; gap:10px;}
+  .bar-state .state-tag .phase{text-transform:none; letter-spacing:0; color:var(--text-muted);
+    border:1px solid var(--line); border-radius:var(--radius-pill); padding:1px 9px; font-size:11px;}
+  /* idle */
+  .pill.idle .pill-mic{border-color:var(--text-muted);}
+  /* listening: accent mic ring + a waveform */
+  .pill.listening{background:var(--bg-raised);}
+  .pill.listening .pill-mic{border-color:var(--accent-tasks); box-shadow:0 0 0 4px rgba(127,159,240,.16);}
+  .wave{display:flex; align-items:center; gap:4px; height:26px;}
+  .wave span{width:4px; border-radius:2px; background:var(--accent-tasks); opacity:.85;}
+  .wave span:nth-child(1){height:30%;} .wave span:nth-child(2){height:65%;}
+  .wave span:nth-child(3){height:100%;} .wave span:nth-child(4){height:55%;}
+  .wave span:nth-child(5){height:80%;} .wave span:nth-child(6){height:40%;}
+  .wave span:nth-child(7){height:70%;} .wave span:nth-child(8){height:25%;}
+  .pill.listening .pill-text{color:var(--text-secondary);}
+  /* reply: success confirmation */
+  .pill.reply{background:var(--bg-raised);}
+  .pill.reply .reply-dot{width:18px;height:18px;border-radius:var(--radius-pill);
+    background:var(--status-success); flex:none; display:flex; align-items:center; justify-content:center;
+    color:var(--bg-page); font-size:12px; font-weight:700;}
+  .pill.reply .pill-text{color:var(--text-primary);}
+  .pill.reply .pill-text b{color:var(--status-success); font-weight:500;}
+
+  /* ===== GENERIC focused tile (P0-7) — placeholder, domain-agnostic ===== */
+  .focused{
+    position:absolute; inset:var(--space-5); background:var(--bg-raised);
+    border-radius:var(--radius-tile); padding:var(--space-5) var(--space-6);
+    display:flex; flex-direction:column; gap:var(--space-4);
+  }
+  .focused-head{display:flex; align-items:center; gap:var(--space-3);}
+  .back{font-size:var(--type-body); color:var(--text-secondary); display:flex; align-items:center; gap:var(--space-2);
+    border:1px solid var(--line); border-radius:var(--radius-pill); padding:6px 14px;}
+  .back .chev{font-size:20px; line-height:1;}
+  .focused-title{font-size:var(--type-number); font-weight:500; display:flex; align-items:center; gap:var(--space-2);}
+  .focused-note{margin-top:var(--space-2); font-size:var(--type-body); color:var(--text-muted); line-height:1.5;}
+  .ph-list{margin-top:var(--space-4); display:flex; flex-direction:column;}
+  .ph-row{display:flex; align-items:center; gap:var(--space-3); padding:var(--space-3) 0; border-bottom:1px solid var(--line);}
+  .ph-row .check{width:26px;height:26px;border:2px solid var(--text-muted);border-radius:6px;flex:none;}
+  .ph-row .item{font-size:var(--type-body); color:var(--text-secondary);}
+  .ph-badge{margin-top:auto; align-self:flex-start; font-size:var(--type-caption); color:var(--text-muted);
+    border:1px dashed var(--line); border-radius:8px; padding:6px 12px;}
+
+  /* ===== ENGAGED MODE takeover (P0-8) — conversational canvas + glance sidebar ===== */
+  .engaged{position:absolute; inset:var(--space-5); display:flex; flex-direction:column; gap:var(--space-4);}
+  .eng-top{display:flex; justify-content:space-between; align-items:center;}
+  .eng-status{font-size:var(--type-caption); color:var(--text-secondary); display:flex; align-items:center; gap:var(--space-2);}
+  .eng-status .live{width:8px;height:8px;border-radius:50%;background:var(--accent-tasks);
+    box-shadow:0 0 0 4px rgba(127,159,240,.18);}
+  .eng-time{text-align:right;}
+  .eng-time .t{font-size:var(--type-number); font-weight:500; line-height:1;}
+  .eng-time .d{font-size:var(--type-caption); color:var(--text-muted); margin-top:2px;}
+
+  .eng-body{flex:1; display:grid; grid-template-columns:1fr 320px; gap:var(--space-4); min-height:0;}
+  /* main conversational canvas */
+  .eng-canvas{background:var(--bg-tile); border-radius:var(--radius-tile); padding:var(--space-5) var(--space-6);
+    display:flex; flex-direction:column; gap:var(--space-4); min-height:0; position:relative;}
+  .msg{max-width:80%;}
+  .msg .who{font-size:var(--type-caption); color:var(--text-muted); margin-bottom:var(--space-1);}
+  .msg .bubble{font-size:var(--type-number); font-weight:500; line-height:1.25;}
+  .msg.you{align-self:flex-end; text-align:right;}
+  .msg.you .bubble{color:var(--text-primary);}
+  .msg.hub .bubble{color:var(--text-primary);}
+  .msg.hub .bubble b{color:var(--status-success); font-weight:500;}
+  /* dynamic intent response card */
+  .intent-card{align-self:flex-start; background:var(--bg-raised); border-radius:var(--radius-tile);
+    border:1px solid var(--line); padding:var(--space-4) var(--space-4); display:flex; align-items:center;
+    gap:var(--space-3); max-width:80%;}
+  .intent-card .tile-dot{width:16px;height:16px;}
+  .intent-card .ic-text{font-size:var(--type-body); color:var(--text-secondary);}
+  .intent-card .ic-text b{color:var(--text-primary); font-weight:500;}
+  /* voice waveform strip — Phase 5, clearly tagged */
+  .canvas-foot{margin-top:auto; display:flex; align-items:center; gap:var(--space-3);
+    padding-top:var(--space-4); border-top:1px solid var(--line);}
+  .canvas-foot .wave{height:22px;}
+  .canvas-foot .foot-label{font-size:var(--type-caption); color:var(--text-secondary);}
+  .canvas-foot .p5{margin-left:auto; font-size:11px; color:var(--text-muted);
+    border:1px solid var(--line); border-radius:var(--radius-pill); padding:1px 9px;}
+
+  /* glance sidebar — the demoted domains */
+  .eng-side{display:flex; flex-direction:column; gap:var(--space-3); min-height:0;}
+  .side-label{font-size:var(--type-caption); color:var(--text-muted); letter-spacing:1px; text-transform:uppercase;}
+  .side-tile{background:var(--bg-tile); border-radius:var(--radius-tile); padding:var(--space-3);
+    display:flex; align-items:center; gap:var(--space-3);}
+  .side-tile .st-num{font-size:var(--type-number); font-weight:500; line-height:1; min-width:34px;}
+  .side-tile .st-meta{display:flex; flex-direction:column; gap:2px;}
+  .side-tile .st-title{font-size:var(--type-label); font-weight:500; color:var(--text-secondary);}
+  .side-tile .st-sub{font-size:var(--type-caption); color:var(--text-muted);}
+  .side-tile.pending{border:1px dashed var(--line); background:transparent;}
+  .side-tile.pending .st-title{color:var(--text-muted);}
+  .side-flag{font-size:var(--type-caption); color:var(--text-muted); line-height:1.4;
+    display:flex; gap:6px; align-items:flex-start;}
+  .side-flag .q{color:var(--amber-400);}
+
+  /* engaged-mode bottom status (dev) */
+  .eng-foot{display:flex; align-items:center; gap:var(--space-3); font-size:var(--type-caption);
+    color:var(--text-muted);}
+  .eng-foot .dot{width:8px;height:8px;border-radius:50%;background:var(--text-muted);}
+  .eng-foot .devtag{margin-left:auto; border:1px solid var(--line); border-radius:var(--radius-pill);
+    padding:1px 9px; color:var(--text-muted); font-size:11px;}
+
+  .legend{max-width:1180px;width:100%;font-size:12.5px;color:#9AA0AB;line-height:1.6;
+    background:#0d0f12;border:1px solid #1E2229;border-radius:12px;padding:18px 22px;}
+  .legend b{color:#E7E9EE;font-weight:600;}
+  .legend code{color:#7F9FF0;font-family:ui-monospace,Menlo,monospace;font-size:12px;}
+  .legend .q{color:#EFB45A;}
+</style>
+</head>
+<body>
+
+  <div class="caption-row">
+    <h1>FamilyHub · Home Hub surface — mockup for PRD 01 (the shell)</h1>
+    <p>iPad 10th-gen canvas (1180×820 pt, dark, ~8 ft glance). This pictures the <b>frame</b>, not a
+      feature: the canonical grid, the Assistant Bar's three states, generic tap-to-focus, and the
+      ambient⇄engaged mode takeover. Built on design-system-seed v1.1 tokens — same block as the
+      Shopping mockup, so the surfaces match by construction.</p>
+  </div>
+
+  <!-- ============ FRAME 1: canonical ambient home (the shell at rest) ============ -->
+  <div class="frame-label">Frame 1 — Ambient home · the shell at rest <small>(P0-1 launch, P0-2 landscape, P0-3 grid, P0-4 glanceable, P1-2 header)</small></div>
+  <div class="device">
+    <div class="hub-header">
+      <div>
+        <div class="clock">7:14</div>
+        <div class="date">Monday, August 3</div>
+      </div>
+      <div class="hub-right">
+        <div class="wordmark">FAMILYHUB</div>
+        <div class="weather">68° · clear</div>
+      </div>
+    </div>
+
+    <div class="tile-row">
+      <div class="tile">
+        <div class="tile-head"><span class="tile-dot accent-shopping"></span><span class="tile-title">Shopping</span></div>
+        <div class="tile-number num-shopping">3</div>
+        <div class="tile-numlabel">to buy</div>
+        <div class="tile-glance">Grocery 2 · Household 1</div>
+      </div>
+      <div class="tile">
+        <div class="tile-head"><span class="tile-dot accent-tasks"></span><span class="tile-title">Tasks</span></div>
+        <div class="tile-number num-tasks">4</div>
+        <div class="tile-numlabel">to do</div>
+        <div class="tile-glance"><span class="mini-check"></span>Skylight Frame decision</div>
+      </div>
+      <div class="tile">
+        <div class="tile-head"><span class="tile-dot accent-mail"></span><span class="tile-title">Mail &amp; Packages</span></div>
+        <div class="tile-number num-mail">2</div>
+        <div class="tile-numlabel">arriving today</div>
+        <div class="tile-glance">Package · out for delivery</div>
+      </div>
+    </div>
+
+    <div class="assistant-bar">
+      <div class="pill idle">
+        <span class="pill-mic"></span>
+        <span class="pill-text">Ask me anything — "add milk…"</span>
+        <span class="pill-tag">Phase 2</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ FRAME 2: Assistant Bar — three states (P0-6) ============ -->
+  <div class="frame-label">Frame 2 — Assistant Bar · three states <small>(P0-6; brief frame 5. Bar is styled + reserved now; behavior is Phase 2 text / Phase 5 voice)</small></div>
+  <div class="bar-states">
+    <div class="bar-state">
+      <div class="state-tag">Idle <span class="phase">Phase 0 — styled stub</span></div>
+      <div class="pill idle">
+        <span class="pill-mic"></span>
+        <span class="pill-text">Ask me anything — "add milk…"</span>
+        <span class="pill-tag">tap to engage</span>
+      </div>
+    </div>
+    <div class="bar-state">
+      <div class="state-tag">Listening <span class="phase">Phase 5 — voice</span></div>
+      <div class="pill listening">
+        <span class="pill-mic"></span>
+        <span class="wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span>
+        <span class="pill-text">Listening…</span>
+      </div>
+    </div>
+    <div class="bar-state">
+      <div class="state-tag">Reply <span class="phase">Phase 2 — text</span></div>
+      <div class="pill reply">
+        <span class="reply-dot">✓</span>
+        <span class="pill-text"><b>Added milk</b> to the grocery list</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ FRAME 3: generic tap-to-focus + back (P0-7) ============ -->
+  <div class="frame-label">Frame 3 — Home ⇄ focus navigation <small>(P0-7; shell-level, domain-agnostic. Real per-domain focus lives in each domain's PRD/mockup)</small></div>
+  <div class="device">
+    <div class="focused">
+      <div class="focused-head">
+        <span class="back"><span class="chev">‹</span> Home</span>
+        <span class="focused-title"><span class="tile-dot accent-tasks"></span> Tasks</span>
+      </div>
+      <div class="focused-note">The shell opens any tile into a focused view on the raised surface and
+        offers one obvious way back — nothing more. What fills this view is the <i>domain's</i> job
+        (Tasks here is a Phase-3 placeholder). The Shopping mockup shows a fully-designed focused view.</div>
+      <div class="ph-list">
+        <div class="ph-row"><span class="check"></span><span class="item">Placeholder item — the domain renders its real content here</span></div>
+        <div class="ph-row"><span class="check"></span><span class="item">Placeholder item</span></div>
+        <div class="ph-row"><span class="check"></span><span class="item">Placeholder item</span></div>
+      </div>
+      <span class="ph-badge">Shell contract: bg.raised surface · back affordance · touch targets sized without precise aim (P0-7)</span>
+    </div>
+  </div>
+
+  <!-- ============ FRAME 4: engaged-mode takeover (P0-8) ============ -->
+  <div class="frame-label">Frame 4 — Engaged mode · the conversational takeover <small>(P0-8; concept owned in Phase 0, stubbed. Text arrives Phase 2, voice Phase 5)</small></div>
+  <div class="device">
+    <div class="engaged">
+      <div class="eng-top">
+        <div class="eng-status"><span class="live"></span> Engaged — hub is listening</div>
+        <div class="eng-time"><div class="t">7:14</div><div class="d">Monday, August 3</div></div>
+      </div>
+
+      <div class="eng-body">
+        <!-- MAIN CONVERSATIONAL CANVAS -->
+        <div class="eng-canvas">
+          <div class="msg you">
+            <div class="who">You</div>
+            <div class="bubble">Add milk and paper towels</div>
+          </div>
+          <div class="msg hub">
+            <div class="who">FamilyHub</div>
+            <div class="bubble">Done — <b>milk</b> to grocery, <b>paper towels</b> to household.</div>
+          </div>
+          <div class="intent-card">
+            <span class="tile-dot accent-shopping"></span>
+            <span class="ic-text"><b>Shopping</b> · 5 to buy — Grocery 3 · Household 2</span>
+          </div>
+
+          <div class="canvas-foot">
+            <span class="wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span>
+            <span class="foot-label">Live transcription &amp; waveform</span>
+            <span class="p5">Phase 5 voice</span>
+          </div>
+        </div>
+
+        <!-- GLANCE SIDEBAR: the demoted domains -->
+        <div class="eng-side">
+          <div class="side-label">At a glance</div>
+          <div class="side-tile">
+            <span class="st-num num-shopping">5</span>
+            <span class="st-meta"><span class="st-title">Shopping</span><span class="st-sub">to buy</span></span>
+          </div>
+          <div class="side-tile">
+            <span class="st-num num-tasks">4</span>
+            <span class="st-meta"><span class="st-title">Tasks</span><span class="st-sub">to do</span></span>
+          </div>
+          <div class="side-tile">
+            <span class="st-num num-mail">2</span>
+            <span class="st-meta"><span class="st-title">Mail &amp; Packages</span><span class="st-sub">arriving today</span></span>
+          </div>
+          <div class="side-tile pending">
+            <span class="st-num" style="color:var(--text-muted)">?</span>
+            <span class="st-meta"><span class="st-title">Calendar</span><span class="st-sub">pending domain decision</span></span>
+          </div>
+          <div class="side-flag"><span class="q">◆</span><span>The wireframe's <b style="color:var(--text-secondary)">Calendar</b> and dev
+            <b style="color:var(--text-secondary)">System Logs</b> are open flags — deferred to the Assistant Bar PRD. Shown here
+            muted, not committed.</span></div>
+        </div>
+      </div>
+
+      <!-- engaged-mode bottom status (dev-gated) -->
+      <div class="eng-foot">
+        <span class="dot"></span> Ambient returns on silence timeout or close-out word
+        <span class="devtag">System Logs — dev only</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Design notes ============ -->
+  <div class="legend">
+    <b>What this mockup shows (and decides)</b><br><br>
+    <b>It pictures the shell, not a domain.</b> Every frame maps to a PRD 01 P0: the canonical grid +
+    header (P0-1/2/3/4), the Assistant Bar's three states (P0-6), generic tap-to-focus with one way
+    back (P0-7), and the ambient⇄engaged mode takeover (P0-8). <b>Tile empty/error states are not
+    re-drawn</b> — they live in <code>shopping-surface-mockup.html</code>; duplicating them would
+    drift the two apart.<br><br>
+    <b>Engaged mode = the same feature as the resting bar, expanded.</b> Tapping the stubbed bar is the
+    Phase-0 <i>synthetic</i> trigger (P0-8 / critic C2); the real hot-word + silence/close-out
+    <b>voice</b> events (Phase 5) plug into the same state machine without a layout rebuild. The
+    conversation is text-first (Phase 2); the waveform / live-transcription strip is tagged
+    <b>Phase 5 voice</b> so nothing here implies voice ships in Phase 0.<br><br>
+    <b>Two engaged-mode open flags surfaced honestly.</b> The reference wireframe
+    (<code>engaged-mode-notes.md</code>) puts a <span class="q">Family Calendar</span> in the sidebar and
+    <span class="q">System Logs</span> in the footer. Calendar isn't one of the three tile domains, so
+    it's shown <i>muted / "pending domain decision"</i> rather than committed; System Logs is drawn as
+    <i>dev-only</i>. Both decisions belong to the Assistant Bar PRD — this mockup flags them, it doesn't
+    settle them.<br><br>
+    <b>Every value is a seed token.</b> Header clock is <code>type.hero</code> (52); tile & sidebar
+    numbers are <code>type.number</code> (30) in each domain's accent; surfaces step
+    <code>bg.page → bg.tile → bg.raised</code> (no shadows, seed §5). The "listening" accent reuses
+    <code>accent.tasks</code> as a stand-in — a dedicated listening/waveform token is the one addition
+    the seed anticipates for engaged mode (seed §10 / engaged-notes), added only when the real voice
+    UI needs it. Seed data is mock, shaped like the real files (AGENTS.md).
+  </div>
+
+</body>
+</html>

@@ -13,6 +13,44 @@
 
 ---
 
+## 2026-08-04 (session 4, Cowork) — Home Hub (shell) surface mockup
+
+**What changed**
+- Drafted the **Home Hub surface mockup**: `design/home-hub-surface-mockup.html`, on seed v1.1 tokens
+  (same verbatim token block as the Shopping mockup, so the two surfaces match by construction).
+- Deliberately scoped to picture the **shell itself**, not a domain — the piece the Shopping mockup
+  couldn't show. Four frames, each mapped to a PRD 01 P0: canonical ambient home + header (P0-1/2/3/4),
+  **Assistant Bar three states** idle/listening/reply (P0-6), **generic home⇄focus** nav (P0-7), and the
+  **ambient⇄engaged mode takeover** (P0-8). Tile empty/error states are *not* re-drawn — they already
+  live in the Shopping mockup; a pointer is left instead of a duplicate (avoids drift).
+- **Engaged mode drawn text-first** (Phase 2), with the voice waveform / live-transcription strip tagged
+  **Phase 5** so nothing implies voice in Phase 0. The two engaged-mode open flags from the wireframe —
+  **Calendar** (not one of the 3 tile domains) and dev **System Logs** — are surfaced *muted / "pending
+  domain decision"* and *dev-only*, flagged not committed (they belong to the Assistant Bar PRD).
+- Updated `PROJECT_MAP.md` (§6 Home Hub status → "PRD locked · mockup drafted" + top status line).
+
+**Why now (design ordering)** — Matt's steer was "don't let design get skipped, but at the correct time."
+The Shopping surface was mocked before the *shell* it sits in had its own full mockup; drawing the Home
+Hub mockup back-fills the foundation and lets the Shopping tile be checked against the real grid. Reversible
+planning work — no code, no publishing.
+
+**Decisions** — no new numbered decision. One design stance worth noting (candidate for the Assistant Bar
+PRD, not locked here): engaged-mode glance sidebar shows the **demoted three domains**; Calendar stays a
+muted placeholder until the "new domain vs. surface backend calendar" question is decided.
+
+**What is next**
+1. **Still the standing open loop:** branch `session-3-prd02-lock` (now also carrying this mockup +
+   doc updates) is committed but **not pushed**. Decide its fate — merge to `main` or open a PR
+   (pushing is an explicit, separate yes). `main` still untouched.
+2. Optional: **PRD 03 — Assistant Bar (v1, Shopping-only)**, now with both a locked domain and two
+   surface mockups to spec against.
+
+**Open questions carried forward** — engaged-mode Calendar/System-Logs (deferred to Assistant Bar PRD);
+listening/waveform accent token (reused `accent.tasks` as a stand-in in the mockup; mint a real token when
+the voice UI is built — seed §10 anticipates it). Serializer whitespace policy still deferred to the parser.
+
+---
+
 ## 2026-08-03 (session 3, Cowork) — PRD 02 locked + first Shopping surface mockup
 
 **What changed**
