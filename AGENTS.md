@@ -34,6 +34,10 @@ spending money, security/privacy tradeoffs, or a real fork in direction.
 - `reynolds_family_dashboard/lib/` — app source: `main.dart`, `app.dart`, `theme/hub_tokens.dart`, and
   `features/home_hub/` (the ambient shell). The prior 5-tab shell, Supabase service/repo, old
   models/providers, and the light theme were removed in the Phase-0 prune.
+- `reynolds_family_dashboard/lib/domain/<domain>/` — the household data layer, **UI-free**: model,
+  parser/serializer, mutations, repository. `shopping/` is the reference implementation.
+- `reynolds_family_dashboard/assets/fixtures/` — committed **seed** copies of the household markdown
+  files. Development reads these, never the live `~/projects/reynolds-household/*.md`.
 - `Agent/` — local Flutter package (AI bar; Gemini). Reserved for the Phase-2 Assistant Bar.
 - `.github/workflows/` — CI + secret scan. See `.github/PIPELINE.md` for how the
   gate + auto-merge work and how to enable them.
@@ -88,6 +92,10 @@ same two surfaces, the same Mac, and near-identical conventions. To stop them cr
 - **Fail loud while building.** Missing/unknown data surfaces as a clear error in dev, never
   silently faked; degrade gracefully once shipped.
 - **Test the opposite too.** When you fix something, check you didn't break the neighbor.
+- **Household markdown is shared — serialize byte-exactly.** `SHOPPING.md` / `TASKS.md` are read by
+  the Morning Briefing and written by the text assistant. Model the *whole file* (intros, comment
+  blocks, blank-line rhythm) and replay unmutated lines verbatim; never normalise or re-render.
+  Domain logic stays as pure functions on the document so the Assistant Bar can call it too (D-19).
 - **Protect core names.** Don't rename or batch-replace identifiers (DB keys, routes, config
   keys, localStorage keys) as "cleanup" without flagging it — silent breakage.
 - **Keep `.env` clean.** Secrets only there; if CI needs a value, it uses a placeholder or a
