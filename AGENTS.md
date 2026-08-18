@@ -11,6 +11,22 @@ development — what gets built doesn't have to be practical — but still aim f
 high-fidelity work. The north star for what exists and what to build next is
 **`PROJECT_MAP.md`**; read it before changing features.
 
+## System boundaries — is this FamilyHub, or the Family Assistant? (read first)
+There is **one World** (the household source of truth — the markdown lists, the
+Reynolds Family calendar + `famcal`, the automations) and there are **faces** on it.
+**FamilyHub is a *surface*** — the iPad wall display. The **Family Assistant**
+(`../family-assistant/`, the live headless iMessage/voice brain) is a *different
+layer*. FamilyHub's own "Assistant Bar" (Phase 2) will be a face onto that same
+brain, not a new brain.
+
+**The routing test — before you build, ask:**
+- Changes the **World** (data, calendar, automations, the assistant's brain/behavior)
+  → **`../family-assistant/`**, not here.
+- Changes a **Surface** (how something looks/feels on the iPad) → **here, `FamilyHub/`.**
+
+Full picture: **`../SYSTEM-MAP.md`**. (Example: the Aug-2026 "Hawaii" trip-conflict
+fix was a World change — it lived in `famcal`, never in this repo.)
+
 ## Who you're working with
 Matt — a Senior UX Researcher, comfortable with AI tools but still growing the deeper
 engineering craft. Pitch explanations at "capable practitioner still learning the stack":
