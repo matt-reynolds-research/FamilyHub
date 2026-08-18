@@ -1,5 +1,14 @@
 # FamilyHub — Reynolds Family Dashboard
 
+> **Role: a SURFACE.** FamilyHub is the iPad wall display — one *face* on the household
+> World. Logic that changes the World (data, calendar, automations, the assistant's
+> brain) lives in [`../family-assistant/`](../family-assistant), **not here.** New to the
+> split between FamilyHub and the Family Assistant? See [`../SYSTEM-MAP.md`](../SYSTEM-MAP.md).
+>
+> ⚠️ **The "Run locally" and "Configuration" sections below are stale** — they predate the
+> Phase-0 prune that removed Supabase and `flutter_dotenv`. Trust [`PROJECT_MAP.md`](PROJECT_MAP.md)
+> and [`AGENTS.md`](AGENTS.md) until this is refreshed. The app runs on seeded mock data today.
+
 A Flutter app that runs full-screen on an iPad as an always-on family "home hub" —
 a customized take on the Google Nest Hub. It shows the family's day at a glance
 (calendar, tasks, groceries, mail & packages, weather) with an AI assistant bar
