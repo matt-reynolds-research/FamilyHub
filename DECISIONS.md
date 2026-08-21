@@ -169,3 +169,15 @@ This exposes a World gap: active `SHOPPING.md` items do not currently carry adde
 provenance. FamilyHub must not invent that information once live. Capturing it is a later World-layer
 decision in `family-assistant/`; the Phase-1 UI can proceed against seeded data in the meantime.
 → `reynolds_family_dashboard/lib/features/home_hub/`, `PROJECT_MAP.md` §9.
+
+### D-21 · 2026-08-21 · Assistant Bar v1 is deterministic, Shopping-only, and not a second brain
+The retained `Agent/` package turned out to be an earlier visual prototype: its Gemini call was stubbed,
+its palette predated the dark seed, and direct model ownership contradicted the one-World/same-brain
+architecture. Phase 2 therefore reuses its useful interaction concept—not its implementation. A real
+text entry expands the hub into the engaged canvas; a small local intent adapter handles Shopping add,
+query, and bought requests by calling the same `ShoppingController` as touch.
+
+This is a replaceable surface seam, not a new household brain. It needs no model, API key, cost, or live
+data. A future transport to the live Family Assistant can replace the adapter without redesigning the
+bar/canvas. The old package remains as historical reference but was removed from app dependencies.
+→ `prds/03-assistant-bar-prd.md`, `reynolds_family_dashboard/lib/features/assistant/`.

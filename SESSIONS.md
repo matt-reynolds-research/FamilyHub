@@ -13,6 +13,27 @@
 
 ---
 
+## 2026-08-21 (Codex) — Phase 2 complete: Assistant Bar v1 + Shopping
+
+**What changed**
+- Wrote and locked `prds/03-assistant-bar-prd.md`.
+- Replaced the inert bottom pill with a real typed Assistant Bar. Focus/submission expands the whole
+  hub into the engaged conversation canvas; close returns to ambient without losing state.
+- Added deterministic Shopping intents: add (Grocery default, Household explicit), list/query, and
+  mark bought. Every action calls `ShoppingController`; the engaged Shopping panel and ambient tile
+  update immediately. Unsupported/missing requests never mutate and offer useful examples.
+- Audited the retained `Agent/` package: it was a stubbed, obsolete Gemini prototype, not a working
+  head start. Kept it as historical reference but removed it and `google_generative_ai` from the app's
+  dependency graph (D-21). No model, API key, live data, or second brain in v1.
+- Browser-verified “add Eggs” at 1180×820. **`flutter analyze` clean; all 33 tests pass.**
+
+**What is next**
+1. Phase 3 — write the Tasks PRD against the now-proven domain + assistant pattern.
+2. Build the lossless `TASKS.md` domain and per-person ambient/focused surface.
+3. Add Tasks intents to the Assistant Bar only after touch/data behavior is working.
+
+---
+
 ## 2026-08-21 (Codex) — Phase 1 complete: working Shopping vertical slice
 
 **What changed**

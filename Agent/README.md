@@ -1,4 +1,8 @@
-# agent
+# agent (historical prototype)
+
+> **Not wired into FamilyHub.** Phase 2 was implemented in the main app with a deterministic,
+> Shopping-only intent adapter so the surface does not create a second household brain or require
+> an API key. This package remains only as reference for the earlier bar/history concept.
 
 A local Flutter package used by the FamilyHub dashboard. It provides the AI assistant
 layer: the "terminal" chat bar pinned to the bottom of the app and the Gemini-powered
