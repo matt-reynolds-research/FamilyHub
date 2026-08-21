@@ -156,3 +156,16 @@ holds mutations **in memory** for the session — assets are read-only at runtim
 file is Phase 5 (D-11). Every save still runs the full parse → mutate → serialize path, so the
 serializer is genuinely exercised; only the final `write()` is absent.
 → `reynolds_family_dashboard/lib/domain/shopping/`, `prds/02-shopping-prd.md` (P0-1/2/5/6).
+
+### D-20 · 2026-08-21 · Ambient tiles show household activity, not miniature lists
+Matt's first running-app review clarified the tile's job: provide enough **volume, ownership,
+recency, and urgency** to prompt an appropriate human follow-up while walking past. Shopping shows
+sample items grouped by who added them and when; Tasks shows remaining counts by owner with a recent
+task signal; Mail & Packages shows the next deliveries, purchaser, arrival estimate, and a loud late
+flag. Focus views provide a larger seeded preview, but remain non-interactive. The mock identities and
+activity are presentation-only; the UI says live household data is not connected.
+
+This exposes a World gap: active `SHOPPING.md` items do not currently carry added-by or added-at
+provenance. FamilyHub must not invent that information once live. Capturing it is a later World-layer
+decision in `family-assistant/`; the Phase-1 UI can proceed against seeded data in the meantime.
+→ `reynolds_family_dashboard/lib/features/home_hub/`, `PROJECT_MAP.md` §9.

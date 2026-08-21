@@ -158,8 +158,8 @@ class _Header extends StatelessWidget {
   }
 }
 
-/// A single glanceable domain tile. Icon + title, one key number in the domain accent, its
-/// meaning, and a single derived summary line. It never shows a raw list.
+/// A single glanceable domain tile. The headline orients from across the room; compact seeded
+/// activity rows add ownership and recency for someone passing close enough to follow up.
 class _DomainTile extends StatelessWidget {
   const _DomainTile({required this.data, required this.onTap});
   final DomainTileData data;
@@ -195,7 +195,7 @@ class _DomainTile extends StatelessWidget {
                   ),
                 ],
               ),
-              const Spacer(),
+              const SizedBox(height: HubSpace.zone),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.baseline,
                 textBaseline: TextBaseline.alphabetic,
@@ -216,10 +216,84 @@ class _DomainTile extends StatelessWidget {
                   style: HubType.caption,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis),
+              const SizedBox(height: HubSpace.gap),
+              Container(height: 1, color: HubColors.hairline),
+              const SizedBox(height: HubSpace.tile),
+              Text(data.previewLabel.toUpperCase(), style: HubType.eyebrow),
+              const SizedBox(height: HubSpace.sm),
+              Expanded(
+                child: Column(
+                  children: [
+                    for (var i = 0; i < data.previewItems.length; i++) ...[
+                      _PreviewRow(item: data.previewItems[i]),
+                      if (i < data.previewItems.length - 1)
+                        const SizedBox(height: HubSpace.tile),
+                    ],
+                  ],
+                ),
+              ),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class _PreviewRow extends StatelessWidget {
+  const _PreviewRow({required this.item, this.expanded = false});
+
+  final TilePreviewItem item;
+  final bool expanded;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                item.title,
+                style: (expanded ? HubType.body : HubType.label)
+                    .copyWith(color: HubColors.textPrimary),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: HubSpace.xs),
+              Text(
+                item.meta,
+                style: HubType.caption,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+        ),
+        if (item.status != null) ...[
+          const SizedBox(width: HubSpace.sm),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              color: item.isLate
+                  ? HubColors.error.withValues(alpha: 0.12)
+                  : HubColors.tile,
+              borderRadius: BorderRadius.circular(HubRadii.pill),
+              border: Border.all(
+                color: item.isLate ? HubColors.error : HubColors.hairline,
+              ),
+            ),
+            child: Text(
+              item.status!,
+              style: HubType.caption.copyWith(
+                color: item.isLate ? HubColors.error : HubColors.textSecondary,
+              ),
+            ),
+          ),
+        ],
+      ],
     );
   }
 }
@@ -274,20 +348,25 @@ class _FocusedContainer extends StatelessWidget {
               ),
             ],
           ),
-          Expanded(
-            child: Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text('Focused view',
-                      style:
-                          HubType.label.copyWith(color: HubColors.textMuted)),
-                  const SizedBox(height: HubSpace.sm),
-                  Text('${tile.title} content plugs in here',
-                      style: HubType.caption),
-                ],
-              ),
-            ),
+          const SizedBox(height: HubSpace.zone),
+          Text(tile.glance,
+              style: HubType.body.copyWith(color: HubColors.textSecondary)),
+          const SizedBox(height: HubSpace.zone),
+          Text(tile.previewLabel.toUpperCase(), style: HubType.eyebrow),
+          const SizedBox(height: HubSpace.gap),
+          for (var i = 0; i < tile.previewItems.length; i++) ...[
+            _PreviewRow(item: tile.previewItems[i], expanded: true),
+            if (i < tile.previewItems.length - 1) ...[
+              const SizedBox(height: HubSpace.gap),
+              Container(height: 1, color: HubColors.hairline),
+              const SizedBox(height: HubSpace.gap),
+            ],
+          ],
+          const Spacer(),
+          const Text(
+            'Seeded preview · live household data is not connected',
+            style: HubType.caption,
+            textAlign: TextAlign.right,
           ),
         ],
       ),

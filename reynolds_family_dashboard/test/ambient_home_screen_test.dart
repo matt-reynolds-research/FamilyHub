@@ -8,6 +8,10 @@ import 'package:reynolds_family_dashboard/features/home_hub/ambient_home_screen.
 /// returns home. Verifies the tree builds without exceptions (no simulator needed).
 void main() {
   Future<void> pumpHub(WidgetTester tester) async {
+    tester.view.physicalSize = const Size(1180, 820);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
     await tester.pumpWidget(
       const ProviderScope(
         child: MaterialApp(home: AmbientHomeScreen()),
@@ -29,8 +33,11 @@ void main() {
     expect(find.text('Shopping'), findsOneWidget);
     expect(find.text('Tasks'), findsOneWidget);
     expect(find.text('Mail & packages'), findsOneWidget);
-    expect(find.text('to buy'), findsOneWidget);
-    expect(find.text('Grocery 2 · Household 1'), findsOneWidget);
+    expect(find.text('people added items'), findsOneWidget);
+    expect(find.text('Milk, berries + 6 more'), findsOneWidget);
+    expect(find.text('Alex · 4 left'), findsOneWidget);
+    expect(find.text('Kids lunchbox'), findsOneWidget);
+    expect(find.text('2 days late'), findsOneWidget);
     expect(find.text("Ask me anything — 'add milk…'"), findsOneWidget);
 
     await teardownHub(tester);
@@ -42,12 +49,14 @@ void main() {
 
     await tester.tap(find.text('Shopping'));
     await tester.pumpAndSettle();
-    expect(find.text('Focused view'), findsOneWidget);
-    expect(find.text('Shopping content plugs in here'), findsOneWidget);
+    expect(find.text('Recently added'.toUpperCase()), findsOneWidget);
+    expect(find.text('Seeded preview · live household data is not connected'),
+        findsOneWidget);
 
     await tester.tap(find.text('Home'));
     await tester.pumpAndSettle();
-    expect(find.text('Focused view'), findsNothing);
+    expect(find.text('Seeded preview · live household data is not connected'),
+        findsNothing);
     expect(find.text('FAMILYHUB'), findsOneWidget);
 
     await teardownHub(tester);

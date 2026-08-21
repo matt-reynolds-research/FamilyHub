@@ -5,7 +5,7 @@
 > this file disagree, one of them is wrong — fix it in the same step. Everything else
 > (PRDs, design system, code) hangs off this.
 
-_Last updated: 2026-08-04 · Status: **Phase 1 — first vertical slice (Shopping): the data layer is built. The lossless `SHOPPING.md` model, byte-exact parser/serializer, add/check mutations and the fixture-backed repository all land ahead of any tile UI (PRD 02's "prove the model first" order); `flutter analyze` clean, 27 tests green. Next: the Shopping tile itself.**_
+_Last updated: 2026-08-21 · Status: **Phase 1 — first vertical slice (Shopping): the data layer is built. The ambient shell now has populated seeded previews for Shopping, Tasks, and deliveries so the glance experience can be evaluated; this is still presentation-only mock data, not the real Shopping tile. Next: connect the Shopping tile to its fixture-backed repository and add/check interactions.**_
 _Phase 0 (done, for the record): Home Hub design imported from Claude Design (`design/FamilyHub Home Hub.dc.html`); first Flutter shell increment landed — dark seed v1.2 tokens (Helvetica Neue) + ambient home (header, 3-tile grid, Assistant Bar pill, generic focus container) on seeded data, widget-tested. Sphere / engaged / voice deferred to a later layer. **Prior tab shell + Supabase + light theme now pruned — the app tree is just the Home Hub shell and analyzes clean.**_
 
 ---
@@ -133,7 +133,7 @@ disposition is §6a.
 
 | Feature | Status | Notes |
 |---------|--------|-------|
-| Home Hub (shell) | 🟡 shell scaffolded (Phase 0) | Phase 0 — [`prds/01-home-hub-prd.md`](prds/01-home-hub-prd.md). Design imported + reviewed ([`design/claude-design-import--home-hub.md`](design/claude-design-import--home-hub.md)). **First Flutter increment built:** `lib/theme/hub_tokens.dart` (seed v1.2, Helvetica Neue) + `lib/features/home_hub/` (ambient home: header, 3-tile grid, Assistant Bar pill, generic focus container; seeded data; widget-tested). Ambient⇄engaged: engaged/voice sphere deferred to a later layer. **Follow-up:** prune prior tab shell + Supabase; wire the real data layer (Phase 1). |
+| Home Hub (shell) | 🟡 shell scaffolded (Phase 0) | Phase 0 — [`prds/01-home-hub-prd.md`](prds/01-home-hub-prd.md). Ambient home now includes populated seeded activity previews across all three tiles: volume, ownership, recency, and delivery urgency. Focus views replay that mock detail and clearly disclose that live household data is not connected. Ambient⇄engaged remains deferred. |
 | Design-system seed | ✅ v1.1 | Phase 0 — [`design/design-system-seed.md`](design/design-system-seed.md). Tokens + tile grid + reusable tile. Target device iPad 10th gen. |
 | Shopping tile | 🟡 data layer built (Phase 1a) | Phase 1 — [`prds/02-shopping-prd.md`](prds/02-shopping-prd.md). **Lossless model + parser/serializer + add/check mutations + fixture-backed repository built and tested** (`lib/domain/shopping/`): byte-exact round-trip, whole-file diffs against hand-written expected files, fail-loud on unclassifiable bullets. Surface mockup drafted ([`design/shopping-surface-mockup.html`](design/shopping-surface-mockup.html)). **Remaining: the tile UI** (summary → focused → add/check wiring). |
 | Assistant Bar | 🟡 prior code to adapt | Phase 2 — the `Agent` package is a working chat bar to restyle/wire (§6a). |
@@ -199,6 +199,10 @@ went with it; `Agent/` stays for the Phase-2 bar.)
 4. **Assistant Bar brains.** On-device vs. hosted, and which model — a cost + privacy decision. The
    `Agent` package currently calls **Gemini** directly, which makes this concrete but doesn't settle
    it. *(Blocks Phase 2. Anything that spends money pauses for you.)*
+5. **Added-by provenance.** The desired ambient experience groups Shopping and Tasks activity by
+   person and recency, but today's `SHOPPING.md` active-item format stores neither author nor added
+   date. The seeded UI demonstrates the experience only. Making it truthful requires a later **World**
+   decision in `family-assistant/` about capturing provenance without breaking existing readers.
 
 ## 10. How to keep this file alive
 
