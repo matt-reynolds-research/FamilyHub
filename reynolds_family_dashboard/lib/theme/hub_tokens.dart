@@ -70,12 +70,33 @@ class HubType {
       fontWeight: FontWeight.w400,
       color: HubColors.textPrimary);
 
+  static const TextStyle bodySecondary = TextStyle(
+      fontFamily: family,
+      fontSize: 16,
+      height: 1.4,
+      fontWeight: FontWeight.w400,
+      color: HubColors.textSecondary);
+
+  static const TextStyle bodyMuted = TextStyle(
+      fontFamily: family,
+      fontSize: 16,
+      height: 1.4,
+      fontWeight: FontWeight.w400,
+      color: HubColors.textMuted);
+
   static const TextStyle label = TextStyle(
       fontFamily: family,
       fontSize: 14,
       height: 1.4,
       fontWeight: FontWeight.w500,
       color: HubColors.textSecondary);
+
+  static const TextStyle labelPrimary = TextStyle(
+      fontFamily: family,
+      fontSize: 14,
+      height: 1.4,
+      fontWeight: FontWeight.w500,
+      color: HubColors.textPrimary);
 
   static const TextStyle caption = TextStyle(
       fontFamily: family,

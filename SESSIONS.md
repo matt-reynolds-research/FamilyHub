@@ -13,6 +13,27 @@
 
 ---
 
+## 2026-08-21 (Codex) — Phase 1 complete: working Shopping vertical slice
+
+**What changed**
+- Connected the Home Hub's Shopping tile to the existing `FixtureShoppingRepository` through a
+  Riverpod async controller. The ambient number, Grocery/Household split, and visible sample items
+  now derive from the parsed seed document rather than duplicated presentation data.
+- Built the real focused Shopping surface: two touch-friendly lists, inline add for each section,
+  check-to-Recently-Bought, live counts, collapsed read-only archive, loading state, and fail-loud
+  error state. Mutations persist in memory for the app session and reset on reload by design.
+- Kept provenance honest: the tile explicitly says the source has no author/date rather than
+  inventing attribution. Input notes/quantities are parsed through the shared conventions before add.
+- Added widget coverage at 1180×820 for fixture load, focus/back, add, check, live counts, and archive
+  movement. **`flutter analyze` clean; all 28 tests pass.** Browser-verified add/check at target size.
+
+**What is next**
+1. Write and lock PRD 03 — Assistant Bar v1, controlling Shopping only.
+2. Restyle/adapt the retained `Agent/` package and call the same `ShoppingController` mutations.
+3. Decide the hosted-model/privacy/cost approach before enabling any paid model call.
+
+---
+
 ## 2026-08-21 (Codex) — first running review + populated ambient previews
 
 **What changed**
