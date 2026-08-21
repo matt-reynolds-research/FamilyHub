@@ -13,6 +13,30 @@
 
 ---
 
+## 2026-08-21 (Codex) — first running review + populated ambient previews
+
+**What changed**
+- Ran FamilyHub for Matt's first hands-on look at the 1180×820 iPad target.
+- Replaced the mostly empty ambient tiles with seeded activity previews. Shopping now conveys who
+  added how much and when; Tasks shows household/per-person remaining work; Mail & Packages lists
+  the next deliveries, purchaser, ETA, and a coral late flag.
+- Populated the generic focus screens with larger read-only previews and an explicit disclosure that
+  live household data is not connected.
+- Added the `TilePreviewItem` presentation seam and an eyebrow type token; updated widget coverage to
+  use the actual target viewport. `flutter analyze` clean; all 27 tests pass.
+
+**Product clarification** — the ambient surface should support household awareness while moving
+through a daily routine; conversation changes altitude into a specific question. Tiles optimize for
+volume + ownership + recency + urgency, not exhaustive list display (D-20).
+
+**What is next**
+1. Review the populated preview with Matt and tune the information hierarchy.
+2. Continue Phase 1 by connecting Shopping's real fixture-backed repository to the tile and focused
+   add/check interactions.
+3. Before live provenance, decide in the World layer how Shopping records author + added date.
+
+---
+
 ## 2026-08-04 (session 7, Cowork) — Phase 1a: the lossless `SHOPPING.md` data layer
 
 **What changed** — new `reynolds_family_dashboard/lib/domain/shopping/`:

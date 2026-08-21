@@ -84,6 +84,14 @@ class HubType {
       fontWeight: FontWeight.w400,
       color: HubColors.textMuted);
 
+  static const TextStyle eyebrow = TextStyle(
+      fontFamily: family,
+      fontSize: 11,
+      height: 1.4,
+      fontWeight: FontWeight.w500,
+      color: HubColors.textMuted,
+      letterSpacing: 1.2);
+
   /// Subtle wordmark — the one place letter-spacing goes wide.
   static const TextStyle wordmark = TextStyle(
       fontFamily: family,
