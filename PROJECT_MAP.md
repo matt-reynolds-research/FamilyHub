@@ -5,7 +5,7 @@
 > this file disagree, one of them is wrong — fix it in the same step. Everything else
 > (PRDs, design system, code) hangs off this.
 
-_Last updated: 2026-08-21 · Status: **Phase 1 — first vertical slice (Shopping): the data layer is built. The ambient shell now has populated seeded previews for Shopping, Tasks, and deliveries so the glance experience can be evaluated; this is still presentation-only mock data, not the real Shopping tile. Next: connect the Shopping tile to its fixture-backed repository and add/check interactions.**_
+_Last updated: 2026-08-21 · Status: **Phase 1 complete — Shopping is the first working vertical slice. Its ambient summary and focused Grocery/Household lists read the fixture-backed lossless document; add/check update the in-session working copy and Recently Bought through the shared pure mutations. Tasks and deliveries remain presentation-only mock previews. Next: write PRD 03 and wire Assistant Bar v1 to Shopping.**_
 _Phase 0 (done, for the record): Home Hub design imported from Claude Design (`design/FamilyHub Home Hub.dc.html`); first Flutter shell increment landed — dark seed v1.2 tokens (Helvetica Neue) + ambient home (header, 3-tile grid, Assistant Bar pill, generic focus container) on seeded data, widget-tested. Sphere / engaged / voice deferred to a later layer. **Prior tab shell + Supabase + light theme now pruned — the app tree is just the Home Hub shell and analyzes clean.**_
 
 ---
@@ -135,7 +135,7 @@ disposition is §6a.
 |---------|--------|-------|
 | Home Hub (shell) | 🟡 shell scaffolded (Phase 0) | Phase 0 — [`prds/01-home-hub-prd.md`](prds/01-home-hub-prd.md). Ambient home now includes populated seeded activity previews across all three tiles: volume, ownership, recency, and delivery urgency. Focus views replay that mock detail and clearly disclose that live household data is not connected. Ambient⇄engaged remains deferred. |
 | Design-system seed | ✅ v1.1 | Phase 0 — [`design/design-system-seed.md`](design/design-system-seed.md). Tokens + tile grid + reusable tile. Target device iPad 10th gen. |
-| Shopping tile | 🟡 data layer built (Phase 1a) | Phase 1 — [`prds/02-shopping-prd.md`](prds/02-shopping-prd.md). **Lossless model + parser/serializer + add/check mutations + fixture-backed repository built and tested** (`lib/domain/shopping/`): byte-exact round-trip, whole-file diffs against hand-written expected files, fail-loud on unclassifiable bullets. Surface mockup drafted ([`design/shopping-surface-mockup.html`](design/shopping-surface-mockup.html)). **Remaining: the tile UI** (summary → focused → add/check wiring). |
+| Shopping tile | ✅ working seeded slice (Phase 1) | Phase 1 — [`prds/02-shopping-prd.md`](prds/02-shopping-prd.md). Ambient summary and focused Grocery/Household lists now derive from the fixture-backed lossless document. Touch add/check persist through the byte-exact serializer for the app session; checking relocates to the read-only Recently Bought archive. Loading/error paths fail visibly. Live household data remains Phase 5. |
 | Assistant Bar | 🟡 prior code to adapt | Phase 2 — the `Agent` package is a working chat bar to restyle/wire (§6a). |
 | Tasks / Todo tile | ⬜ Placeholder | Phase 3 |
 | Mail & Packages tile | ⬜ Placeholder | Phase 4 |

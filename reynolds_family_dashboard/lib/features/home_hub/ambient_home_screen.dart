@@ -5,6 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../theme/hub_tokens.dart';
+import '../../domain/shopping/shopping_model.dart';
+import '../shopping/shopping_controller.dart';
+import '../shopping/shopping_focus_view.dart';
 import 'home_hub_models.dart';
 
 /// The Home Hub shell — Phase 0. The always-on frame that domain tiles plug into: a header,
@@ -44,9 +47,14 @@ class _AmbientHomeScreenState extends ConsumerState<AmbientHomeScreen> {
   @override
   Widget build(BuildContext context) {
     final tiles = ref.watch(homeTilesProvider);
+    final shopping = ref.watch(shoppingControllerProvider);
+    final liveTiles = [
+      _shoppingTile(tiles.first, shopping),
+      ...tiles.skip(1),
+    ];
     final focused = _focusedTileId == null
         ? null
-        : tiles.firstWhere((t) => t.id == _focusedTileId);
+        : liveTiles.firstWhere((t) => t.id == _focusedTileId);
 
     return Scaffold(
       backgroundColor: HubColors.page,
@@ -60,13 +68,17 @@ class _AmbientHomeScreenState extends ConsumerState<AmbientHomeScreen> {
                 child: focused == null
                     ? _AmbientBody(
                         now: _now,
-                        tiles: tiles,
+                        tiles: liveTiles,
                         onOpen: (id) => setState(() => _focusedTileId = id),
                       )
-                    : _FocusedContainer(
-                        tile: focused,
-                        onBack: () => setState(() => _focusedTileId = null),
-                      ),
+                    : focused.id == 'shopping'
+                        ? ShoppingFocusView(
+                            onBack: () => setState(() => _focusedTileId = null),
+                          )
+                        : _FocusedContainer(
+                            tile: focused,
+                            onBack: () => setState(() => _focusedTileId = null),
+                          ),
               ),
               const SizedBox(height: HubSpace.zone),
               const _AssistantBar(),
@@ -74,6 +86,49 @@ class _AmbientHomeScreenState extends ConsumerState<AmbientHomeScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  DomainTileData _shoppingTile(
+    DomainTileData seed,
+    AsyncValue<ShoppingDocument> shopping,
+  ) {
+    return shopping.when(
+      loading: () => seed.copyWith(
+        keyNumber: '—',
+        keyMeaning: 'loading shopping',
+        glance: 'Reading the seeded working copy…',
+        previewItems: const [],
+      ),
+      error: (error, _) => seed.copyWith(
+        keyNumber: '!',
+        keyMeaning: 'couldn\'t load shopping',
+        glance: '$error',
+        previewItems: const [],
+      ),
+      data: (document) {
+        final grocery = document.activeItems(ShoppingList.grocery);
+        final household = document.activeItems(ShoppingList.household);
+        final preview = <TilePreviewItem>[
+          for (final item in grocery.take(2))
+            TilePreviewItem(
+              title: item.itemText,
+              meta: 'Grocery · no author/date',
+            ),
+          for (final item in household.take(1))
+            TilePreviewItem(
+              title: item.itemText,
+              meta: 'Household · no author/date',
+            ),
+        ];
+        return seed.copyWith(
+          keyNumber: '${document.totalToBuy}',
+          keyMeaning: 'things to buy',
+          glance: 'Grocery ${grocery.length} · Household ${household.length}',
+          previewLabel: 'On the list',
+          previewItems: preview,
+        );
+      },
     );
   }
 }

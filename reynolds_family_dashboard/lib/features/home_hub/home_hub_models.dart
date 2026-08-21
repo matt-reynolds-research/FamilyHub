@@ -29,6 +29,25 @@ class DomainTileData {
   final IconData icon;
   final String previewLabel;
   final List<TilePreviewItem> previewItems;
+
+  DomainTileData copyWith({
+    String? keyNumber,
+    String? keyMeaning,
+    String? glance,
+    String? previewLabel,
+    List<TilePreviewItem>? previewItems,
+  }) =>
+      DomainTileData(
+        id: id,
+        title: title,
+        keyNumber: keyNumber ?? this.keyNumber,
+        keyMeaning: keyMeaning ?? this.keyMeaning,
+        glance: glance ?? this.glance,
+        accent: accent,
+        icon: icon,
+        previewLabel: previewLabel ?? this.previewLabel,
+        previewItems: previewItems ?? this.previewItems,
+      );
 }
 
 /// A compact, seeded activity signal for the ambient tile and its focused preview.
