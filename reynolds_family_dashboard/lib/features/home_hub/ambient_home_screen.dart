@@ -6,6 +6,8 @@ import 'package:intl/intl.dart';
 
 import '../../theme/hub_tokens.dart';
 import '../../domain/shopping/shopping_model.dart';
+import '../assistant/assistant_controller.dart';
+import '../assistant/assistant_surface.dart';
 import '../shopping/shopping_controller.dart';
 import '../shopping/shopping_focus_view.dart';
 import 'home_hub_models.dart';
@@ -48,6 +50,7 @@ class _AmbientHomeScreenState extends ConsumerState<AmbientHomeScreen> {
   Widget build(BuildContext context) {
     final tiles = ref.watch(homeTilesProvider);
     final shopping = ref.watch(shoppingControllerProvider);
+    final assistant = ref.watch(assistantControllerProvider);
     final liveTiles = [
       _shoppingTile(tiles.first, shopping),
       ...tiles.skip(1),
@@ -65,23 +68,27 @@ class _AmbientHomeScreenState extends ConsumerState<AmbientHomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Expanded(
-                child: focused == null
-                    ? _AmbientBody(
-                        now: _now,
-                        tiles: liveTiles,
-                        onOpen: (id) => setState(() => _focusedTileId = id),
-                      )
-                    : focused.id == 'shopping'
-                        ? ShoppingFocusView(
-                            onBack: () => setState(() => _focusedTileId = null),
+                child: assistant.isEngaged
+                    ? const AssistantEngagedView()
+                    : focused == null
+                        ? _AmbientBody(
+                            now: _now,
+                            tiles: liveTiles,
+                            onOpen: (id) => setState(() => _focusedTileId = id),
                           )
-                        : _FocusedContainer(
-                            tile: focused,
-                            onBack: () => setState(() => _focusedTileId = null),
-                          ),
+                        : focused.id == 'shopping'
+                            ? ShoppingFocusView(
+                                onBack: () =>
+                                    setState(() => _focusedTileId = null),
+                              )
+                            : _FocusedContainer(
+                                tile: focused,
+                                onBack: () =>
+                                    setState(() => _focusedTileId = null),
+                              ),
               ),
               const SizedBox(height: HubSpace.zone),
-              const _AssistantBar(),
+              const AssistantBar(),
             ],
           ),
         ),
@@ -422,44 +429,6 @@ class _FocusedContainer extends StatelessWidget {
             'Seeded preview · live household data is not connected',
             style: HubType.caption,
             textAlign: TextAlign.right,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-/// The Assistant Bar — the pinned "front door". Always present and visually prominent (not a
-/// footer), reserved even while stubbed. Inert in Phase 0; wiring is a later phase.
-class _AssistantBar extends StatelessWidget {
-  const _AssistantBar();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 64,
-      padding: const EdgeInsets.symmetric(horizontal: HubSpace.gap),
-      decoration: BoxDecoration(
-        color: HubColors.raised,
-        borderRadius: BorderRadius.circular(HubRadii.pill),
-        border: Border.all(color: HubColors.hairline),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 36,
-            height: 36,
-            decoration: const BoxDecoration(
-                color: HubColors.tile, shape: BoxShape.circle),
-            child: const Icon(Icons.mic_none,
-                color: HubColors.textSecondary, size: 20),
-          ),
-          const SizedBox(width: HubSpace.tile),
-          Flexible(
-            child: Text("Ask me anything — 'add milk…'",
-                style: HubType.body.copyWith(color: HubColors.textMuted),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis),
           ),
         ],
       ),

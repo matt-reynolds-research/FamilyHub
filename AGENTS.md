@@ -40,8 +40,9 @@ spending money, security/privacy tradeoffs, or a real fork in direction.
 - State: Riverpod. **No backend datastore** — FamilyHub mirrors the markdown world (D-15) and runs on
   **seeded mock data** in Phase 0. **Supabase was removed in the Phase-0 prune** (2026-08-03), along with
   `flutter_dotenv`, `google_fonts`, and `google_generative_ai`.
-- AI bar: the local **`Agent/`** package (Gemini) is kept as a path dep for the **Phase-2** Assistant
-  Bar; it is not wired in yet.
+- Assistant Bar: Phase 2 lives in the app's `lib/features/assistant/` and uses a deterministic,
+  Shopping-only local intent adapter. The old **`Agent/`** Gemini prototype remains as historical
+  reference but is not an app dependency; it must not become a second household brain.
 - Design-system tokens under `lib/theme/hub_tokens.dart` (seed v1.2, Helvetica Neue). Widget tests in `test/`.
 - No secrets are needed by the app today (dotenv removed with Supabase). Any future keys live in
   `reynolds_family_dashboard/.env` — git-ignored, never committed; `.env.example` documents them.
@@ -54,7 +55,7 @@ spending money, security/privacy tradeoffs, or a real fork in direction.
   parser/serializer, mutations, repository. `shopping/` is the reference implementation.
 - `reynolds_family_dashboard/assets/fixtures/` — committed **seed** copies of the household markdown
   files. Development reads these, never the live `~/projects/reynolds-household/*.md`.
-- `Agent/` — local Flutter package (AI bar; Gemini). Reserved for the Phase-2 Assistant Bar.
+- `Agent/` — historical Gemini chat-bar prototype, not wired and not an app dependency.
 - `.github/workflows/` — CI + secret scan. See `.github/PIPELINE.md` for how the
   gate + auto-merge work and how to enable them.
 

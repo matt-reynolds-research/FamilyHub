@@ -5,7 +5,7 @@
 > this file disagree, one of them is wrong — fix it in the same step. Everything else
 > (PRDs, design system, code) hangs off this.
 
-_Last updated: 2026-08-21 · Status: **Phase 1 complete — Shopping is the first working vertical slice. Its ambient summary and focused Grocery/Household lists read the fixture-backed lossless document; add/check update the in-session working copy and Recently Bought through the shared pure mutations. Tasks and deliveries remain presentation-only mock previews. Next: write PRD 03 and wire Assistant Bar v1 to Shopping.**_
+_Last updated: 2026-08-21 · Status: **Phase 2 complete — Assistant Bar v1 is wired to Shopping. The persistent text entry expands into an engaged conversation canvas; deterministic add/query/bought intents call the same Shopping controller as touch and update its sidebar immediately. No model, API key, voice, or second brain. Next: Phase 3 Tasks / Todo.**_
 _Phase 0 (done, for the record): Home Hub design imported from Claude Design (`design/FamilyHub Home Hub.dc.html`); first Flutter shell increment landed — dark seed v1.2 tokens (Helvetica Neue) + ambient home (header, 3-tile grid, Assistant Bar pill, generic focus container) on seeded data, widget-tested. Sphere / engaged / voice deferred to a later layer. **Prior tab shell + Supabase + light theme now pruned — the app tree is just the Home Hub shell and analyzes clean.**_
 
 ---
@@ -106,11 +106,10 @@ AI bar) are harvested rather than rebuilt. See §6a and `SALVAGE-AUDIT.md`.
   Supabase). Validates the whole pipeline (data → design system → tile → interaction). *Tasks is an
   equally valid slice; Shopping chosen for being the most constrained CRUD.*
 
-- **Phase 2 — Assistant Bar v1 (wired to Shopping).** The persistent bar, controlling exactly one
-  domain: "add milk," "what's on the list," "we got the eggs." **Head start:** the prior app's
-  `Agent` package already provides a working pinned-bottom, Gemini-backed chat bar — restyle to the
-  seed's pill and wire to the domain. Text first; voice is later polish. *(The model/$ choice is
-  §9.4.)*
+- **Phase 2 — Assistant Bar v1 (wired to Shopping).** **Complete.** The persistent text bar controls
+  exactly one domain: "add milk," "what's on the list," "we got the eggs." It expands into the
+  engaged canvas and reuses Shopping's controller/mutations. V1 is a deterministic local adapter—no
+  model cost, API key, or second brain. The old `Agent/` Gemini prototype is historical reference.
 
 - **Phase 3 — Tasks / Todo domain.** Second domain tile + assistant integration. Reuses Phase 1–2
   patterns; confirms the shell and assistant generalize beyond one domain ("test the opposite too").
@@ -136,7 +135,7 @@ disposition is §6a.
 | Home Hub (shell) | 🟡 shell scaffolded (Phase 0) | Phase 0 — [`prds/01-home-hub-prd.md`](prds/01-home-hub-prd.md). Ambient home now includes populated seeded activity previews across all three tiles: volume, ownership, recency, and delivery urgency. Focus views replay that mock detail and clearly disclose that live household data is not connected. Ambient⇄engaged remains deferred. |
 | Design-system seed | ✅ v1.1 | Phase 0 — [`design/design-system-seed.md`](design/design-system-seed.md). Tokens + tile grid + reusable tile. Target device iPad 10th gen. |
 | Shopping tile | ✅ working seeded slice (Phase 1) | Phase 1 — [`prds/02-shopping-prd.md`](prds/02-shopping-prd.md). Ambient summary and focused Grocery/Household lists now derive from the fixture-backed lossless document. Touch add/check persist through the byte-exact serializer for the app session; checking relocates to the read-only Recently Bought archive. Loading/error paths fail visibly. Live household data remains Phase 5. |
-| Assistant Bar | 🟡 prior code to adapt | Phase 2 — the `Agent` package is a working chat bar to restyle/wire (§6a). |
+| Assistant Bar | ✅ working Shopping-only v1 (Phase 2) | [`prds/03-assistant-bar-prd.md`](prds/03-assistant-bar-prd.md). Typed ambient entry → engaged conversation canvas; add/query/bought intents share Shopping mutations; unsupported requests fail helpfully. Deterministic and session-only; voice/live-brain transport deferred. |
 | Tasks / Todo tile | ⬜ Placeholder | Phase 3 |
 | Mail & Packages tile | ⬜ Placeholder | Phase 4 |
 | Ambient/wall mode | ⬜ Placeholder | Phase 5 |
@@ -158,7 +157,7 @@ tile-shell/markdown vision above is canonical (D-14). Full detail in
 - **⛔ Shelved — now REMOVED (Phase-0 prune, 2026-08-03):** `supabase_flutter` + the repository/
   service/`supabase_migration.sql`; the tab navigation (`AppTab` + `_TabBarRow`) and all five tab
   feature pages; the light `AppColors`/`AppTheme`/`AppTypography`; the old models/providers; and the
-  `flutter_dotenv`/`google_fonts`/`google_generative_ai` deps. `Agent/` is kept for Phase 2.
+  `flutter_dotenv`/`google_fonts`/`google_generative_ai` deps. `Agent/` now remains only as historical reference.
 
 ## 7. PRD writing order
 
@@ -166,8 +165,7 @@ PRDs get written **one phase ahead of the build**, in dependency order:
 
 1. **Home Hub** (the shell) → **✅ Locked: [`prds/01-home-hub-prd.md`](prds/01-home-hub-prd.md).**
 2. **Shopping** — first vertical slice → **✅ Locked: [`prds/02-shopping-prd.md`](prds/02-shopping-prd.md).**
-3. **Assistant Bar** — written after Shopping so it has a concrete domain (and now, a concrete
-   `Agent` starting point) to specify against.
+3. **Assistant Bar** → **✅ Locked and implemented: [`prds/03-assistant-bar-prd.md`](prds/03-assistant-bar-prd.md).**
 4. **Tasks / Todo** — mostly mirrors Shopping; fast to write once patterns exist.
 5. **Mail & Packages** — last; most external unknowns.
 
@@ -184,7 +182,7 @@ package.** Direction: **iPad target, headless/ambient-first.**
 **Supabase — REMOVED (Phase-0 prune, 2026-08-03).** `supabase_flutter` + the repository/service/
 `supabase_migration.sql` are gone; FamilyHub mirrors the markdown world instead (§3, D-15). The app now
 runs on seeded mock data with no datastore. (`google_generative_ai`, `google_fonts`, `flutter_dotenv`
-went with it; `Agent/` stays for the Phase-2 bar.)
+went with it; the old `Agent/` package is retained only as historical reference and is not a dependency.)
 
 ## 9. Open decisions — need Matt before/at these points
 
@@ -196,9 +194,10 @@ went with it; `Agent/` stays for the Phase-2 bar.)
 3. **Live backend, eventually.** Read/write the real `TASKS.md`/`SHOPPING.md` + calendar, or stay a
    seeded demo? Shapes the data layer. Reinforced by shelving Supabase (§3). *(Decided by Phase 5;
    if yes, concurrent-write arbitration with the existing automations is a hard precondition — L5.)*
-4. **Assistant Bar brains.** On-device vs. hosted, and which model — a cost + privacy decision. The
-   `Agent` package currently calls **Gemini** directly, which makes this concrete but doesn't settle
-   it. *(Blocks Phase 2. Anything that spends money pauses for you.)*
+4. **Assistant Bar live transport.** V1 is deliberately deterministic and free (D-21). Before it
+   becomes a face onto the live Family Assistant, choose the transport/API plus its privacy boundary.
+   A model choice is only needed if local/deterministic handling proves insufficient. *(No longer
+   blocks Phase 2; blocks live/general assistant behavior. Anything that spends money pauses.)*
 5. **Added-by provenance.** The desired ambient experience groups Shopping and Tasks activity by
    person and recency, but today's `SHOPPING.md` active-item format stores neither author nor added
    date. The seeded UI demonstrates the experience only. Making it truthful requires a later **World**

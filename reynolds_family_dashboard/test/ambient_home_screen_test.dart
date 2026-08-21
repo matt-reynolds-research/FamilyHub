@@ -65,7 +65,10 @@ void main() {
     expect(find.text('Alex · 4 left'), findsOneWidget);
     expect(find.text('Kids lunchbox'), findsOneWidget);
     expect(find.text('2 days late'), findsOneWidget);
-    expect(find.text("Ask me anything — 'add milk…'"), findsOneWidget);
+    expect(
+      find.text('Add milk · What do we need? · We got eggs'),
+      findsOneWidget,
+    );
 
     await teardownHub(tester);
   });
@@ -114,6 +117,28 @@ void main() {
     expect(find.text('Pasta'), findsNothing);
     expect(find.text('4 to buy'), findsOneWidget);
     expect(find.text('Recently bought · 2'), findsOneWidget);
+
+    await teardownHub(tester);
+  });
+
+  testWidgets('Assistant Bar enters engaged mode, mutates Shopping, and closes',
+      (tester) async {
+    await pumpHub(tester);
+
+    await tester.enterText(find.byType(TextField), 'add Eggs');
+    await tester.tap(find.byTooltip('Send to FamilyHub'));
+    await tester.pump();
+    await tester.pump();
+
+    expect(find.text('Shopping preview'), findsOneWidget);
+    expect(find.text('Added to grocery: Eggs'), findsOneWidget);
+    expect(find.text('5'), findsOneWidget);
+
+    await tester.tap(find.text('Back to home'));
+    await tester.pump();
+    expect(find.text('FAMILYHUB'), findsOneWidget);
+    expect(find.text('5'), findsOneWidget);
+    expect(find.text('Grocery 4 · Household 1'), findsOneWidget);
 
     await teardownHub(tester);
   });
