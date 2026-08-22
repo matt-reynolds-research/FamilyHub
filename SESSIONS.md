@@ -13,6 +13,22 @@
 
 ---
 
+## 2026-08-21 (Codex) — Phase 3b complete: working Tasks surface
+
+**What changed**
+- Replaced the Tasks placeholder with a fixture-derived ambient tile: six remaining tasks, workflow
+  section counts, and the three most recent provenance signals.
+- Added a focused task board with Family/Open lists, Waiting/Someday counts, clear provenance, and
+  touch-friendly add/complete interactions backed by the shared Tasks controller and mutations.
+- New hub-entered tasks are attributed to `FamilyHub`; the surface explicitly says authorship is not
+  ownership. Changes remain in the safe seeded working copy for the app session only.
+- Browser-verified the ambient and focused layouts at 1180×820. **`flutter analyze` clean; all 43
+  tests pass.**
+
+**What is next**
+1. Phase 3c — add deterministic Tasks add/query/done intents to the Assistant Bar.
+2. Keep Tasks and Shopping routed through their existing controllers; no new brain or live data.
+
 ## 2026-08-21 (Codex) — Phase 3a complete: Tasks contract + lossless data layer
 
 **What changed**
