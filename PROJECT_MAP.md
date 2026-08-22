@@ -5,7 +5,7 @@
 > this file disagree, one of them is wrong — fix it in the same step. Everything else
 > (PRDs, design system, code) hangs off this.
 
-_Last updated: 2026-08-21 · Status: **Phase 3b complete — Tasks now has a fixture-derived ambient tile and focused touch surface with workflow counts, provenance, add, and complete behavior. The UI explicitly distinguishes authorship from ownership. Next: Phase 3c Assistant Bar integration for Tasks.**_
+_Last updated: 2026-08-22 · Status: **Phase 3 complete — Tasks is a working seeded vertical slice across ambient, touch, and conversation. The Assistant Bar now routes explicit Tasks add/query/complete commands through the same controller as touch and switches its engaged preview by domain. Next: Phase 4 Mail & Packages scoping.**_
 _Phase 0 (done, for the record): Home Hub design imported from Claude Design (`design/FamilyHub Home Hub.dc.html`); first Flutter shell increment landed — dark seed v1.2 tokens (Helvetica Neue) + ambient home (header, 3-tile grid, Assistant Bar pill, generic focus container) on seeded data, widget-tested. Sphere / engaged / voice deferred to a later layer. **Prior tab shell + Supabase + light theme now pruned — the app tree is just the Home Hub shell and analyzes clean.**_
 
 ---
@@ -111,8 +111,8 @@ AI bar) are harvested rather than rebuilt. See §6a and `SALVAGE-AUDIT.md`.
   engaged canvas and reuses Shopping's controller/mutations. V1 is a deterministic local adapter—no
   model cost, API key, or second brain. The old `Agent/` Gemini prototype is historical reference.
 
-- **Phase 3 — Tasks / Todo domain.** Second domain tile + assistant integration. Reuses Phase 1–2
-  patterns; confirms the shell and assistant generalize beyond one domain ("test the opposite too").
+- **Phase 3 — Tasks / Todo domain.** **Complete.** Second domain tile + assistant integration reuses
+  Phase 1–2 patterns and confirms the shell and deterministic assistant generalize beyond one domain.
 
 - **Phase 4 — Mail & Packages.** The integration-heavy domain. Start read-mostly (glanceable
   status). External accounts are a security/privacy decision point — pause and confirm before wiring
@@ -135,8 +135,8 @@ disposition is §6a.
 | Home Hub (shell) | 🟡 shell scaffolded (Phase 0) | Phase 0 — [`prds/01-home-hub-prd.md`](prds/01-home-hub-prd.md). Ambient home now includes populated seeded activity previews across all three tiles: volume, ownership, recency, and delivery urgency. Focus views replay that mock detail and clearly disclose that live household data is not connected. Ambient⇄engaged remains deferred. |
 | Design-system seed | ✅ v1.1 | Phase 0 — [`design/design-system-seed.md`](design/design-system-seed.md). Tokens + tile grid + reusable tile. Target device iPad 10th gen. |
 | Shopping tile | ✅ working seeded slice (Phase 1) | Phase 1 — [`prds/02-shopping-prd.md`](prds/02-shopping-prd.md). Ambient summary and focused Grocery/Household lists now derive from the fixture-backed lossless document. Touch add/check persist through the byte-exact serializer for the app session; checking relocates to the read-only Recently Bought archive. Loading/error paths fail visibly. Live household data remains Phase 5. |
-| Assistant Bar | ✅ working Shopping-only v1 (Phase 2) | [`prds/03-assistant-bar-prd.md`](prds/03-assistant-bar-prd.md). Typed ambient entry → engaged conversation canvas; add/query/bought intents share Shopping mutations; unsupported requests fail helpfully. Deterministic and session-only; voice/live-brain transport deferred. |
-| Tasks / Todo tile | ✅ working seeded surface (Phase 3b) | [`prds/04-tasks-prd.md`](prds/04-tasks-prd.md). Ambient workflow counts and recent provenance derive from the fixture; focused Family/Open lists support touch add/complete through the lossless repository. Waiting/Someday are summarized; authorship is not presented as ownership. Assistant integration is next. |
+| Assistant Bar | ✅ working Shopping + Tasks adapter (Phase 3) | [`prds/03-assistant-bar-prd.md`](prds/03-assistant-bar-prd.md). Typed ambient entry → engaged conversation canvas; explicit add/query/complete commands share each domain's controller and switch the side preview. Deterministic and session-only; voice/live-brain transport deferred. |
+| Tasks / Todo tile | ✅ working seeded slice (Phase 3) | [`prds/04-tasks-prd.md`](prds/04-tasks-prd.md). Ambient workflow counts and recent provenance, focused touch add/complete, and Assistant Bar add/query/done all use the fixture-backed lossless repository. Authorship is never presented as ownership. |
 | Mail & Packages tile | ⬜ Placeholder | Phase 4 |
 | Ambient/wall mode | ⬜ Placeholder | Phase 5 |
 | Live backend wiring | ⬜ Placeholder | Phase 5 — needs an explicit go |
@@ -166,7 +166,7 @@ PRDs get written **one phase ahead of the build**, in dependency order:
 1. **Home Hub** (the shell) → **✅ Locked: [`prds/01-home-hub-prd.md`](prds/01-home-hub-prd.md).**
 2. **Shopping** — first vertical slice → **✅ Locked: [`prds/02-shopping-prd.md`](prds/02-shopping-prd.md).**
 3. **Assistant Bar** → **✅ Locked and implemented: [`prds/03-assistant-bar-prd.md`](prds/03-assistant-bar-prd.md).**
-4. **Tasks / Todo** — **✅ Locked: [`prds/04-tasks-prd.md`](prds/04-tasks-prd.md).** Phase 3a data contract complete; surface and assistant increments remain.
+4. **Tasks / Todo** — **✅ Locked and implemented: [`prds/04-tasks-prd.md`](prds/04-tasks-prd.md).**
 5. **Mail & Packages** — last; most external unknowns.
 
 The **design-system seed comes before PRD #2**; it then *grows* as each PRD surfaces a component it

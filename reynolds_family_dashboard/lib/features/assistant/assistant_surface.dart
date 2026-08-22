@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/shopping/shopping_model.dart';
+import '../../domain/tasks/task_model.dart';
 import '../../theme/hub_tokens.dart';
 import '../shopping/shopping_controller.dart';
+import '../tasks/task_controller.dart';
 import 'assistant_controller.dart';
 
 class AssistantBar extends ConsumerStatefulWidget {
@@ -59,7 +61,7 @@ class _AssistantBarState extends ConsumerState<AssistantBar> {
               textInputAction: TextInputAction.send,
               style: HubType.body,
               decoration: const InputDecoration(
-                hintText: 'Add milk · What do we need? · We got eggs',
+                hintText: 'Add milk · Add task call plumber · What is left?',
                 hintStyle: HubType.bodyMuted,
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.symmetric(horizontal: HubSpace.sm),
@@ -107,6 +109,7 @@ class AssistantEngagedView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final assistant = ref.watch(assistantControllerProvider);
     final shopping = ref.watch(shoppingControllerProvider);
+    final tasks = ref.watch(taskControllerProvider);
 
     return Container(
       decoration: BoxDecoration(
@@ -130,7 +133,12 @@ class AssistantEngagedView extends ConsumerWidget {
               const SizedBox(width: HubSpace.sm),
               const Text('FamilyHub', style: HubType.labelPrimary),
               const SizedBox(width: HubSpace.sm),
-              const Text('Shopping preview', style: HubType.caption),
+              Text(
+                assistant.activeDomain == AssistantDomain.tasks
+                    ? 'Tasks preview'
+                    : 'Shopping preview',
+                style: HubType.caption,
+              ),
               const Spacer(),
               TextButton.icon(
                 onPressed: () =>
@@ -154,7 +162,11 @@ class AssistantEngagedView extends ConsumerWidget {
                 const SizedBox(width: HubSpace.zone),
                 Container(width: 1, color: HubColors.hairline),
                 const SizedBox(width: HubSpace.zone),
-                Expanded(child: _ShoppingGlance(shopping: shopping)),
+                Expanded(
+                  child: assistant.activeDomain == AssistantDomain.tasks
+                      ? _TaskGlance(tasks: tasks)
+                      : _ShoppingGlance(shopping: shopping),
+                ),
               ],
             ),
           ),
@@ -185,7 +197,7 @@ class _Conversation extends StatelessWidget {
             Text('What can I help with?', style: HubType.keyNumber),
             SizedBox(height: HubSpace.sm),
             Text(
-              'Try “add milk”, “what do we need?”, or “we got the eggs”.',
+              'Try “add milk”, “add task call the plumber”, or “what tasks are left?”.',
               style: HubType.bodyMuted,
               textAlign: TextAlign.center,
             ),
@@ -220,6 +232,61 @@ class _Conversation extends StatelessWidget {
       },
     );
   }
+}
+
+class _TaskGlance extends StatelessWidget {
+  const _TaskGlance({required this.tasks});
+  final AsyncValue<TaskDocument> tasks;
+
+  @override
+  Widget build(BuildContext context) => tasks.when(
+        loading: () => const Center(
+          child: CircularProgressIndicator(color: HubColors.accentTasks),
+        ),
+        error: (error, _) => Text('$error', style: HubType.caption),
+        data: (document) {
+          final family = document.activeTasks(TaskSectionKind.family);
+          final open = document.activeTasks(TaskSectionKind.open);
+          final waiting = document.activeTasks(TaskSectionKind.waiting);
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Row(children: [
+                Icon(Icons.checklist_rounded, color: HubColors.accentTasks),
+                SizedBox(width: HubSpace.sm),
+                Text('Tasks', style: HubType.labelPrimary),
+              ]),
+              const SizedBox(height: HubSpace.zone),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.baseline,
+                textBaseline: TextBaseline.alphabetic,
+                children: [
+                  Text('${document.totalRemaining}',
+                      style: HubType.keyNumber
+                          .copyWith(color: HubColors.accentTasks)),
+                  const SizedBox(width: HubSpace.sm),
+                  const Text('tasks remaining', style: HubType.bodySecondary),
+                ],
+              ),
+              const SizedBox(height: HubSpace.zone),
+              Text('Family · ${family.length}', style: HubType.eyebrow),
+              const SizedBox(height: HubSpace.sm),
+              Text(family.map((task) => task.title).join(' · '),
+                  style: HubType.bodySecondary,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis),
+              const SizedBox(height: HubSpace.zone),
+              Text('Open · ${open.length}  /  Waiting · ${waiting.length}',
+                  style: HubType.eyebrow),
+              const SizedBox(height: HubSpace.sm),
+              Text(open.map((task) => task.title).join(' · '),
+                  style: HubType.bodySecondary,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis),
+            ],
+          );
+        },
+      );
 }
 
 class _ShoppingGlance extends StatelessWidget {

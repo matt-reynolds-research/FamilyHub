@@ -99,7 +99,7 @@ void main() {
     expect(find.text('Kids lunchbox'), findsOneWidget);
     expect(find.text('2 days late'), findsOneWidget);
     expect(
-      find.text('Add milk · What do we need? · We got eggs'),
+      find.text('Add milk · Add task call plumber · What is left?'),
       findsOneWidget,
     );
 
@@ -202,6 +202,26 @@ void main() {
     expect(find.text('FAMILYHUB'), findsOneWidget);
     expect(find.text('5'), findsOneWidget);
     expect(find.text('Grocery 4 · Household 1'), findsOneWidget);
+
+    await teardownHub(tester);
+  });
+
+  testWidgets('Assistant Bar routes task commands to Tasks and updates preview',
+      (tester) async {
+    await pumpHub(tester);
+
+    await tester.enterText(find.byType(TextField), 'add task Call plumber');
+    await tester.tap(find.byTooltip('Send to FamilyHub'));
+    await tester.pump();
+    await tester.pump();
+
+    expect(find.text('Tasks preview'), findsOneWidget);
+    expect(find.text('Added to Open Tasks: Call plumber'), findsOneWidget);
+    expect(find.text('7'), findsOneWidget);
+
+    await tester.tap(find.text('Back to home'));
+    await tester.pump();
+    expect(find.text('Family 2 · Open 3 · Waiting 1'), findsOneWidget);
 
     await teardownHub(tester);
   });
