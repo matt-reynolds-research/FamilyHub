@@ -6,10 +6,13 @@ import 'package:intl/intl.dart';
 
 import '../../theme/hub_tokens.dart';
 import '../../domain/shopping/shopping_model.dart';
+import '../../domain/tasks/task_model.dart';
 import '../assistant/assistant_controller.dart';
 import '../assistant/assistant_surface.dart';
 import '../shopping/shopping_controller.dart';
 import '../shopping/shopping_focus_view.dart';
+import '../tasks/task_controller.dart';
+import '../tasks/task_focus_view.dart';
 import 'home_hub_models.dart';
 
 /// The Home Hub shell — Phase 0. The always-on frame that domain tiles plug into: a header,
@@ -50,10 +53,12 @@ class _AmbientHomeScreenState extends ConsumerState<AmbientHomeScreen> {
   Widget build(BuildContext context) {
     final tiles = ref.watch(homeTilesProvider);
     final shopping = ref.watch(shoppingControllerProvider);
+    final tasks = ref.watch(taskControllerProvider);
     final assistant = ref.watch(assistantControllerProvider);
     final liveTiles = [
       _shoppingTile(tiles.first, shopping),
-      ...tiles.skip(1),
+      _tasksTile(tiles[1], tasks),
+      ...tiles.skip(2),
     ];
     final focused = _focusedTileId == null
         ? null
@@ -81,11 +86,16 @@ class _AmbientHomeScreenState extends ConsumerState<AmbientHomeScreen> {
                                 onBack: () =>
                                     setState(() => _focusedTileId = null),
                               )
-                            : _FocusedContainer(
-                                tile: focused,
-                                onBack: () =>
-                                    setState(() => _focusedTileId = null),
-                              ),
+                            : focused.id == 'tasks'
+                                ? TaskFocusView(
+                                    onBack: () =>
+                                        setState(() => _focusedTileId = null),
+                                  )
+                                : _FocusedContainer(
+                                    tile: focused,
+                                    onBack: () =>
+                                        setState(() => _focusedTileId = null),
+                                  ),
               ),
               const SizedBox(height: HubSpace.zone),
               const AssistantBar(),
@@ -93,6 +103,50 @@ class _AmbientHomeScreenState extends ConsumerState<AmbientHomeScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  DomainTileData _tasksTile(
+    DomainTileData seed,
+    AsyncValue<TaskDocument> tasks,
+  ) {
+    return tasks.when(
+      loading: () => seed.copyWith(
+        keyNumber: '—',
+        keyMeaning: 'loading tasks',
+        glance: 'Reading the seeded working copy…',
+        previewItems: const [],
+      ),
+      error: (error, _) => seed.copyWith(
+        keyNumber: '!',
+        keyMeaning: 'couldn\'t load tasks',
+        glance: '$error',
+        previewItems: const [],
+      ),
+      data: (document) {
+        final family = document.activeTasks(TaskSectionKind.family);
+        final open = document.activeTasks(TaskSectionKind.open);
+        final waiting = document.activeTasks(TaskSectionKind.waiting);
+        final recent = document.allActive
+            .where((task) => task.addedDate != null)
+            .toList()
+          ..sort((a, b) => b.addedDate!.compareTo(a.addedDate!));
+        return seed.copyWith(
+          keyNumber: '${document.totalRemaining}',
+          keyMeaning: 'tasks remaining',
+          glance:
+              'Family ${family.length} · Open ${open.length} · Waiting ${waiting.length}',
+          previewLabel: 'Recently added',
+          previewItems: [
+            for (final task in recent.take(3))
+              TilePreviewItem(
+                title: task.title,
+                meta:
+                    'Added by ${task.addedBy ?? 'unknown'} · ${DateFormat('MMM d').format(task.addedDate!)}',
+              ),
+          ],
+        );
+      },
     );
   }
 

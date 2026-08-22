@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:reynolds_family_dashboard/domain/shopping/shopping_repository.dart';
+import 'package:reynolds_family_dashboard/domain/tasks/task_repository.dart';
 import 'package:reynolds_family_dashboard/features/home_hub/ambient_home_screen.dart';
 import 'package:reynolds_family_dashboard/features/shopping/shopping_controller.dart';
+import 'package:reynolds_family_dashboard/features/tasks/task_controller.dart';
 
 const shoppingFixture = '''# Shopping
 
@@ -22,6 +24,31 @@ const shoppingFixture = '''# Shopping
 - [x] ~~Oat milk~~ (grocery, 2026-08-20)
 ''';
 
+const taskFixture = '''# Tasks
+
+## Family Tasks
+
+- [ ] **Plan dinner** — added via text from Sara on 2026-08-20
+- [ ] **Return books** — added via text from Matt on 2026-08-21
+
+## Open Tasks
+
+- [ ] **Choose skylight frame** — compare options — added via text from Matt on 2026-08-19
+- [ ] **Book dentist** — added via text from Sara on 2026-08-18
+
+## Waiting On
+
+- [ ] **School list** — teacher email — added via text from Sara on 2026-08-17
+
+## Someday / Maybe
+
+- [ ] **Paint guest room**
+
+## Done
+
+- [x] ~~Replace bulb~~ (2026-08-20)
+''';
+
 /// Phase-0 shell smoke tests: the ambient Home Hub renders its seeded glance content, the
 /// Assistant Bar is always present, and tapping a tile opens the generic focus container and
 /// returns home. Verifies the tree builds without exceptions (no simulator needed).
@@ -34,10 +61,14 @@ void main() {
     final repository = FixtureShoppingRepository(
       loadAsset: (_) async => shoppingFixture,
     );
+    final taskRepository = FixtureTaskRepository(
+      loadAsset: (_) async => taskFixture,
+    );
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
           shoppingRepositoryProvider.overrideWithValue(repository),
+          taskRepositoryProvider.overrideWithValue(taskRepository),
         ],
         child: const MaterialApp(home: AmbientHomeScreen()),
       ),
@@ -62,13 +93,45 @@ void main() {
     expect(find.text('things to buy'), findsOneWidget);
     expect(find.text('Grocery 3 · Household 1'), findsOneWidget);
     expect(find.text('Pasta'), findsOneWidget);
-    expect(find.text('Alex · 4 left'), findsOneWidget);
+    expect(find.text('6'), findsOneWidget);
+    expect(find.text('Family 2 · Open 2 · Waiting 1'), findsOneWidget);
+    expect(find.text('Return books'), findsOneWidget);
     expect(find.text('Kids lunchbox'), findsOneWidget);
     expect(find.text('2 days late'), findsOneWidget);
     expect(
       find.text('Add milk · What do we need? · We got eggs'),
       findsOneWidget,
     );
+
+    await teardownHub(tester);
+  });
+
+  testWidgets('Tasks opens real workflow lists and supports add and complete',
+      (tester) async {
+    await pumpHub(tester);
+
+    await tester.tap(find.text('Tasks'));
+    await tester.pump();
+    expect(find.text('Family Tasks  · 2'), findsOneWidget);
+    expect(find.text('Open Tasks  · 2'), findsOneWidget);
+    expect(find.text('Added by Matt · Aug 21'), findsOneWidget);
+    expect(find.textContaining('author shows who added it'), findsOneWidget);
+
+    await tester.enterText(
+        find.widgetWithText(TextField, 'Add a task'), 'Call plumber');
+    await tester.tap(find.byTooltip('Add task'));
+    await tester.pump();
+    expect(find.text('Call plumber'), findsOneWidget);
+    expect(find.text('7 remaining'), findsOneWidget);
+
+    await tester.tap(find.byType(Checkbox).first);
+    await tester.pump();
+    expect(find.text('Plan dinner'), findsNothing);
+    expect(find.text('6 remaining'), findsOneWidget);
+
+    await tester.tap(find.text('Home'));
+    await tester.pump();
+    expect(find.text('Family 1 · Open 3 · Waiting 1'), findsOneWidget);
 
     await teardownHub(tester);
   });
