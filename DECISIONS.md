@@ -181,3 +181,11 @@ This is a replaceable surface seam, not a new household brain. It needs no model
 data. A future transport to the live Family Assistant can replace the adapter without redesigning the
 bar/canvas. The old package remains as historical reference but was removed from app dependencies.
 → `prds/03-assistant-bar-prd.md`, `reynolds_family_dashboard/lib/features/assistant/`.
+
+### D-22 · 2026-08-21 · Task authorship is not task ownership
+The household `TASKS.md` convention records who added a task and when, but it has no assignee field.
+FamilyHub therefore must not turn “added via text from Sara” into “Sara has this task” or calculate
+per-person workload from it. Phase 3 surfaces honest section/household counts plus provenance for
+human follow-up. True per-person assignment requires a future World-layer convention change in
+`family-assistant/`; the lossless parser preserves that evolution path without inventing data.
+→ `prds/04-tasks-prd.md`, `reynolds_family_dashboard/lib/domain/tasks/`.
