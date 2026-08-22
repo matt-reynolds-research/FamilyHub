@@ -23,3 +23,4 @@ flutter:
     # Seeded mock data shaped like the household's SHOPPING.md. Development never reads or
     # writes the live household files (AGENTS.md); live wiring is Phase 5.
     - assets/fixtures/shopping_seed.md
+    - assets/fixtures/tasks_seed.md

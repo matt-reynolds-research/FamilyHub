@@ -13,6 +13,24 @@
 
 ---
 
+## 2026-08-21 (Codex) — Phase 3a complete: Tasks contract + lossless data layer
+
+**What changed**
+- Wrote and locked `prds/04-tasks-prd.md` against the household's actual `TASKS.md` conventions.
+- Added a safe seeded task fixture and a whole-file parser/serializer that preserves prose, comments,
+  unknown sections, whitespace, line endings, and unmodified task lines byte-for-byte.
+- Added pure add/complete mutations plus the fixture repository seam. Add targets Open or Family Tasks,
+  dedupes across active sections, and preserves provenance; complete relocates the task to Done using
+  the World's exact archive form.
+- Recorded the product constraint that provenance is not assignment (D-22). The present World cannot
+  support honest per-person workload counts, so the UI will show household/workflow counts until it can.
+- **`flutter analyze` clean; all 42 tests pass.** No live family file or account was read or changed.
+
+**What is next**
+1. Phase 3b — replace the Tasks placeholder with fixture-derived ambient and focused views.
+2. Add touch add/complete through the shared controller and preserve clear loading/error states.
+3. Phase 3c — extend the Assistant Bar only after the touch/data behavior is proven.
+
 ## 2026-08-21 (Codex) — Phase 2 complete: Assistant Bar v1 + Shopping
 
 **What changed**
