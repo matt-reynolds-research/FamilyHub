@@ -189,3 +189,11 @@ per-person workload from it. Phase 3 surfaces honest section/household counts pl
 human follow-up. True per-person assignment requires a future World-layer convention change in
 `family-assistant/`; the lossless parser preserves that evolution path without inventing data.
 → `prds/04-tasks-prd.md`, `reynolds_family_dashboard/lib/domain/tasks/`.
+
+### D-23 · 2026-08-22 · Deterministic cross-domain commands stay explicit
+The local Assistant Bar now controls both Shopping and Tasks without a model, so ambiguous “add X”
+must retain one stable meaning: Shopping. Tasks additions require “add task X” (or `task:` / `todo:`),
+while task queries and completions use unmistakable task language. This makes routing explainable,
+prevents a second brain from emerging in the surface, and leaves the adapter replaceable by the live
+Family Assistant transport later. The engaged side panel follows the most recently addressed domain.
+→ `reynolds_family_dashboard/lib/features/assistant/`.

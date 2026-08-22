@@ -13,6 +13,23 @@
 
 ---
 
+## 2026-08-22 (Codex) — Phase 3 complete: Tasks in the Assistant Bar
+
+**What changed**
+- Extended the deterministic Assistant Bar from Shopping-only to Shopping + Tasks. Explicit task
+  commands add to Open Tasks, summarize every active workflow, and complete an exact task match.
+- All actions call `TaskController`, so conversational and touch changes update the same seeded
+  document and ambient tile immediately.
+- Added active-domain state: the engaged canvas now switches its side panel and label between live
+  Shopping and Tasks previews according to the latest command.
+- Kept routing predictable (D-23): bare “add X” remains Shopping; Tasks uses “add task X.” Unsupported
+  input explains both domains without mutation.
+- Browser-verified “add task Call plumber” at 1180×820. **`flutter analyze` clean; all 47 tests pass.**
+
+**What is next**
+1. Phase 4 — scope Mail & Packages against the actual available delivery/mail sources.
+2. Pause before connecting any external account; that is an explicit privacy/security decision.
+
 ## 2026-08-21 (Codex) — Phase 3b complete: working Tasks surface
 
 **What changed**
