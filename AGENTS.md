@@ -1,5 +1,13 @@
 # AGENTS.md — FamilyHub
 
+> **North star: PRD 00.** FamilyHub is the Surfaces track of the one Reynolds household plan,
+> `docs/PRD-00-household-north-star.md` in `reynolds-household-world` (ledger D81). **Before planning
+> or building, read PRD 00 (its Surfaces track and Order sections) and the OPEN list of the drift
+> ledger** (`docs/active/planning/2026-10-09-HOUSEHOLD-AWARE-drift-ledger.md`); in the household
+> folder they are at `../docs/`. In a clone without that folder, fetch them, e.g.
+> `gh api repos/matt-reynolds-research/reynolds-household-world/contents/docs/PRD-00-household-north-star.md -H 'Accept: application/vnd.github.raw'`. **If you can't read them, stop and say so.** Decisions are D-numbers in that ledger;
+> this repo's `DECISIONS.md` and `SESSIONS.md` are frozen history.
+
 Durable rules for any AI tool working in this repo (Claude, Gemini/Antigravity, etc.).
 Read this first every session. It's the portable companion to the Cowork project
 instructions — if you're building here, these are the rules that apply.
@@ -8,8 +16,8 @@ instructions — if you're building here, these are the rules that apply.
 FamilyHub is a **hobby project**: a Flutter iPad "home hub" (Nest Hub-style) built for and
 finetuned to the Reynolds family. It's a place to experiment and stay sharp on AI-assisted
 development — what gets built doesn't have to be practical — but still aim for clean,
-high-fidelity work. The north star for what exists and what to build next is
-**`PROJECT_MAP.md`**; read it before changing features.
+high-fidelity work. What exists and the feature detail is
+**`PROJECT_MAP.md`**; the plan and order are PRD 00 (above).
 
 ## System boundaries — is this FamilyHub, or the Family Assistant? (read first)
 There is **one World** (the household source of truth — the markdown lists, the
@@ -61,15 +69,15 @@ spending money, security/privacy tradeoffs, or a real fork in direction.
 
 ## The pipeline — how changes ship
 Right-sized from indigo-flow. Every code change goes through a PR; CI is the quality gate;
-green PRs auto-merge. Full mechanics and the one-time GitHub setup: **`.github/PIPELINE.md`**.
+a person merges green PRs (no auto-merge since 2026-10-29). Full mechanics and the one-time GitHub setup: **`.github/PIPELINE.md`**.
 
 **"Ship it" flow** (run end-to-end when a unit of work is done):
 1. Branch from `origin/main`. Name it `feat/…`, `fix/…`, `chore/…`, `ci/…`, or `docs/…`.
 2. Commit with a [Conventional Commits](https://www.conventionalcommits.org) message
    (`feat: add weather widget`, `fix: correct task toggle`).
 3. Open the PR (`gh pr create`) with a short what/why body.
-4. Arm auto-merge: `gh pr merge <n> --auto --squash`. It merges itself once CI is green;
-   Matt keeps a veto window (`gh pr merge <n> --disable-auto`).
+4. Wait for CI and read the review, then merge by hand: `gh pr merge <n> --squash --delete-branch`.
+   No auto-merge: one merge rule across the household repos (PRD 00 v2, C4; repo setting off 2026-10-29).
 5. Return to `main` (`git checkout main && git pull --ff-only`) so the next session starts clean.
 
 Don't leave work "done but not submitted." If a change genuinely shouldn't be a PR, say so

@@ -1,5 +1,9 @@
 # FamilyHub — Session Log
 
+> **North star: PRD 00. Frozen 2026-10-29 (D81).** New sessions go in the household repo's `SESSIONS.md`
+> (`reynolds-household-world`). This file is kept as history.
+
+
 > **What this is.** An append-only handoff log — one short entry per working session so each session
 > is *self-contained* and the next one (or the next AI tool) starts by reading the latest entry
 > instead of replaying a long chat. This is the antidote to context loss: the conversation is the

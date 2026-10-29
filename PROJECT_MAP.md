@@ -1,11 +1,17 @@
 # FamilyHub — PROJECT_MAP.md
 
-> **The north star.** This file is the single source of truth for *what FamilyHub is,
-> what exists vs. what's still a placeholder, and the order we build in.* If reality and
+> **North star: PRD 00.** Since 2026-10-29 (D81) the plan for FamilyHub lives in the household
+> repo: `docs/PRD-00-household-north-star.md` (https://github.com/matt-reynolds-research/reynolds-household-world). This page is the **Surfaces track's detail**:
+> what's built and how. The roadmap below (§5) is superseded; FamilyHub's Phases 0–3 are history
+> (FH0–FH3, a seeded prototype), "Mail & Packages" is parked, and next is household **Phase 5,
+> "FamilyHub: the family's day"**, scoped by its own PRD.
+
+> **The feature map.** This file says *what FamilyHub is and what exists vs. what's still a
+> placeholder.* The order we build in is PRD 00's. If reality and
 > this file disagree, one of them is wrong — fix it in the same step. Everything else
 > (PRDs, design system, code) hangs off this.
 
-_Last updated: 2026-08-22 · Status: **Phase 3 complete — Tasks is a working seeded vertical slice across ambient, touch, and conversation. The Assistant Bar now routes explicit Tasks add/query/complete commands through the same controller as touch and switches its engaged preview by domain. Next: Phase 4 Mail & Packages scoping.**_
+_Last updated: 2026-08-22 · Status: **Phase 3 complete — Tasks is a working seeded vertical slice across ambient, touch, and conversation. The Assistant Bar now routes explicit Tasks add/query/complete commands through the same controller as touch and switches its engaged preview by domain. Next (since 2026-10-29): household Phase 5, the family's day, per PRD 00.**_
 _Phase 0 (done, for the record): Home Hub design imported from Claude Design (`design/FamilyHub Home Hub.dc.html`); first Flutter shell increment landed — dark seed v1.2 tokens (Helvetica Neue) + ambient home (header, 3-tile grid, Assistant Bar pill, generic focus container) on seeded data, widget-tested. Sphere / engaged / voice deferred to a later layer. **Prior tab shell + Supabase + light theme now pruned — the app tree is just the Home Hub shell and analyzes clean.**_
 
 ---
@@ -83,12 +89,16 @@ determines build order:
 assistant has nothing to talk about until at least one domain exists. So the shell and one
 real domain come first; the assistant proves itself against that domain; then the rest fan out.
 
-## 5. Roadmap — dependency order, not excitement order
+## 5. Roadmap (superseded 2026-10-29: see PRD 00's Surfaces track)
+
+> Kept as history. FH0–FH3 below are done. FH4 (Mail & Packages) is parked: no such mail reaches the
+> household inbox. FH5's wall mode folds into household Phase 5, whose first screen is the family's day.
+
 
 Build in the order things *stand on each other*, and always ship one complete vertical slice
 before going wide. **Phase 0 is now "salvage-and-reshape," not greenfield** — a prior Flutter
 app exists and its reusable parts (project, CI, Riverpod patterns, theme structure, the `Agent`
-AI bar) are harvested rather than rebuilt. See §6a and `SALVAGE-AUDIT.md`.
+AI bar) are harvested rather than rebuilt. See §6a and `docs/archive/SALVAGE-AUDIT.md`.
 
 - **Phase 0 — Foundation & guardrails (reshape the prior app).** Reuse the existing Flutter
   project, CI, and `Agent` package. **Replace** `lib/shell` + the tab navigation with the tile
@@ -147,7 +157,7 @@ A prior Flutter app, **`reynolds_family_dashboard`** (a 5-tab Nest Hub-style das
 lines, mock-data + a written-but-off Supabase backend), plus the **`Agent`** AI-bar package, live
 in this repo. It embodies an *earlier* product conception (tabs + a separate database); the
 tile-shell/markdown vision above is canonical (D-14). Full detail in
-[`SALVAGE-AUDIT.md`](SALVAGE-AUDIT.md). Summary:
+[`SALVAGE-AUDIT.md`](docs/archive/SALVAGE-AUDIT.md). Summary:
 
 - **✅ Carry over:** the Flutter project + CI + platform folders; the Riverpod state *pattern*
   (`AsyncNotifier` per domain); the theme *structure* (`tokens → ThemeData`); `google_fonts`/Inter,
