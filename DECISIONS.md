@@ -1,5 +1,9 @@
 # FamilyHub — Decisions Log
 
+> **North star: PRD 00. Frozen 2026-10-29 (D81).** New decisions are D-numbers and go in the household repo's drift ledger, `docs/active/planning/2026-10-09-HOUSEHOLD-AWARE-drift-ledger.md`
+> (`reynolds-household-world`). This file is kept as history.
+
+
 > **What this is.** An append-only record of *why* we chose what we chose — the lightweight version
 > of an ADR (architecture decision record). `PROJECT_MAP.md` holds *what* and *state*; this holds the
 > *reasoning*, so nobody has to re-derive a settled call or re-read a whole session to answer "wait,

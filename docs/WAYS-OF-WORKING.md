@@ -1,5 +1,8 @@
 # Ways of working — FamilyHub
 
+> **North star: PRD 00.** Superseded 2026-10-29 (D81) by the household repo's
+> `WAYS-OF-WORKING.md`; FamilyHub-specific build rules stay in `AGENTS.md`. Kept as history.
+
 How we (Matt + Claude) build this project. Written 2026-07-22, after the foundation was laid.
 This is the narrative; the enforceable specifics live in `AGENTS.md`, `.github/PIPELINE.md`,
 and `scripts/preflight.sh`.
