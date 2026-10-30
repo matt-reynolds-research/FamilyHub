@@ -20,12 +20,16 @@ high-fidelity work. What exists and the feature detail is
 **`PROJECT_MAP.md`**; the plan and order are PRD 00 (above).
 
 ## System boundaries — is this FamilyHub, or the Family Assistant? (read first)
-There is **one World** (the household source of truth — the markdown lists, the
-Reynolds Family calendar + `famcal`, the automations) and there are **faces** on it.
-**FamilyHub is a *surface*** — the iPad wall display. The **Family Assistant**
-(`../family-assistant/`, the live headless iMessage/voice brain) is a *different
-layer*. FamilyHub's own "Assistant Bar" (Phase 2) will be a face onto that same
-brain, not a new brain.
+There is **one World** and there are **faces** on it (PRD 00 v2, D81). The World is
+**Reynolds-World** (the Supabase world model: people, modes, the event log, policies,
+collisions) plus the **family calendar**, which the PC reads and writes through `gcal`
+(Google's API replaced `famcal` in H1). The markdown lists are no longer the World:
+lists are Sara's, and Phase 3 is paused (D75). **FamilyHub is a *surface*** — the iPad
+display, Phase 5 ("the family's day"). Surfaces read the world and the calendar and
+never keep their own copy; how FamilyHub reads the calendar is Phase 5's first
+decision. The **Family Assistant** (`../family-assistant/`, the headless iMessage
+brain, hosted on the Linux PC) is a *different layer*. FamilyHub's "Assistant Bar"
+(FH2, Aug 2026 seeded prototype — history) is a face onto that brain, never a new one.
 
 **The routing test — before you build, ask:**
 - Changes the **World** (data, calendar, automations, the assistant's brain/behavior)
@@ -45,10 +49,12 @@ spending money, security/privacy tradeoffs, or a real fork in direction.
 
 ## Tech stack (authoritative version = `reynolds_family_dashboard/pubspec.yaml`)
 - Flutter (Dart), app lives in **`reynolds_family_dashboard/`**.
-- State: Riverpod. **No backend datastore** — FamilyHub mirrors the markdown world (D-15) and runs on
-  **seeded mock data** in Phase 0. **Supabase was removed in the Phase-0 prune** (2026-08-03), along with
+- State: Riverpod. **No backend datastore today** — the app runs on **seeded mock data** (FH0–FH3).
+  D-15 ("mirror the markdown world") is reversed: Phase 5 reads Reynolds-World (Supabase, with
+  Supabase Auth and read-only policies) and the calendar; build UI against world-model-shaped seeded
+  data until then (PRD 00 Order step 3). **Supabase was removed in the Phase-0 prune** (2026-08-03), along with
   `flutter_dotenv`, `google_fonts`, and `google_generative_ai`.
-- Assistant Bar: Phase 2 lives in the app's `lib/features/assistant/` and uses a deterministic,
+- Assistant Bar (FH2, history): lives in the app's `lib/features/assistant/` and uses a deterministic,
   Shopping-only local intent adapter. The old **`Agent/`** Gemini prototype remains as historical
   reference but is not an app dependency; it must not become a second household brain.
 - Design-system tokens under `lib/theme/hub_tokens.dart` (seed v1.2, Helvetica Neue). Widget tests in `test/`.
